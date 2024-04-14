@@ -1,35 +1,28 @@
 import Release from './release.jsx'
-import {useState} from 'react'
+import PropTypes from 'prop-types'
 
-function Releases () {
-    const [releases, setReleases] = useState([['', '', '', '', '', '']])
-
-    const addHandler = () => {
-        const newReleases = [...releases, ['', '', '', '', '', '']]
-        setReleases(newReleases)
-    }
-
-    const changeHandler = (idx, inputIdx, value) => {
-        const newReleases = [...releases]
-        newReleases[idx][inputIdx] = value
-    }
-
-    const deleteHandler = (idx) => {
-        const newReleases = [...releases.slice(0, idx), ...releases.slice(idx + 1)]
-        setReleases(newReleases)
-    }
+function Releases (props) {
+    const {releases, addReleaseHandler, changeReleaseHandler, deleteReleaseHandler} = props
 
     return (
         <>
-            <h1>Releases</h1>
+            <h2>Releases</h2>
             {
                 releases.map((release, idx) => (
-                    <Release key={idx} release={release} onChange={(inputIdx, value) => changeHandler(idx, inputIdx, value)} deleteHandler={() => deleteHandler(idx)}/>
+                    <Release key={idx} release={release} onChange={(inputIdx, value) => changeReleaseHandler(idx, inputIdx, value)} deleteHandler={() => deleteReleaseHandler(idx)}/>
                 ))
             }
-            <button type='button' onClick={addHandler}>Add</button>
+            <br></br>
+            <button type='button' onClick={addReleaseHandler}>Add</button>
         </>
     )
 }
+
+Releases.propTypes = {
+    releases: PropTypes.number.isRequired,
+    addReleaseHandler: PropTypes.func.isRequired,
+    deleteReleaseHandler: PropTypes.func.isRequired,
+    changeReleaseHandler: PropTypes.func.isRequired
+};
 
 export default Releases

@@ -5,8 +5,8 @@ function Release (props) {
 
     return (
         <>
-            <input type="number" id="release" name="release"></input> &nbsp;&nbsp;
-            <input type="number" id="release" name="release"></input>-<input type="number" id="release" name="release"></input>-<input type="number" id="release" name="release"></input>-<input type="number" id="release" name="release"></input>-<input type="number" id="release" name="release"></input>-<input type="number" id="release" name="release"></input>
+            <input type="text" id="release" name="release"></input> &nbsp;&nbsp;
+            <input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>
             <button type="button" onClick={deleteHandler}>delete</button>
         </>
     )
