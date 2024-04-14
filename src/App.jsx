@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 function App() {
   const [draws, setDraws] = useState([['', '', '', '', '', '']])
-  const [releases, setReleases] = useState([['', '', '', '', '', '']])
+  const [releases, setReleases] = useState([{0:['', '', '', '', '', '']}])
   const [results, setResults] = useState([])
 
   //Draws handlers
@@ -67,8 +67,9 @@ function App() {
     <>
       <h1>Mark Sixer</h1>
       <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
+      <p>Draws: {draws[0]}</p>
       <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
-      <Results results={[[{23:[1,2,3]},{24:[6,7,8]}],[{25:[2,4,6]}]]}/>
+      <Results results={results}/>
       <button type='button' onClick={checkHandler}>Check</button>
     </>
   )

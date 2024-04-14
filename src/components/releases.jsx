@@ -12,7 +12,6 @@ function Releases (props) {
                     <Release key={idx} release={release} onChange={(inputIdx, value) => changeReleaseHandler(idx, inputIdx, value)} deleteHandler={() => deleteReleaseHandler(idx)}/>
                 ))
             }
-            <br></br>
             <button type='button' onClick={addReleaseHandler}>Add</button>
         </>
     )

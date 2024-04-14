@@ -8,7 +8,7 @@ function Draws(props) {
             <h2>Your Draws</h2>
             {
                 draws.map((draw, idx) => (
-                    <Draw key={idx} id={idx} draw={draw} onChange={(inputIdx, value) => changeDrawHandler(idx, inputIdx, value)} deleteHandler={() => deleteDrawHandler(idx)}/>
+                    <Draw key={idx} id={idx} draw={draw} changeDrawHandler={(event) => changeDrawHandler(idx, event.target.value)} deleteHandler={() => deleteDrawHandler(idx)}/>
                 ))
             }
             <button type="button" onClick={addDrawHandler}>Add</button>

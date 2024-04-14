@@ -1,22 +1,21 @@
 import PropTypes from 'prop-types'
 
 function Release (props) {
-    const {deleteHandler} = props
+    const {deleteHandler, changeReleaseHandler} = props
 
     return (
-        <>
-            <input type="text" id="release" name="release"></input> &nbsp;&nbsp;
-            <input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>
+        <div className='release'>
+            <input type="text" id="release" name="release" onChange={(event) => changeReleaseHandler(event.target.value)}></input> &nbsp;&nbsp; <input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>
             <button type="button" onClick={deleteHandler}>delete</button>
-        </>
+        </div>
     )
 }
 
 Release.propTypes = {
-    dele: PropTypes.number.isRequired,
     draw: PropTypes.number.isRequired,
     deleteHandler: PropTypes.func.isRequired,
-    id: PropTypes.number.isRequired
+    id: PropTypes.number.isRequired,
+    changeReleaseHandler: PropTypes.func.isRequired,
 };
 
 export default Release
