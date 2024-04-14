@@ -1,20 +1,27 @@
 
 import { useState } from 'react'
+import Draw from './draw.jsx'
 
 function Draws() {
-    const [count, setCount] = useState(0)
+    const [draws, setDraws] = useState([])
 
     const addHandler = () => {
         setCount(count + 1)
     }
 
+    const changeHandler = () => {
+        const newDraws = [...draws]
+        
+    }
+
     return (
         <>
             <h1>Your Draws</h1>
-            <div className="draw">
-                <label htmlFor="draw1">{count}</label>
-                <input type="text" id="draw1" name="draw"></input>-<input type="text" id="draw2" name="draw"></input>-<input type="text" id="draw3" name="draw"></input>-<input type="text" id="draw4" name="draw"></input>-<input type="text" id="draw5" name="draw"></input>-<input type="text" id="draw6" name="draw"></input>
-            </div>
+            {
+                draws.map((draw, idx) => (
+                    <Draw idx={idx} draw={draw} onChange={() => }
+                ))
+            }
             <button type="button" onClick={addHandler}>Add</button>
         </>
     )
