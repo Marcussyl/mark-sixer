@@ -5,8 +5,8 @@ import Results  from './components/results.jsx'
 import { useState } from 'react'
 
 function App() {
-  const [draws, setDraws] = useState([['', '', '', '', '', '']])
-  const [releases, setReleases] = useState([{0:['', '', '', '', '', '']}])
+  const [draws, setDraws] = useState([['a', 'b', 'c', 'd', 'e', 'f']])
+  const [releases, setReleases] = useState({0:['a', 'b', 'c', 'd', 'e', 'f']})
   const [results, setResults] = useState([])
 
   //Draws handlers
@@ -18,6 +18,7 @@ function App() {
   const changeDrawHandler = (idx, inputIdx, value) => {
       const newDraws = [...draws]
       newDraws[idx][inputIdx] = value
+      alert(`newDraws: ${newDraws}`)
       setDraws(newDraws)
   }
 
@@ -29,13 +30,14 @@ function App() {
   
   //Releases handlers
   const addReleaseHandler = () => {
-      const newReleases = [...releases, ['', '', '', '', '', '']]
+      const newReleases = [...releases, {0:['', '', '', '', '', '']}]
       setReleases(newReleases)
   }
 
   const changeReleaseHandler = (idx, inputIdx, value) => {
       const newReleases = [...releases]
       newReleases[idx][inputIdx] = value
+      alert(`newReleases: ${newReleases[0][0]}`)
   }
 
   const deleteReleaseHandler = (idx) => {
@@ -67,7 +69,6 @@ function App() {
     <>
       <h1>Mark Sixer</h1>
       <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
-      <p>Draws: {draws[0]}</p>
       <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
       <Results results={results}/>
       <button type='button' onClick={checkHandler}>Check</button>

@@ -5,7 +5,7 @@ function Release (props) {
 
     return (
         <div className='release'>
-            <input type="text" id="release" name="release" onChange={(event) => changeReleaseHandler(event.target.value)}></input> &nbsp;&nbsp; <input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>
+            <input type="text" id="release" name="release" onChange={(event) => changeReleaseHandler(0, event.target.value)}></input> &nbsp;&nbsp; <input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>-<input type="text" id="release" name="release"></input>
             <button type="button" onClick={deleteHandler}>delete</button>
         </div>
     )
