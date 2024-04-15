@@ -12,13 +12,15 @@ function Releases (props) {
                     return <Release key={idx} release={release} changeReleaseHandler={(inputIdx, value) => changeReleaseHandler(idx, inputIdx, value)} deleteReleaseHandler={() => deleteReleaseHandler(idx)}/>
                 })
             }
+            <br></br>
+            <br></br>
             <button type='button' onClick={addReleaseHandler}>Add</button>
         </>
     )
 }
 
 Releases.propTypes = {
-    releases: PropTypes.number.isRequired,
+    releases: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
     addReleaseHandler: PropTypes.func.isRequired,
     deleteReleaseHandler: PropTypes.func.isRequired,
     changeReleaseHandler: PropTypes.func.isRequired

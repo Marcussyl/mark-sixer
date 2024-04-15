@@ -1,39 +1,46 @@
 import PropTypes from 'prop-types'
 
 function Results (props) {
-    const {results} = props
+    const {results, releases} = props
 
     return (
         <div>
             <h2>Results</h2>
-            {results.map((row, rowIndex) => (
-                <div key={rowIndex}>
-                    {row.map((item, itemIndex) => {
-                        // Extract the key and value from the dictionary
-                        const [key, value] = Object.entries(item)[0];
-                        return (
-                            <div key={itemIndex}>
-                                {/* Display the key */}
-                                {key}: &nbsp;, 
-                                {/* Display the array of numbers */}
-                                {value.join(', ')}
-                            </div>
-                        );
-                    })}
-                    <br></br>
-                </div>
-            ))}
+            <p>{results.join(',')}</p>
+            <table style={{ borderCollapse: 'collapse' }}>
+                <tr>
+                    <th style={{ border: '1px solid black', padding: '8px' }}></th>
+                    {
+                        releases.map((release) => (
+                            <th key={release[0]} style={{ border: '1px solid black', padding: '8px' }}>{release[0]}</th>
+                        ))
+                        
+                    }
+                </tr>
+                
+                {
+                    results.map((result, drawIdx) => (
+                        <tr key={drawIdx}>
+                            <th style={{ border: '1px solid black', padding: '8px' }}>Draw {drawIdx}</th>
+                            {
+                                result.map((drawReleaseMatch, releaseIdx) => (
+                                    <td key={releaseIdx} style={{ border: '1px solid black', padding: '8px' }}>{drawReleaseMatch.join(' ')}</td>
+                                ))
+                            }
+                        </tr>
+                    ))
+                }
+            </table>
         </div>
     )
 }
 
-const dictionaryShape = PropTypes.shape({
-    // Each dictionary has a single key-value pair, where the key is a number and the value is an array of numbers
-    [PropTypes.number.isRequired]: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-});
+
 
 Results.propTypes = {
-    results: PropTypes.arrayOf(PropTypes.arrayOf(dictionaryShape)).isRequired,
+    results: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+    releases: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+    draws: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
 }
 
 export default Results

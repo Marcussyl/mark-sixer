@@ -11,7 +11,7 @@ function Release (props) {
             <input type="text" id="releaseNum3" name="releaseNum3" value={release[3]} onChange={(event) => changeReleaseHandler(3, event.target.value)}/>-
             <input type="text" id="releaseNum4" name="releaseNum4" value={release[4]} onChange={(event) => changeReleaseHandler(4, event.target.value)}/>-
             <input type="text" id="releaseNum5" name="releaseNum5" value={release[5]} onChange={(event) => changeReleaseHandler(5, event.target.value)}/>-
-            <input type="text" id="releaseNum6" name="releaseNum6" value={release[6]} onChange={(event) => changeReleaseHandler(6, event.target.value)}/>
+            <input type="text" id="releaseNum6" name="releaseNum6" value={release[6]} onChange={(event) => changeReleaseHandler(6, event.target.value)}/> &nbsp;&nbsp;
             <button type="button" onClick={deleteReleaseHandler}>delete</button>
         </div>
     )

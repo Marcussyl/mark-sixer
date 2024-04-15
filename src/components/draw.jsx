@@ -11,7 +11,7 @@ function Draw (props) {
             <input type="text" id="drawNum3" name="drawNum3" value={draw[2]} onChange={(event) => changeDrawHandler(2, event.target.value)}/>-
             <input type="text" id="drawNum4" name="drawNum4" value={draw[3]} onChange={(event) => changeDrawHandler(3, event.target.value)}/>-
             <input type="text" id="drawNum5" name="drawNum5" value={draw[4]} onChange={(event) => changeDrawHandler(4, event.target.value)}/>-
-            <input type="text" id="drawNum6" name="drawNum6" value={draw[5]} onChange={(event) => changeDrawHandler(5, event.target.value)}/>
+            <input type="text" id="drawNum6" name="drawNum6" value={draw[5]} onChange={(event) => changeDrawHandler(5, event.target.value)}/> &nbsp;&nbsp;
             <button type='button' onClick={deleteDrawHandler}>delete</button>
         </div>
     )

@@ -11,13 +11,15 @@ function Draws(props) {
                     <Draw key={idx} id={idx} draw={draw} changeDrawHandler={(inputIdx, value) => changeDrawHandler(idx, inputIdx, value)} deleteDrawHandler={() => deleteDrawHandler(idx)}/>
                 ))
             }
+            <br></br>
+            <br></br>
             <button type="button" onClick={addDrawHandler}>Add</button>
         </>
     )
 }
 
 Draws.propTypes = {
-    draws: PropTypes.number.isRequired,
+    draws: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
     addDrawHandler: PropTypes.func.isRequired,
     deleteDrawHandler: PropTypes.func.isRequired,
     changeDrawHandler: PropTypes.func.isRequired
