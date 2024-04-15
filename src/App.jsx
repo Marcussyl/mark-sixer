@@ -5,8 +5,8 @@ import Results  from './components/results.jsx'
 import { useState } from 'react'
 
 function App() {
-  const [draws, setDraws] = useState([['a', 'b', 'c', 'd', 'e', 'f']])
-  const [releases, setReleases] = useState({0:['a', 'b', 'c', 'd', 'e', 'f']})
+  const [draws, setDraws] = useState([['', '', '', '', '', '']]) //draw
+  const [releases, setReleases] = useState([['', '', '', '', '', '', '']]) //term number: release
   const [results, setResults] = useState([])
 
   //Draws handlers
@@ -18,7 +18,7 @@ function App() {
   const changeDrawHandler = (idx, inputIdx, value) => {
       const newDraws = [...draws]
       newDraws[idx][inputIdx] = value
-      alert(`newDraws: ${newDraws}`)
+      //alert(`newDraws: ${newDraws}`)
       setDraws(newDraws)
   }
 
@@ -30,14 +30,15 @@ function App() {
   
   //Releases handlers
   const addReleaseHandler = () => {
-      const newReleases = [...releases, {0:['', '', '', '', '', '']}]
+      const newReleases = [...releases, ['', '', '', '', '', '', '']]
       setReleases(newReleases)
   }
 
   const changeReleaseHandler = (idx, inputIdx, value) => {
       const newReleases = [...releases]
       newReleases[idx][inputIdx] = value
-      alert(`newReleases: ${newReleases[0][0]}`)
+      setReleases(newReleases)
+      //alert(`newReleases: ${newReleases[0]}`)
   }
 
   const deleteReleaseHandler = (idx) => {
@@ -50,7 +51,7 @@ function App() {
     const newResults = [...results]
     for(let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
           newResults[drawIdx] = []
-          for (let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
+          for (let releaseIdx = 1; releaseIdx < releases.length; releaseIdx++) {
             let tempResult = [];
             for (let i = 0; i < 6; i++) {
               if (draws[drawIdx][i] === releases[releaseIdx][i]) {
@@ -58,7 +59,7 @@ function App() {
               }
             }
             if (tempResult.length >= 3) {
-              newResults[drawIdx] = [...newResults[drawIdx], {releaseIdx: tempResult}];
+              newResults[drawIdx] = [...newResults[drawIdx], tempResult];
               setResults(newResults);
             }              
         }
