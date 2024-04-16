@@ -53,6 +53,7 @@ function App() {
       newResults[drawIdx] = []
       //alert(`newResults: ${newResults}`)
       for(let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
+        alert(`releases: ${releases[releaseIdx]}`)
         let tempResult = [];
         for (let i = 0; i < 6; i++) {
           if (draws[drawIdx][i] === releases[releaseIdx][i+1]) {
@@ -62,7 +63,7 @@ function App() {
         }
         if (tempResult.length >= 3) {
           newResults[drawIdx] = [...newResults[drawIdx], tempResult];
-          //alert(`newResults: ${newResults}`)
+          alert(`newResults: ${newResults}`)
           setResults(newResults);
         }              
       }
