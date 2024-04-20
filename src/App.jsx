@@ -3,11 +3,12 @@ import Draws from './components/draws.jsx'
 import Releases from './components/releases.jsx'
 import Results  from './components/results.jsx'
 import { useState } from 'react'
+import './App.css'
 
 function App() {
-  const [draws, setDraws] = useState([['', '', '', '', '', '']]) //draw
-  const [releases, setReleases] = useState([['125', '1', '2', '3', '11', '12', '13'],['256', '2','3','4','5','6','7']]) //term number: release
-  const [results, setResults] = useState([[['23','56','76'],['12','45','13']],[['43','15','67']]]) //[[[draw1 & release1 matches], [draw1 & release2 matches]],[[draw2 & release1 matches]]]
+  const [draws, setDraws] = useState([]) //draw
+  const [releases, setReleases] = useState([]) //term number: release
+  const [results, setResults] = useState([]) //[[[draw1 & release1 matches], [draw1 & release2 matches]],[[draw2 & release1 matches]]]
 
   //Draws handlers
   const addDrawHandler = () => {
@@ -46,24 +47,31 @@ function App() {
       setReleases(newReleases)
   }
 
+  function deepCopy(arr) {
+      return JSON.parse(JSON.stringify(arr));
+  }
+
   //Results handlers
   const checkHandler = () => {
-    const newResults = [...results]
+    let newResults = deepCopy(results)
+    alert(JSON.stringify(newResults, null, 2));
     for(let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
+      let draw = draws[drawIdx]
       newResults[drawIdx] = []
-      //alert(`newResults: ${newResults}`)
+      //alert(`release length: ${releases.length}`)
       for(let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
-        alert(`releases: ${releases[releaseIdx]}`)
+        let release = releases[releaseIdx].slice(1);
+        //alert(`comparing draw ${drawIdx}: ${draw} with release ${releaseIdx}: ${release}...`)
         let tempResult = [];
         for (let i = 0; i < 6; i++) {
-          if (draws[drawIdx][i] === releases[releaseIdx][i+1]) {
-            tempResult.push(releases[releaseIdx][i+1]);
-            alert(`draw ${draws[drawIdx][i]} and release ${releases[releaseIdx][i+1]} match`)
+          if (release.indexOf(draw[i]) !== -1) {
+            tempResult.push(draw[i]);
+            //alert(`draw ${drawIdx} and release ${releaseIdx} match: ${draw[i]}`)
           }
         }
         if (tempResult.length >= 3) {
           newResults[drawIdx] = [...newResults[drawIdx], tempResult];
-          alert(`newResults: ${newResults}`)
+          alert(`newResults: ${newResults}; drawIdx length: ${newResults[drawIdx].length}`)
           setResults(newResults);
         }              
       }
@@ -76,6 +84,7 @@ function App() {
       <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
       <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
       <Results results={results} releases={releases} draws={draws}/>
+      <br></br>
       <button type='button' onClick={checkHandler}>Check</button>
     </>
   )
