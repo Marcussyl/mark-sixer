@@ -81,11 +81,17 @@ function App() {
   return (
     <>
       <h1>Mark Sixer</h1>
-      <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
-      <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
-      <Results results={results} releases={releases} draws={draws}/>
-      <br></br>
-      <button type='button' onClick={checkHandler}>Check</button>
+      <div className='main-container'>
+        <div className='top-container'>
+          <div className='input-container'>
+          <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
+          <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
+          </div>
+          <br></br>
+          <button type='button' onClick={checkHandler}>Check</button>
+        </div>
+        <Results results={results} releases={releases} draws={draws}/>
+      </div> 
     </>
   )
 }

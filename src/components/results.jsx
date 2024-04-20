@@ -1,18 +1,18 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import './results.css';
 
 function Results (props) {
     const {results, releases} = props
 
     return (
-        <div>
+        <div className='results-container'>
             <h2>Results</h2>
-            <p>{results.join(',')}</p>
-            <table style={{ borderCollapse: 'collapse' }}>
+            <table>
                 <tr>
-                    <th style={{ border: '1px solid black', padding: '8px' }}></th>
+                    <th></th>
                     {
                         releases.map((release) => (
-                            <th key={release[0]} style={{ border: '1px solid black', padding: '8px' }}>{release[0]}</th>
+                            <th key={release[0]}>{release[0]}</th>
                         ))
                         
                     }
@@ -21,10 +21,10 @@ function Results (props) {
                 {
                     results.map((result, drawIdx) => (
                         <tr key={drawIdx}>
-                            <th style={{ border: '1px solid black', padding: '8px' }}>Draw {drawIdx}</th>
+                            <th>Draw {drawIdx}</th>
                             {
                                 result.map((drawReleaseMatch, releaseIdx) => (
-                                    <td key={releaseIdx} style={{ border: '1px solid black', padding: '8px' }}>{drawReleaseMatch.join(' ')}</td>
+                                    <td key={releaseIdx}>{drawReleaseMatch.join(' ')}</td>
                                 ))
                             }
                         </tr>

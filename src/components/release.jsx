@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import './release.css';
 
 function Release (props) {
     const {release, deleteReleaseHandler, changeReleaseHandler} = props
 
     return (
         <div className='release'>
-            <input type="text" id="termNum" name="termNum" value={release[0]} placeholder='term number' onChange={(event) => changeReleaseHandler(0, event.target.value)}/> &nbsp;&nbsp; 
+            <input type="text" id="termNum" name="termNum" value={release[0]} placeholder='release no.' onChange={(event) => changeReleaseHandler(0, event.target.value)}/> &nbsp;&nbsp; 
             <input type="text" id="releaseNum1" name="releaseNum1" value={release[1]} onChange={(event) => changeReleaseHandler(1, event.target.value)}/>-
             <input type="text" id="releaseNum2" name="releaseNum2" value={release[2]} onChange={(event) => changeReleaseHandler(2, event.target.value)}/>-
             <input type="text" id="releaseNum3" name="releaseNum3" value={release[3]} onChange={(event) => changeReleaseHandler(3, event.target.value)}/>-
