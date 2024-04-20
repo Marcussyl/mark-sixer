@@ -6,9 +6,9 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [draws, setDraws] = useState([]) //draw
-  const [releases, setReleases] = useState([]) //term number: release
-  const [results, setResults] = useState([]) //[[[draw1 & release1 matches], [draw1 & release2 matches]],[[draw2 & release1 matches]]]
+  const [draws, setDraws] = useState([[]]) //draw
+  const [releases, setReleases] = useState([[]]) //term number: release
+  const [results, setResults] = useState([[]]) //[[[draw1 & release1 matches], [draw1 & release2 matches]],[[draw2 & release1 matches]]]
 
   //Draws handlers
   const addDrawHandler = () => {
@@ -69,11 +69,13 @@ function App() {
             //alert(`draw ${drawIdx} and release ${releaseIdx} match: ${draw[i]}`)
           }
         }
-        if (tempResult.length >= 3) {
-          newResults[drawIdx] = [...newResults[drawIdx], tempResult];
-          alert(`newResults: ${newResults}; drawIdx length: ${newResults[drawIdx].length}`)
-          setResults(newResults);
-        }              
+        newResults[drawIdx] = [...newResults[drawIdx], tempResult];
+        setResults(newResults);
+        // if (tempResult.length >= 3) {
+        //   newResults[drawIdx] = [...newResults[drawIdx], tempResult];
+        //   alert(`newResults: ${newResults}; drawIdx length: ${newResults[drawIdx].length}`)
+        //   setResults(newResults);
+        // }              
       }
     }
   }
@@ -88,7 +90,7 @@ function App() {
           <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
           </div>
           <br></br>
-          <button type='button' onClick={checkHandler}>Check</button>
+          <button type='button' onClick={checkHandler} className='check-button'>Check</button>
         </div>
         <Results results={results} releases={releases} draws={draws}/>
       </div> 
