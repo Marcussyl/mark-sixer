@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import './results.css';
+import '../scss/results.scss';
 
 function Results (props) {
     const {results, releases} = props

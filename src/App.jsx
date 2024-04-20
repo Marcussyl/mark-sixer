@@ -1,9 +1,8 @@
-import './App.css'
 import Draws from './components/draws.jsx'
 import Releases from './components/releases.jsx'
 import Results  from './components/results.jsx'
 import { useState } from 'react'
-import './App.css'
+import './App.scss'
 
 function App() {
   const [draws, setDraws] = useState([[]]) //draw

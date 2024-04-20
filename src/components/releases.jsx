@@ -1,6 +1,6 @@
 import Release from './release.jsx'
 import PropTypes from 'prop-types'
-import './releases.css'
+import '../scss/releases.scss'
 
 function Releases (props) {
     const {releases, addReleaseHandler, changeReleaseHandler, deleteReleaseHandler} = props

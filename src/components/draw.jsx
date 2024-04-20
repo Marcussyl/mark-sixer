@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import './draw.css'
+import '../scss/draw.scss'
 
 function Draw (props) {
     const {id, draw, deleteDrawHandler, changeDrawHandler} = props

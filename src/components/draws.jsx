@@ -1,6 +1,6 @@
 import Draw from './draw.jsx'
 import PropTypes from 'prop-types'
-import './draws.css'
+import '../scss/draws.scss'
 
 function Draws(props) {
     const {draws, addDrawHandler, deleteDrawHandler, changeDrawHandler} = props
