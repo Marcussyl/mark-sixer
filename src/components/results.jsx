@@ -7,12 +7,13 @@ function Results (props) {
     return (
         <div className='results-container'>
             <h2>Results</h2>
+            <br></br>
             <table>
                 <tr>
                     <th></th>
                     {
                         releases.map((release) => (
-                            <th key={release[0]}>{release[0]}</th>
+                            <th key={release[0]} className='header'>{release[0]}</th>
                         ))
                         
                     }
@@ -21,10 +22,10 @@ function Results (props) {
                 {
                     results.map((result, drawIdx) => (
                         <tr key={drawIdx}>
-                            <th>Draw {drawIdx}</th>
+                            <th className='header'>Draw {drawIdx}</th>
                             {
                                 result.map((drawReleaseMatch, releaseIdx) => (
-                                    <td key={releaseIdx}>{drawReleaseMatch.join(' ')}</td>
+                                    <td key={releaseIdx} className='match'>{drawReleaseMatch.join(' ')}</td>
                                 ))
                             }
                         </tr>
