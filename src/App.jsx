@@ -69,12 +69,7 @@ function App() {
           }
         }
         newResults[drawIdx] = [...newResults[drawIdx], tempResult];
-        setResults(newResults);
-        // if (tempResult.length >= 3) {
-        //   newResults[drawIdx] = [...newResults[drawIdx], tempResult];
-        //   alert(`newResults: ${newResults}; drawIdx length: ${newResults[drawIdx].length}`)
-        //   setResults(newResults);
-        // }              
+        setResults(newResults);            
       }
     }
   }
