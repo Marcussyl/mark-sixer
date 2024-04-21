@@ -1,13 +1,45 @@
 import Draws from './components/draws.jsx'
 import Releases from './components/releases.jsx'
 import Results  from './components/results.jsx'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.scss'
 
 function App() {
   const [draws, setDraws] = useState([[]]) //draw
-  const [releases, setReleases] = useState([[]]) //term number: release
+  const [releases, setReleases] = useState([[]]) //1st element: release number
   const [results, setResults] = useState([[]]) //[[[draw1 & release1 matches], [draw1 & release2 matches]],[[draw2 & release1 matches]]]
+
+  useEffect(() => {
+    const draws = window.localStorage.getItem('Mark_Sixer_Draws')
+    const releases = window.localStorage.getItem('Mark_Sixer_Releases')
+    const results = window.localStorage.getItem('Mark_Sixer_Results')
+    console.log(`draws: ${draws}, releases: ${releases}, results: ${results}`)
+
+    if (draws && releases && results) {
+      try {
+        setDraws(JSON.parse(draws));
+        setReleases(JSON.parse(releases));
+        setResults(JSON.parse(results));
+      } catch (error) {
+        console.error('Error parsing stored data:', error);
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    window.localStorage.setItem('Mark_Sixer_Draws', JSON.stringify(draws))
+    alert(`setting draws in localstorage ...`)
+  }, [draws])
+
+  useEffect(() => {
+    window.localStorage.setItem('Mark_Sixer_Releases', JSON.stringify(releases))
+    alert(`setting releases in localstorage ...`)
+  }, [releases])
+
+  useEffect(() => {
+    window.localStorage.setItem('Mark_Sixer_Results', JSON.stringify(results))
+    alert(`setting results in localstorage ...`)
+  }, [results])
 
   //Draws handlers
   const addDrawHandler = () => {
@@ -53,7 +85,6 @@ function App() {
   //Results handlers
   const checkHandler = () => {
     let newResults = deepCopy(results)
-    alert(JSON.stringify(newResults, null, 2));
     for(let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
       let draw = draws[drawIdx]
       newResults[drawIdx] = []
