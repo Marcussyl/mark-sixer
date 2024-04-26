@@ -28,17 +28,17 @@ function App() {
 
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Draws', JSON.stringify(draws))
-    alert(`setting draws in localstorage ...`)
+    //alert(`setting draws in localstorage ...`)
   }, [draws])
 
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Releases', JSON.stringify(releases))
-    alert(`setting releases in localstorage ...`)
+    //alert(`setting releases in localstorage ...`)
   }, [releases])
 
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Results', JSON.stringify(results))
-    alert(`setting results in localstorage ...`)
+    //alert(`setting results in localstorage ...`)
   }, [results])
 
   //Draws handlers
@@ -109,7 +109,7 @@ function App() {
     <>
       <h1>Mark Sixer</h1>
       <div className='main-container'>
-        <div className='top-container'>
+        <div className='left-container'>
           <div className='input-container'>
           <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
           <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
