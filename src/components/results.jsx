@@ -12,17 +12,19 @@ function Results (props) {
             <div className='result-container'>
                 {
                     results.map((result, idx) => (
-                        <div key={`draw ${idx}`} className='draw-match-container'>
-                            <h4>{`Draw ${idx}`}</h4>
-                            {
-                                result.map((releaseMatch, idx) => (
-                                    <div key={`release ${idx}`} className='release-match-container'>
-                                        <p className='release-number'>{`${releaseMatch[0]}: `}</p>
-                                        <p>{releaseMatch.slice(1).join(', ')}</p>
-                                    </div>
-                                ))
-                            }
-                        </div>
+                        result.length > 0 && (
+                            <div key={`draw ${idx}`} className='draw-match-container'>
+                                <h4>{`Draw ${idx}`}</h4>
+                                {
+                                    result.map((releaseMatch, idx) => (
+                                        <div key={`release ${idx}`} className='release-match-container'>
+                                            <p className='release-number'>{`${releaseMatch[0]}: `}</p>
+                                            <p>{releaseMatch.slice(1).join(', ')}</p>
+                                        </div>
+                                    ))
+                                } 
+                            </div>
+                        )
                     ))
                 }
             </div>

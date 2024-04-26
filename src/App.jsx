@@ -73,28 +73,25 @@ function App() {
       setReleases(newReleases)
   }
 
-  function deepCopy(arr) {
-      return JSON.parse(JSON.stringify(arr));
-  }
-
   //Results handlers
   const checkHandler = () => {
-    let newResults = deepCopy(results)
+    let newResults = []
     for(let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
       let draw = draws[drawIdx]
       newResults[drawIdx] = []
       for(let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
         let release = releases[releaseIdx].slice(1);
         let tempResult = [releases[releaseIdx][0]];
-        alert(`tempResult: ${JSON.stringify(tempResult)}`)
         for (let i = 0; i < 6; i++) {
           if (release.indexOf(draw[i]) !== -1) {
             tempResult.push(draw[i]);
           }
         }
-        newResults[drawIdx] = [...newResults[drawIdx], tempResult];
-        setResults(newResults); 
-        alert(`Results: ${newResults}`)           
+        if(tempResult.length >= 4){
+          newResults[drawIdx].push(tempResult);
+          setResults(newResults); 
+          alert(`tempResult: ${tempResult} newResults: ${newResults}`)
+        }
       }
     }
   }
