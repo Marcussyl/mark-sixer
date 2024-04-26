@@ -8,6 +8,12 @@
     margin-bottom: 2rem;
 }
 
+.draw-container{
+    max-height: 300px;
+    overflow-y: auto; /* Enable vertical scrollbar */
+    scrollbar-color: black lightgrey;
+}
+
 h2 {
     margin: 0;
 }

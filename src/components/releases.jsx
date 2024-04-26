@@ -8,14 +8,16 @@ function Releases (props) {
     return (
         <div className='releases-container'>
             <h2>Releases</h2>
-            {
-                releases.map((release, idx) => (
-                    <div key={idx}>
-                        <Release release={release} changeReleaseHandler={(inputIdx, value) => changeReleaseHandler(idx, inputIdx, value)} deleteReleaseHandler={() => deleteReleaseHandler(idx)}/>
-                    </div>
-                    
-                ))
-            }
+            <div className='release-container'>
+                {
+                    releases.map((release, idx) => (
+                        <div key={idx}>
+                            <Release release={release} changeReleaseHandler={(inputIdx, value) => changeReleaseHandler(idx, inputIdx, value)} deleteReleaseHandler={() => deleteReleaseHandler(idx)}/>
+                        </div>
+                        
+                    ))
+                }
+            </div>
             <br></br>
             <button type='button' onClick={addReleaseHandler}>Add</button>
         </div>

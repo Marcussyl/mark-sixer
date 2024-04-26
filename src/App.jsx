@@ -90,7 +90,6 @@ function App() {
         if(tempResult.length >= 4){
           newResults[drawIdx].push(tempResult);
           setResults(newResults); 
-          alert(`tempResult: ${tempResult} newResults: ${newResults}`)
         }
       }
     }
@@ -102,10 +101,9 @@ function App() {
       <div className='main-container'>
         <div className='left-container'>
           <div className='input-container'>
-          <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
-          <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
+            <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
+            <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
           </div>
-          <br></br>
           <button type='button' onClick={checkHandler} className='check-button'>Check</button>
         </div>
         <div className='right-container'>

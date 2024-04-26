@@ -9,15 +9,21 @@
 
 .result-container{
   width: 100%;
+  color: black;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  row-gap: 1rem;
+  column-gap: 1rem;
+  max-height: 500px;
+  overflow-y: scroll;
+  scrollbar-color: black lightgrey;
 }
 
 .draw-match-container{
   border: 1px black dashed;
   text-align: left;
-  margin-right: 1rem;
   padding: 1rem;
   background-color: lightgoldenrodyellow;
   border-radius: 20px;

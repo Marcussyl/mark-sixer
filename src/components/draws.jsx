@@ -8,14 +8,16 @@ function Draws(props) {
     return (
         <div className='draws-container'>
             <h2>Your Draws</h2>
-            {
-                draws.map((draw, idx) => (
-                    <div key={idx}>
-                        <Draw id={idx} draw={draw} changeDrawHandler={(inputIdx, value) => changeDrawHandler(idx, inputIdx, value)} deleteDrawHandler={() => deleteDrawHandler(idx)}/>
-                    </div>
-                    
-                ))
-            }
+            <div className='draw-container'>
+                {
+                    draws.map((draw, idx) => (
+                        <div key={idx}>
+                            <Draw id={idx} draw={draw} changeDrawHandler={(inputIdx, value) => changeDrawHandler(idx, inputIdx, value)} deleteDrawHandler={() => deleteDrawHandler(idx)}/>
+                        </div>
+                        
+                    ))
+                }
+            </div>
             <br></br>
             <button type="button" onClick={addDrawHandler}>Add</button>
         </div>
