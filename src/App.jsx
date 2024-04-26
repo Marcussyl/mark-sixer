@@ -7,7 +7,7 @@ import './App.scss'
 function App() {
   const [draws, setDraws] = useState([[]]) //draw
   const [releases, setReleases] = useState([[]]) //1st element: release number
-  const [results, setResults] = useState([[]]) //[[[draw1 & release1 matches], [draw1 & release2 matches]],[[draw2 & release1 matches]]]
+  const [results, setResults] = useState([[]]) //[[[release no, draw1 & release1 matches], [release no, draw1 & release2 matches]],[[release no, draw2 & release1 matches]]]
 
   useEffect(() => {
     const draws = window.localStorage.getItem('Mark_Sixer_Draws')
@@ -28,17 +28,14 @@ function App() {
 
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Draws', JSON.stringify(draws))
-    //alert(`setting draws in localstorage ...`)
   }, [draws])
 
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Releases', JSON.stringify(releases))
-    //alert(`setting releases in localstorage ...`)
   }, [releases])
 
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Results', JSON.stringify(results))
-    //alert(`setting results in localstorage ...`)
   }, [results])
 
   //Draws handlers
@@ -50,7 +47,6 @@ function App() {
   const changeDrawHandler = (idx, inputIdx, value) => {
       const newDraws = [...draws]
       newDraws[idx][inputIdx] = value
-      //alert(`newDraws: ${newDraws}`)
       setDraws(newDraws)
   }
 
@@ -70,7 +66,6 @@ function App() {
       const newReleases = [...releases]
       newReleases[idx][inputIdx] = value
       setReleases(newReleases)
-      //alert(`newReleases: ${newReleases[0]}`)
   }
 
   const deleteReleaseHandler = (idx) => {
@@ -88,26 +83,25 @@ function App() {
     for(let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
       let draw = draws[drawIdx]
       newResults[drawIdx] = []
-      //alert(`release length: ${releases.length}`)
       for(let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
         let release = releases[releaseIdx].slice(1);
-        //alert(`comparing draw ${drawIdx}: ${draw} with release ${releaseIdx}: ${release}...`)
-        let tempResult = [];
+        let tempResult = [releases[releaseIdx][0]];
+        alert(`tempResult: ${JSON.stringify(tempResult)}`)
         for (let i = 0; i < 6; i++) {
           if (release.indexOf(draw[i]) !== -1) {
             tempResult.push(draw[i]);
-            //alert(`draw ${drawIdx} and release ${releaseIdx} match: ${draw[i]}`)
           }
         }
         newResults[drawIdx] = [...newResults[drawIdx], tempResult];
-        setResults(newResults);            
+        setResults(newResults); 
+        alert(`Results: ${newResults}`)           
       }
     }
   }
 
   return (
     <>
-      <h1>Mark Sixer</h1>
+      
       <div className='main-container'>
         <div className='left-container'>
           <div className='input-container'>
@@ -117,7 +111,11 @@ function App() {
           <br></br>
           <button type='button' onClick={checkHandler} className='check-button'>Check</button>
         </div>
-        <Results results={results} releases={releases} draws={draws}/>
+        <div className='right-container'>
+          <h1>Mark Sixer</h1>
+          <Results results={results}/>
+        </div>
+        
       </div> 
     </>
   )

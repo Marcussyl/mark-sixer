@@ -2,36 +2,33 @@ import PropTypes from 'prop-types';
 import '../scss/results.scss';
 
 function Results (props) {
-    const {results, releases} = props
+    const {results} = props
+    
 
     return (
         <div className='results-container'>
             <h2>Results</h2>
             <br></br>
-            <table>
-                <tr>
-                    <th></th>
-                    {
-                        releases.map((release) => (
-                            <th key={release[0]} className='header'>{release[0]}</th>
-                        ))
-                        
-                    }
-                </tr>
-                
+            <div className='result-container'>
                 {
-                    results.map((result, drawIdx) => (
-                        <tr key={drawIdx}>
-                            <th className='header'>Draw {drawIdx}</th>
+                    results.map((result, idx) => (
+                        <div key={`draw ${idx}`} className='draw-match-container'>
+                            <h4>{`Draw ${idx}`}</h4>
                             {
-                                result.map((drawReleaseMatch, releaseIdx) => (
-                                    <td key={releaseIdx} className='match'>{drawReleaseMatch.join(' ')}</td>
+                                result.map((releaseMatch, idx) => (
+                                    <div key={`release ${idx}`} className='release-match-container'>
+                                        <p className='release-number'>{`${releaseMatch[0]}: `}</p>
+                                        <p>{releaseMatch.slice(1).join(', ')}</p>
+                                    </div>
                                 ))
                             }
-                        </tr>
+                        </div>
                     ))
                 }
-            </table>
+            </div>
+            
+            
+            
         </div>
     )
 }
@@ -40,8 +37,6 @@ function Results (props) {
 
 Results.propTypes = {
     results: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    releases: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    draws: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
 }
 
 export default Results

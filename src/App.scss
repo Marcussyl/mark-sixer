@@ -15,14 +15,22 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
-  align-content: center;
+  align-items: flex-start;
   border: 2px solid orange;
   width: 100%;
 }
 
 .left-container {
-  width: 80%;
+  width: 50%;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.right-container{
+  width: 50%;
   padding: 1em;
   display: flex;
   flex-direction: column;

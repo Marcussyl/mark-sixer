@@ -4,34 +4,35 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 1rem 0;
 }
 
-table {
-  width: 60%;
-  border-collapse: collapse;
-  border: 3px solid dashed;
+.result-container{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
-th, td {
-    width: 50px;
-    padding: 8px;
-    text-align: left;
-    border: 1px solid black;
-    color: black;
+.draw-match-container{
+  border: 1px black dashed;
+  text-align: left;
+  margin-right: 1rem;
+  padding: 1rem;
+  background-color: lightgoldenrodyellow;
+  border-radius: 20px;
 }
 
-th {
-  background-color: #A4D8FB;
+.draw-match-container h4{
+  margin: .2rem;
+  padding: 0;
 }
 
-tr:nth-child(odd) {
-  background-color: #FD49A0;
+.release-match-container p{
+  display: inline;
 }
 
-tr:nth-child(even) {
-  background-color: #B4FEE7;
-}
-
-th:first-child, td:first-child {
-  text-align: center;
+.release-number {
+  font-weight: bold;
+  color: lightcoral;
 }
