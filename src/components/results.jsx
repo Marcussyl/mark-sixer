@@ -38,7 +38,7 @@ function Results (props) {
 
 
 Results.propTypes = {
-    results: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+    results: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))).isRequired,
 }
 
 export default Results

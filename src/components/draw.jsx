@@ -21,7 +21,7 @@ function Draw (props) {
 
 Draw.propTypes = {
     id: PropTypes.number.isRequired,
-    draw: PropTypes.number.isRequired,
+    draw: PropTypes.arrayOf(PropTypes.string).isRequired,
     deleteDrawHandler: PropTypes.func.isRequired,
     changeDrawHandler: PropTypes.func.isRequired
 };
