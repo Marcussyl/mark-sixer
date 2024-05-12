@@ -3,11 +3,14 @@ import Releases from './components/releases.jsx'
 import Results  from './components/results.jsx'
 import { useState, useEffect } from 'react'
 import './App.scss'
+import Tesseract from 'tesseract.js'
+
 
 function App() {
   const [draws, setDraws] = useState([[]]) //draw
   const [releases, setReleases] = useState([[]]) //1st element: release number
   const [results, setResults] = useState([[]]) //[[[release no, draw1 & release1 matches], [release no, draw1 & release2 matches]],[[release no, draw2 & release1 matches]]]
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const draws = window.localStorage.getItem('Mark_Sixer_Draws')
@@ -36,6 +39,34 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Results', JSON.stringify(results))
   }, [results])
+
+  
+  // Text extraction
+  const processResult = (result) => {
+    const pattern = /(\d+\+\d+\+\d+\+\d+\+\d+\+\d+)/g;
+    const matches = result.match(pattern);
+
+    if (matches) {
+        console.log(`matches: ${JSON.stringify(matches)}`);
+        const extractedDigits = matches.map((match) => {
+            const digits = match.match(/\d/g);
+            return digits ? digits : [];
+        });
+        setDraws([...draws, ...extractedDigits]);
+    } else {
+        console.log("No matches found.");
+    }
+    
+    setIsModalOpen(true);
+  };
+
+  const onFileChange = (e) => {
+    Tesseract.recognize(e.target.files[0], 'eng')
+    .then(({ data: { text } }) => {
+        console.log(text);
+        processResult(text);
+    });
+  };
 
   //Draws handlers
   const addDrawHandler = () => {
@@ -100,7 +131,7 @@ function App() {
       <div className='main-container'>
         <div className='left-container'>
           <div className='input-container'>
-            <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler}/>
+            <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler} onFileChange={onFileChange} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
             <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
           </div>
           <button type='button' onClick={checkHandler} className='check-button'>Check</button>
