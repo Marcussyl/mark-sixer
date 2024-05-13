@@ -11,12 +11,13 @@ function App() {
   const [releases, setReleases] = useState([[]]) //1st element: release number
   const [results, setResults] = useState([[]]) //[[[release no, draw1 & release1 matches], [release no, draw1 & release2 matches]],[[release no, draw2 & release1 matches]]]
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [match, setMatch] = useState()
 
   useEffect(() => {
     const draws = window.localStorage.getItem('Mark_Sixer_Draws')
     const releases = window.localStorage.getItem('Mark_Sixer_Releases')
     const results = window.localStorage.getItem('Mark_Sixer_Results')
-
+    
     if (draws && releases && results) {
       try {
         setDraws(JSON.parse(draws));
@@ -41,18 +42,20 @@ function App() {
   }, [results])
 
   
-  // Text extraction
+  //Text extraction
   const processResult = (result) => {
     const pattern = /(\d+\+\d+\+\d+\+\d+\+\d+\+\d+)/g;
     const matches = result.match(pattern);
 
     if (matches) {
-        console.log(`matches: ${JSON.stringify(matches)}`);
-        const extractedDigits = matches.map((match) => {
-            const digits = match.match(/\d/g);
-            return digits ? digits : [];
-        });
-        setDraws([...draws, ...extractedDigits]);
+      setMatch(JSON.stringify(matches))
+      console.log(match)
+      //console.log(`matches: ${JSON.stringify(matches)}`);
+      // const extractedDigits = matches.map((match) => {
+      //     const digits = match.match(/\d/g);
+      //     return digits ? digits : [];
+      // });
+      //setDraws([...draws, ...extractedDigits]);
     } else {
         console.log("No matches found.");
     }
@@ -63,7 +66,7 @@ function App() {
   const onFileChange = (e) => {
     Tesseract.recognize(e.target.files[0], 'eng')
     .then(({ data: { text } }) => {
-        console.log(text);
+        console.log(`Raw text: ${text}`);
         processResult(text);
     });
   };
@@ -131,7 +134,7 @@ function App() {
       <div className='main-container'>
         <div className='left-container'>
           <div className='input-container'>
-            <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler} onFileChange={onFileChange} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+            <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler} onFileChange={onFileChange} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} match={match}/>
             <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
           </div>
           <button type='button' onClick={checkHandler} className='check-button'>Check</button>

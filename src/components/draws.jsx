@@ -4,7 +4,7 @@ import '../scss/draws.scss'
 import { Modal } from 'antd'
 
 function Draws(props) {
-    const {draws, addDrawHandler, deleteDrawHandler, changeDrawHandler, onFileChange, isModalOpen, setIsModalOpen} = props
+    const {draws, addDrawHandler, deleteDrawHandler, changeDrawHandler, onFileChange, isModalOpen, setIsModalOpen, match} = props
 
     const handleOk = () => {
         setIsModalOpen(false);
@@ -29,10 +29,10 @@ function Draws(props) {
             </div>
             <br></br>
             <button type="button" onClick={addDrawHandler}>Add</button>
-            <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+            <Modal title="Match results" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <p>{match}</p>
+                <img  src='../assets/icon.png' alt='logo'/>
+                <link rel="icon" type="image/png" href="./src/assets/icon.png" />
             </Modal>
         </div>
     )
@@ -46,6 +46,7 @@ Draws.propTypes = {
     onFileChange: PropTypes.func.isRequired,
     isModalOpen: PropTypes.bool.isRequired,
     setIsModalOpen: PropTypes.func.isRequired,
+    match: PropTypes.string.isRequired
 };
 
 export default Draws
