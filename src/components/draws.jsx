@@ -4,11 +4,16 @@ import '../scss/draws.scss'
 import { Modal } from 'antd'
 
 function Draws(props) {
-    const {draws, addDrawHandler, deleteDrawHandler, changeDrawHandler, onFileChange, isModalOpen, setIsModalOpen, match} = props
+    const {draws, addDrawHandler, deleteDrawHandler, changeDrawHandler, onFileChange, isModalOpen, setIsModalOpen, match, progress, handleInputChange, setDraws} = props
 
     const handleOk = () => {
         setIsModalOpen(false);
+        //update the draws list
+        const convertedMatch = match.map((mat) => (mat.split('+')))
+        const updatedDraws = [...draws, ...convertedMatch]
+        setDraws(updatedDraws)
     };
+
     const handleCancel = () => {
         setIsModalOpen(false);
     };
@@ -17,6 +22,7 @@ function Draws(props) {
         <div className='draws-container'>
             <h2>Your Draws</h2>
             <input type="file" onChange={onFileChange} />
+            <progress value={progress} max={1} />
             <div className='draw-container'>
                 {
                     draws.map((draw, idx) => (
@@ -29,10 +35,13 @@ function Draws(props) {
             </div>
             <br></br>
             <button type="button" onClick={addDrawHandler}>Add</button>
-            <Modal title="Match results" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <p>{match}</p>
-                <img  src='../assets/icon.png' alt='logo'/>
-                <link rel="icon" type="image/png" href="./src/assets/icon.png" />
+            <Modal title="Match results" centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                {/* <p>{match}</p> */}
+                {
+                    match && match.map((mat, idx) => (
+                        <input key={idx} value={mat} onChange={(event) => handleInputChange(idx, event.target.value)}/>
+                    ))
+                }
             </Modal>
         </div>
     )
@@ -46,7 +55,10 @@ Draws.propTypes = {
     onFileChange: PropTypes.func.isRequired,
     isModalOpen: PropTypes.bool.isRequired,
     setIsModalOpen: PropTypes.func.isRequired,
-    match: PropTypes.string.isRequired
+    match: PropTypes.arrayOf(PropTypes.string).isRequired,
+    progress: PropTypes.number.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
+    setDraws: PropTypes.func.isRequired,
 };
 
 export default Draws
