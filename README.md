@@ -10,7 +10,7 @@ The Mark Six Result Matcher is a React-based web application that allows users t
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/mark`
+1. Clone the repository: `git clone https://marcussyl.github.io/mark-sixer/`
 2. Navigate to the project directory: `cd mark-sxier`
 3. Install dependencies: `npm install`
 
