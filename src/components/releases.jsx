@@ -3,7 +3,24 @@ import PropTypes from 'prop-types'
 import '../scss/releases.scss'
 
 function Releases (props) {
-    const {releases, addReleaseHandler, changeReleaseHandler, deleteReleaseHandler} = props
+    const {releases, setReleases} = props
+
+    //Releases handlers
+    const addReleaseHandler = () => {
+        const newReleases = [...releases, ['', '', '', '', '', '', '']]
+        setReleases(newReleases)
+    }
+
+    const changeReleaseHandler = (idx, inputIdx, value) => {
+        const newReleases = [...releases]
+        newReleases[idx][inputIdx] = value
+        setReleases(newReleases)
+    }
+
+    const deleteReleaseHandler = (idx) => {
+        const newReleases = [...releases.slice(0, idx), ...releases.slice(idx + 1)]
+        setReleases(newReleases)
+    }
 
     return (
         <div className='releases-container'>
@@ -26,9 +43,7 @@ function Releases (props) {
 
 Releases.propTypes = {
     releases: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    addReleaseHandler: PropTypes.func.isRequired,
-    deleteReleaseHandler: PropTypes.func.isRequired,
-    changeReleaseHandler: PropTypes.func.isRequired
+    setReleases: PropTypes.func.isRequired
 };
 
 export default Releases

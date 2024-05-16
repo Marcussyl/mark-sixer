@@ -3,17 +3,14 @@ import Releases from './components/releases.jsx'
 import Results  from './components/results.jsx'
 import { useState, useEffect } from 'react'
 import './App.scss'
-import Tesseract from 'tesseract.js'
 
 
 function App() {
   const [draws, setDraws] = useState([[]]) //draw
   const [releases, setReleases] = useState([[]]) //1st element: release number
-  const [results, setResults] = useState([[]]) //[[[release no, draw1 & release1 matches], [release no, draw1 & release2 matches]],[[release no, draw2 & release1 matches]]]
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [match, setMatch] = useState([])
-  const [progress, setProgress] = useState(0);
+  const [results, setResults] = useState([[]]) //[[[release no, draw1 & release1 matches], [release no, draw1 & release2 matches]],[[release no, draw2 & release1 matches]]] 
 
+  //storage persistence
   useEffect(() => {
     const draws = window.localStorage.getItem('Mark_Sixer_Draws')
     const releases = window.localStorage.getItem('Mark_Sixer_Releases')
@@ -41,87 +38,11 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Results', JSON.stringify(results))
   }, [results])
-
   
-  //Text extraction
-  const processResult = (result) => {
-    const pattern = /(\d+\+\d+\+\d+\+\d+\+\d+\+\d+)/g;
-    const matches = result.match(pattern);
-
-    if (matches) {
-      //setMatch(JSON.stringify(matches))
-      setMatch(matches)
-      // const extractedDigits = matches.map((match) => {
-      //     const digits = match.match(/\d/g);
-      //     return digits ? digits : [];
-      // });
-      //setDraws([...draws, ...extractedDigits]);
-    } else {
-        console.log("No matches found.");
-    }
-    
-    setIsModalOpen(true);
-  };
-
-  const onFileChange = (e) => {
-    Tesseract.recognize(e.target.files[0], 'eng', {
-      logger: (m) => {
-        //console.log(m);
-        if (m.status === "recognizing text") {
-          setProgress(m.progress);
-        }
-      },
-    })
-    .then(({ data: { text } }) => {
-        console.log(`Raw text: ${text}`);
-        processResult(text);
-    });
-  };
-
-  //Modal handlers
-  const handleInputChange = (idx, value) => {
-      const updatedMatch = [...match]
-      updatedMatch[idx] = value
-      console.log(updatedMatch)
-      setMatch(updatedMatch)
-  }
-
-  //Draws handlers
-  const addDrawHandler = () => {
-      const newDraws = [...draws, ['', '', '', '', '', '']]
-      setDraws(newDraws)
-  }
-
-  const changeDrawHandler = (idx, inputIdx, value) => {
-      const newDraws = [...draws]
-      newDraws[idx][inputIdx] = value
-      setDraws(newDraws)
-  }
-
-  const deleteDrawHandler = (idx) => {
-      const newDraws = [...draws.slice(0, idx), ...draws.slice(idx + 1)]
-      setDraws(newDraws)
-  }
-
-  
-  //Releases handlers
-  const addReleaseHandler = () => {
-      const newReleases = [...releases, ['', '', '', '', '', '', '']]
-      setReleases(newReleases)
-  }
-
-  const changeReleaseHandler = (idx, inputIdx, value) => {
-      const newReleases = [...releases]
-      newReleases[idx][inputIdx] = value
-      setReleases(newReleases)
-  }
-
-  const deleteReleaseHandler = (idx) => {
-      const newReleases = [...releases.slice(0, idx), ...releases.slice(idx + 1)]
-      setReleases(newReleases)
-  }
-
-  //Results handlers
+  /**
+   * check if there are matches between draws and releases lists
+   * store the matches in results state
+   */
   const checkHandler = () => {
     let newResults = []
     for(let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
@@ -145,14 +66,11 @@ function App() {
 
   return (
     <>
-      
       <div className='main-container'>
         <div className='left-container'>
           <div className='input-container'>
-            <Draws draws={draws} addDrawHandler={addDrawHandler} changeDrawHandler={changeDrawHandler} deleteDrawHandler={deleteDrawHandler} 
-            onFileChange={onFileChange} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} match={match} progress={progress} 
-            handleInputChange={handleInputChange} setDraws={setDraws}/>
-            <Releases releases={releases} addReleaseHandler={addReleaseHandler} changeReleaseHandler={changeReleaseHandler} deleteReleaseHandler={deleteReleaseHandler}/>
+            <Draws draws={draws} setDraws={setDraws}/>
+            <Releases releases={releases} setReleases={setReleases}/>
           </div>
           <button type='button' onClick={checkHandler} className='check-button'>Check</button>
         </div>
@@ -160,7 +78,6 @@ function App() {
           <h1>Mark Sixer</h1>
           <Results results={results}/>
         </div>
-        
       </div> 
     </>
   )
