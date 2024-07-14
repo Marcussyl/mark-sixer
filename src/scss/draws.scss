@@ -1,7 +1,7 @@
 .draws-container {
     border: 1px black dashed;
-    padding: 0.5em;
-    width: 100%;
+    padding: 0.3em;
+    width: 90%;
     background-color: #A1A9FE;
     border-radius: 25px;
     color: black;
@@ -12,6 +12,7 @@
     max-height: 300px;
     overflow-y: auto; /* Enable vertical scrollbar */
     scrollbar-color: black lightgrey;
+    border: #535bf2 solid 1px;
 }
 
 h2 {
