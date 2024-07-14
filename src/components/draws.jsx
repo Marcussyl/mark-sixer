@@ -80,8 +80,10 @@ function Draws(props) {
     return (
         <div className='draws-container'>
             <h2>Your Draws</h2>
-            <input type="file" onChange={onFileChange} />
-            <progress value={progress} max={1} />
+            <div className={'tesseract-container'}>
+                <input type="file" onChange={onFileChange}/>
+                <progress value={progress} max={1}/>
+            </div>
             <div className='draw-container'>
                 {
                     draws.map((draw, idx) => (
