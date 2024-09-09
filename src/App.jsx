@@ -3,6 +3,7 @@ import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
 import { useState, useEffect } from "react";
 import "./scss/App.scss";
+import { OpenCvProvider } from "opencv-react";
 
 function App() {
   const [draws, setDraws] = useState([[]]); //draw
@@ -71,18 +72,19 @@ function App() {
       <div className="main-container">
         <div className="left-container">
           <div className="input-container">
-            <Draws draws={draws} setDraws={setDraws} />
-            <Releases releases={releases} setReleases={setReleases} />
-          </div>
+            <Draws draws={draws} setDraws={setDraws} />{" "}
+            <OpenCvProvider>
+              <Releases releases={releases} setReleases={setReleases} />{" "}
+            </OpenCvProvider>{" "}
+          </div>{" "}
           <button type="button" onClick={checkHandler} className="check-button">
-            Check
-          </button>
-        </div>
+            Check{" "}
+          </button>{" "}
+        </div>{" "}
         <div className="right-container">
-          <h1>Mark Sixer</h1>
-          <Results results={results} />
-        </div>
-      </div>
+          <h1> Mark Sixer </h1> <Results results={results} />{" "}
+        </div>{" "}
+      </div>{" "}
     </>
   );
 }
