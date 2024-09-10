@@ -4,10 +4,13 @@ import "../scss/releases.scss";
 import { useState } from "react";
 import Tesseract from "tesseract.js";
 import { useOpenCv } from "opencv-react";
+import { Modal } from "antd";
 
 function Releases(props) {
   const { releases, setReleases } = props;
   const [progress, setProgress] = useState(0);
+  const [match, setMatch] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { loaded, cv } = useOpenCv();
 
   //Releases handlers
@@ -29,18 +32,17 @@ function Releases(props) {
 
   //Text extraction
   const processResult = (result) => {
-    // const pattern = /(\d+\+\d+\+\d+\+\d+\+\d+\+\d+)/g;
-    // const matches = result.match(pattern);
+    const matches = result.trim().split("\n");
 
-    // if (matches) {
-    //   setMatch(matches);
-    // } else {
-    //   console.log("No matches found.");
-    // }
+    if (matches) {
+      setMatch(matches);
+    } else {
+      console.log("No matches found.");
+    }
 
-    // setIsModalOpen(true);
+    setIsModalOpen(true);
 
-    console.log(result);
+    console.log(typeof result);
   };
 
   const processImage = (image) => {
@@ -89,18 +91,39 @@ function Releases(props) {
 
   const onFileChange = (e) => {
     const image = e.target.files[0];
-    const processedImage = processImage(image);
-    Tesseract.recognize(processedImage, "eng", {
-      logger: (m) => {
-        //console.log(m);
-        if (m.status === "recognizing text") {
-          setProgress(m.progress);
-        }
-      },
-    }).then(({ data: { text } }) => {
-      console.log(`Raw text: ${text}`);
-      processResult(text);
+    processImage(image).then((processedImage) => {
+      Tesseract.recognize(processedImage, "eng", {
+        logger: (m) => {
+          //console.log(m);
+          if (m.status === "recognizing text") {
+            setProgress(m.progress);
+          }
+        },
+      }).then(({ data: { text } }) => {
+        //console.log(`Raw text: ${text}`);
+        processResult(text);
+      });
     });
+  };
+
+  //Modal handlers
+  const handleInputChange = (idx, value) => {
+    const updatedMatch = [...match];
+    updatedMatch[idx] = value;
+    console.log(updatedMatch);
+    setMatch(updatedMatch);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+    //update the draws list
+    const convertedMatch = match.map((mat) => mat.split(" "));
+    const updatedReleases = [...releases, ...convertedMatch];
+    setReleases(updatedReleases);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -128,10 +151,26 @@ function Releases(props) {
           </div>
         ))}{" "}
       </div>{" "}
-      <br> </br>{" "}
+      <br />
       <button type="button" onClick={addReleaseHandler}>
         Add{" "}
       </button>{" "}
+      <Modal
+        title="Match results"
+        centered
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        {match &&
+          match.map((mat, idx) => (
+            <input
+              key={idx}
+              value={mat}
+              onChange={(event) => handleInputChange(idx, event.target.value)}
+            />
+          ))}{" "}
+      </Modal>{" "}
     </div>
   );
 }
