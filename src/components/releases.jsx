@@ -41,8 +41,6 @@ function Releases(props) {
     }
 
     setIsModalOpen(true);
-
-    console.log(typeof result);
   };
 
   const processImage = (image) => {
