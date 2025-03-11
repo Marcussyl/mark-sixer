@@ -1,34 +1,20 @@
-import Draw from './draw.jsx'
-import PropTypes from 'prop-types'
 import '../scss/draws.scss'
 import { Modal } from 'antd'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import Tesseract from 'tesseract.js'
+import Draw from './draw.jsx'
+import { DrawContext } from '../App.jsx'
+import { PlusSquareOutlined } from "@ant-design/icons";
+import { Flex, Progress } from "antd";
 
-function Draws(props) {
+function Draws() {
     const [progress, setProgress] = useState(0);
     const [match, setMatch] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const {draws, setDraws} = props
 
     //Draws handlers
-    const addDrawHandler = () => {
-        const newDraws = [...draws, ['', '', '', '', '', '']]
-        setDraws(newDraws)
-    }
+    const {draws, addDraw, setDraws} = useContext(DrawContext);
 
-    const changeDrawHandler = (idx, inputIdx, value) => {
-        const newDraws = [...draws]
-        newDraws[idx][inputIdx] = value
-        setDraws(newDraws)
-    }
-
-    const deleteDrawHandler = (idx) => {
-        const newDraws = [...draws.slice(0, idx), ...draws.slice(idx + 1)]
-        setDraws(newDraws)
-    }
-
-    //Text extraction
     const processResult = (result) => {
         const pattern = /(\d+\+\d+\+\d+\+\d+\+\d+\+\d+)/g;
         const matches = result.match(pattern);
@@ -78,38 +64,62 @@ function Draws(props) {
     };
 
     return (
-        <div className='draws-container'>
-            {/* <h2>Your Draws</h2> */}
-            <div className={'tesseract-container'}>
-                <input type="file" onChange={onFileChange}/>
-                <progress value={progress} max={1}/>
-            </div>
-            <div className='draw-container'>
-                {
-                    draws.map((draw, idx) => (
-                        <div key={idx}>
-                            <Draw id={idx} draw={draw} changeDrawHandler={(inputIdx, value) => changeDrawHandler(idx, inputIdx, value)} deleteDrawHandler={() => deleteDrawHandler(idx)}/>
-                        </div>
-                        
-                    ))
-                }
-            </div>
-            <button className='add-btn' type="button" onClick={addDrawHandler}>Add</button>
-            <Modal title="Match results" centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                {/* <p>{match}</p> */}
-                {
-                    match && match.map((mat, idx) => (
-                        <input key={idx} value={mat} onChange={(event) => handleInputChange(idx, event.target.value)}/>
-                    ))
-                }
-            </Modal>
+      <div className="draws-container">
+        {/* <h2>Your Draws</h2> */}
+        <div>
+          <div className={"tesseract-container"}>
+            <input type="file" onChange={onFileChange} />
+            {/* <Dragger {...props}>
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">
+                  Click or drag file to this area to upload
+                </p>
+                <p className="ant-upload-hint">
+                  Support for a single or bulk upload. Strictly prohibited from
+                  uploading company data or other banned files.
+                </p>
+              </Dragger> */}
+            {/* <progress value={progress} max={1} /> */}
+            <Flex
+              vertical
+              gap="small"
+              style={{
+                width: 180,
+              }}
+            >
+              <Progress percent={progress*100} size="small" showInfo={false}/>
+            </Flex>
+          </div>
+          <div className="draw-container">
+            {draws.map((draw, idx) => (
+              <Draw key={idx} id={idx} />
+            ))}
+          </div>
         </div>
-    )
-}
+        <br></br>
+        <PlusSquareOutlined className='add-btn' onClick={addDraw} />
 
-Draws.propTypes = {
-    draws: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    setDraws: PropTypes.func.isRequired,
-};
+        {/* pop-up window for users to confirm matches after extracting text from image */}
+        <Modal
+          title="Match results"
+          centered
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          {match &&
+            match.map((mat, idx) => (
+              <input
+                key={idx}
+                value={mat}
+                onChange={(event) => handleInputChange(idx, event.target.value)}
+              />
+            ))}
+        </Modal>
+      </div>
+    );
+}
 
 export default Draws

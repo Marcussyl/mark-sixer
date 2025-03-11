@@ -1,48 +1,39 @@
 import Draws from "./components/draws.jsx";
 import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./scss/App.scss";
 import { OpenCvProvider } from "opencv-react";
 import { DiffOutlined, HighlightOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
 
+export const DrawContext = React.createContext();
+
 function App() {
-  const [draws, setDraws] = useState([[]]); //draw
-  const [releases, setReleases] = useState([[]]); //1st element: release number
+  const [draws, setDraws] = useState([]);
+  const [releases, setReleases] = useState([]); //1st element: release number
   const [results, setResults] = useState([[]]); //[[[release no, draw1 & release1 matches], [release no, draw1 & release2 matches]],[[release no, draw2 & release1 matches]]]
 
-  //storage persistence
-  useEffect(() => {
-    const draws = window.localStorage.getItem("Mark_Sixer_Draws");
-    const releases = window.localStorage.getItem("Mark_Sixer_Releases");
-    const results = window.localStorage.getItem("Mark_Sixer_Results");
+  function updateDraw(drawIdx, fieldIdx, value) {
+    // In React, you should never mutate state directly because it can lead to inconsistencies in the UI and prevent React from detecting changes properly.
+    console.log("Updating...");
+    console.log("old draws:"+JSON.stringify(draws));
+    const updatedDraws = [...draws];
+    updatedDraws[drawIdx][fieldIdx] = value;
+    setDraws(updatedDraws);
+    console.log("updated draws:" + JSON.stringify(draws));
+  }
 
-    if (draws && releases && results) {
-      try {
-        setDraws(JSON.parse(draws));
-        setReleases(JSON.parse(releases));
-        setResults(JSON.parse(results));
-      } catch (error) {
-        console.error("Error parsing stored data:", error);
-      }
-    }
-  }, []);
+  function addDraw() {
+    const updatedDraws = [...draws, ["", "", "", "", "", ""]];
+    setDraws(updatedDraws);
+  }
 
-  useEffect(() => {
-    window.localStorage.setItem("Mark_Sixer_Draws", JSON.stringify(draws));
-  }, [draws]);
-
-  useEffect(() => {
-    window.localStorage.setItem(
-      "Mark_Sixer_Releases",
-      JSON.stringify(releases)
-    );
-  }, [releases]);
-
-  useEffect(() => {
-    window.localStorage.setItem("Mark_Sixer_Results", JSON.stringify(results));
-  }, [results]);
+  function deleteDraw(idx) {
+    const updatedDraws = [...draws];
+    updatedDraws.splice(idx, 1);
+    setDraws(updatedDraws);
+  }
 
   /**
    * check if there are matches between draws and releases lists
@@ -70,7 +61,9 @@ function App() {
   };
 
   const DrawComponent = () => (
-    <Draws draws={draws} setDraws={setDraws} />
+    <DrawContext.Provider value={{draws, addDraw, updateDraw, deleteDraw, setDraws}}>
+      <Draws draws={draws} setDraws={setDraws} />
+    </DrawContext.Provider>
   )
 
   const ReleaseComponent = () => (
@@ -89,6 +82,7 @@ function App() {
 
   return (
     <>
+      {/* <h1>Hello world!</h1> */}
       <div className="main-container">
         <h1 className="titan-one-regular"> Mark Sixer </h1> 
         <Tabs

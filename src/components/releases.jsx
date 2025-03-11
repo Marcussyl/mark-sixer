@@ -5,6 +5,7 @@ import { useState } from "react";
 import Tesseract from "tesseract.js";
 import { useOpenCv } from "opencv-react";
 import { Modal } from "antd";
+import { PlusSquareOutlined } from "@ant-design/icons";
 
 function Releases(props) {
   const { releases, setReleases } = props;
@@ -136,7 +137,6 @@ function Releases(props) {
         <p> Loading OpenCV... </p>
       )}
       <div className="release-container">
-        
         {releases.map((release, idx) => (
           <div key={idx}>
             <Release
@@ -147,11 +147,13 @@ function Releases(props) {
               deleteReleaseHandler={() => deleteReleaseHandler(idx)}
             />
           </div>
-        ))}
-      </div>
-      <button className='add-btn' type="button" onClick={addReleaseHandler}>
-        Add
-      </button>
+        ))}{" "}
+      </div>{" "}
+      <br />
+      {/* <button type="button" onClick={addReleaseHandler}>
+        Add{" "}
+      </button>{" "} */}
+      <PlusSquareOutlined className="add-btn" onClick={addReleaseHandler} />
       <Modal
         title="Match results"
         centered
