@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import { useContext } from 'react'
-import '../scss/draw.scss'
 import { DrawContext } from '../App'
 import { DeleteOutlined } from "@ant-design/icons";
 
@@ -58,9 +57,9 @@ function Draw (props) {
           name="drawNum6"
           value={draw[5]}
           onChange={(event) => updateDraw(id, 5, event.target.value)}
-        />{" "}
+        />
         &nbsp;&nbsp;
-        <DeleteOutlined onClick={deleteDraw} />
+        <DeleteOutlined onClick={deleteDraw} className='delete-btn'/>
       </div>
     );
     

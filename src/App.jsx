@@ -3,7 +3,6 @@ import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
 import React, { useState } from "react";
 import "./scss/App.scss";
-import { OpenCvProvider } from "opencv-react";
 import { DiffOutlined, HighlightOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
 
@@ -16,12 +15,9 @@ function App() {
 
   function updateDraw(drawIdx, fieldIdx, value) {
     // In React, you should never mutate state directly because it can lead to inconsistencies in the UI and prevent React from detecting changes properly.
-    console.log("Updating...");
-    console.log("old draws:"+JSON.stringify(draws));
     const updatedDraws = [...draws];
     updatedDraws[drawIdx][fieldIdx] = value;
     setDraws(updatedDraws);
-    console.log("updated draws:" + JSON.stringify(draws));
   }
 
   function addDraw() {
@@ -68,9 +64,7 @@ function App() {
 
   const ReleaseComponent = () => (
     <div>
-      <OpenCvProvider>
-        <Releases releases={releases} setReleases={setReleases} />
-      </OpenCvProvider>
+      <Releases releases={releases} setReleases={setReleases} />
     </div>
   )
 

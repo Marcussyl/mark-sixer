@@ -26,15 +26,22 @@
     font-size: 6rem;
     margin: 0;
     color: rgb(63, 63, 63);
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
 
   .ant-tabs {
     width: 90%;
+    max-width: 768px;
     margin: auto;
 
     .add-btn {
       width: fit-content;
+      font-size: 20px;
+    }
+
+    .delete-btn {
+      color: #f74f4f;
+      font-size: 15px;
     }
 
     input[type='text'] {
@@ -42,6 +49,7 @@
       height: 20px;
       background-color: #F6D4D2;
       color: black;
+      border-radius: 10px;
     }
 
     .draws-container, .releases-container {
@@ -51,49 +59,39 @@
       align-items: center;
       gap: 20px;
       padding: 20px;
+      width: 100%;
+      max-width: 768px;
+      border-radius: 25px;
+      color: black;
+
+      .draw-container, .release-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding-inline: 40px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
     }
 
     .draws-container {
-      border: 1px black dashed;
-      width: 100%;
       background-color: #A1A9FE;
-      border-radius: 25px;
-      color: black;
-      margin-bottom: 2rem;
-      
-      .draw-container{
-        width: 100%;
-        max-height: 300px;
-        overflow-y: auto; /* Enable vertical scrollbar */
-        scrollbar-color: black lightgrey;
 
-        .draw {
-            padding-bottom: 0.5em;
+      .tesseract-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        input[type="file"] {
+          width: 55%;
         }
       }
     }
 
     .releases-container {
-      border: 1px black dashed;
-      margin-bottom: 2rem;
-      width: 100%;
-      border-radius: 25px;
       background-color: #6BCFDC;
-      color: black;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      
-      .release-container{
-        max-height: 300px;
-        overflow-y: auto; /* Enable vertical scrollbar */
-        scrollbar-color: black lightgrey;
-
-        .release {
-            padding-bottom: 0.5em;
-        }
-      }
     }
   }
 }

@@ -32,43 +32,47 @@ function Results (props) {
     const { styles } = useStyle();
 
     return (
-        <div className='results-container'>
-            <div className='result-container'>
-                {
-                    results.map((result, idx) => (
-                        result.length > 0 && (
-                            <div key={`draw ${idx}`} className='draw-match-container'>
-                                <h4>{`Draw ${idx}`}</h4>
-                                {
-                                    result.map((releaseMatch, idx) => (
-                                        <div key={`release ${idx}`} className='release-match-container'>
-                                            <p className='release-number'>{`${releaseMatch[0]}: `}</p>
-                                            <p>{releaseMatch.slice(1).join(', ')}</p>
-                                        </div>
-                                    ))
-                                } 
-                            </div>
-                        )
-                    ))
-                }
-                <button type="button" onClick={checkHandler} className="check-button">
-                    Check
-                </button>
-                {/* <ConfigProvider
-                    button={{
-                        className: styles.linearGradientButton,
-                    }}
+      <div className="results-container">
+        <div className="result-container">
+          {results.map(
+            (result, idx) =>
+              result.length > 0 && (
+                <div key={`draw ${idx}`} className="draw-match-container">
+                  <h4>{`Draw ${idx}`}</h4>
+                  {result.map((releaseMatch, idx) => (
+                    <div
+                      key={`release ${idx}`}
+                      className="release-match-container"
                     >
-                    <Space>
-                        <Button type="primary" size="large" icon={<AntDesignOutlined />}>
-                        Gradient Button
-                        </Button>
-                        <Button size="large">Button</Button>
-                    </Space>
-                </ConfigProvider> */}
-            </div>
+                      <p className="release-number">{`${releaseMatch[0]}: `}</p>
+                      <p>{releaseMatch.slice(1).join(", ")}</p>
+                    </div>
+                  ))}
+                </div>
+              )
+          )}
+          {/* <button type="button" onClick={checkHandler} className="check-button">
+                    Check
+                </button> */}
+          <ConfigProvider
+            button={{
+              className: styles.linearGradientButton,
+            }}
+          >
+            <Space>
+              <Button
+                type="primary"
+                size="large"
+                icon={<AntDesignOutlined />}
+                onClick={checkHandler}
+              >
+                Check
+              </Button>
+            </Space>
+          </ConfigProvider>
         </div>
-    )
+      </div>
+    );
 }
 
 

@@ -61,7 +61,7 @@ function Release (props) {
           value={release[6]}
           onChange={(event) => changeReleaseHandler(6, event.target.value)}
         />
-        /
+        &nbsp; / &nbsp;
         <input
           type="text"
           id="releaseNum7"
@@ -69,15 +69,8 @@ function Release (props) {
           value={release[7]}
           onChange={(event) => changeReleaseHandler(7, event.target.value)}
         />
-        &nbsp;
-        {/* <button
-          type="button"
-          onClick={deleteReleaseHandler}
-          className="delete-button"
-        >
-          Del
-        </button> */}
-        <DeleteOutlined onClick={deleteReleaseHandler} />
+        &nbsp;&nbsp;
+        <DeleteOutlined onClick={deleteReleaseHandler} className="delete-btn" />
       </div>
     );
 }
