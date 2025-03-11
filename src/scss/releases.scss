@@ -10,14 +10,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+    
+    .release-container{
+        max-height: 300px;
+        overflow-y: auto; /* Enable vertical scrollbar */
+        scrollbar-color: black lightgrey;
 
-.release-container{
-    max-height: 300px;
-    overflow-y: auto; /* Enable vertical scrollbar */
-    scrollbar-color: black lightgrey;
-}
-
-h2 {
-    margin: 0;
+        .release {
+            padding-bottom: 0.5em;
+        }
+    }
 }

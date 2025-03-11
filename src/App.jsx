@@ -4,6 +4,8 @@ import Results from "./components/results.jsx";
 import { useState, useEffect } from "react";
 import "./scss/App.scss";
 import { OpenCvProvider } from "opencv-react";
+import { DiffOutlined, HighlightOutlined, BarChartOutlined } from '@ant-design/icons';
+import { Tabs } from 'antd';
 
 function App() {
   const [draws, setDraws] = useState([[]]); //draw
@@ -67,24 +69,42 @@ function App() {
     }
   };
 
+  const DrawComponent = () => (
+    <Draws draws={draws} setDraws={setDraws} />
+  )
+
+  const ReleaseComponent = () => (
+    <div>
+      <OpenCvProvider>
+        <Releases releases={releases} setReleases={setReleases} />
+      </OpenCvProvider>
+    </div>
+  )
+
+  const MatchComponent = () => (
+    <Results results={results} checkHandler={checkHandler}/>
+  )
+
+  const tabNames = ['Draws', 'Releases', 'Matches'];
+
   return (
     <>
       <div className="main-container">
-        <div className="left-container">
-          <div className="input-container">
-            <Draws draws={draws} setDraws={setDraws} />{" "}
-            <OpenCvProvider>
-              <Releases releases={releases} setReleases={setReleases} />{" "}
-            </OpenCvProvider>{" "}
-          </div>{" "}
-          <button type="button" onClick={checkHandler} className="check-button">
-            Check{" "}
-          </button>{" "}
-        </div>{" "}
-        <div className="right-container">
-          <h1> Mark Sixer </h1> <Results results={results} />{" "}
-        </div>{" "}
-      </div>{" "}
+        <h1 className="titan-one-regular"> Mark Sixer </h1> 
+        <Tabs
+          defaultActiveKey="1"
+          centered
+          items={[DiffOutlined, HighlightOutlined, BarChartOutlined].map((Icon, i) => {
+            const id = String(i + 1);
+            return {
+              key: id,
+              label: `${tabNames[i]}`,
+              children: id === '1' ? <DrawComponent/> : id === '2' ? <ReleaseComponent/> : <MatchComponent/>,
+              icon: <Icon />,
+            };
+          })}
+        />
+      </div>
     </>
   );
 }

@@ -126,17 +126,17 @@ function Releases(props) {
 
   return (
     <div className="releases-container">
-      <h2> Releases </h2>{" "}
+      {/* <h2> Releases </h2> */}
       {loaded ? (
         <div className={"tesseract-container"}>
-          <input type="file" onChange={onFileChange} />{" "}
-          <progress value={progress} max={1} />{" "}
+          <input type="file" onChange={onFileChange} />
+          <progress value={progress} max={1} />
         </div>
       ) : (
         <p> Loading OpenCV... </p>
-      )}{" "}
+      )}
       <div className="release-container">
-        {" "}
+        
         {releases.map((release, idx) => (
           <div key={idx}>
             <Release
@@ -145,14 +145,13 @@ function Releases(props) {
                 changeReleaseHandler(idx, inputIdx, value)
               }
               deleteReleaseHandler={() => deleteReleaseHandler(idx)}
-            />{" "}
+            />
           </div>
-        ))}{" "}
-      </div>{" "}
-      <br />
-      <button type="button" onClick={addReleaseHandler}>
-        Add{" "}
-      </button>{" "}
+        ))}
+      </div>
+      <button className='add-btn' type="button" onClick={addReleaseHandler}>
+        Add
+      </button>
       <Modal
         title="Match results"
         centered
@@ -167,8 +166,8 @@ function Releases(props) {
               value={mat}
               onChange={(event) => handleInputChange(idx, event.target.value)}
             />
-          ))}{" "}
-      </Modal>{" "}
+          ))}
+      </Modal>
     </div>
   );
 }

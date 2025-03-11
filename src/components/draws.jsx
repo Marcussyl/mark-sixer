@@ -79,7 +79,7 @@ function Draws(props) {
 
     return (
         <div className='draws-container'>
-            <h2>Your Draws</h2>
+            {/* <h2>Your Draws</h2> */}
             <div className={'tesseract-container'}>
                 <input type="file" onChange={onFileChange}/>
                 <progress value={progress} max={1}/>
@@ -94,8 +94,7 @@ function Draws(props) {
                     ))
                 }
             </div>
-            <br></br>
-            <button type="button" onClick={addDrawHandler}>Add</button>
+            <button className='add-btn' type="button" onClick={addDrawHandler}>Add</button>
             <Modal title="Match results" centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 {/* <p>{match}</p> */}
                 {

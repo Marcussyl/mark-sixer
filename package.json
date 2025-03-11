@@ -15,6 +15,7 @@
   "dependencies": {
     "@techstark/opencv-js": "^4.10.0-release.1",
     "antd": "^5.17.0",
+    "antd-style": "^3.7.1",
     "jimp": "^1.4.0",
     "opencv-react": "^0.0.6",
     "puppeteer": "^23.1.1",

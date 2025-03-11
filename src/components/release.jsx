@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import '../scss/release.scss';
 
 function Release (props) {
     const {release, deleteReleaseHandler, changeReleaseHandler} = props
