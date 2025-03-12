@@ -1,15 +1,15 @@
 import Release from "./release.jsx";
-import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   PlusSquareOutlined,
   SearchOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
 import { Button, Flex, InputNumber } from "antd";
+import { ReleaseContext } from "../App.jsx";
 
-function Releases(props) {
-  const { releases, setReleases } = props;
+function Releases() {
+  const { releases, addRelease } = useContext(ReleaseContext);
   const [loadings, setLoadings] = useState([]);
 
   const enterLoading = (index) => {
@@ -25,23 +25,6 @@ function Releases(props) {
         return newLoadings;
       });
     }, 3000);
-  };
-
-  //Releases handlers
-  const addReleaseHandler = () => {
-    const newReleases = [...releases, ["", "", "", "", "", "", ""]];
-    setReleases(newReleases);
-  };
-
-  const changeReleaseHandler = (idx, inputIdx, value) => {
-    const newReleases = [...releases];
-    newReleases[idx][inputIdx] = value;
-    setReleases(newReleases);
-  };
-
-  const deleteReleaseHandler = (idx) => {
-    const newReleases = [...releases.slice(0, idx), ...releases.slice(idx + 1)];
-    setReleases(newReleases);
   };
 
   const onChange = (value) => {
@@ -72,23 +55,13 @@ function Releases(props) {
           <div key={idx}>
             <Release
               id={idx}
-              release={release}
-              changeReleaseHandler={(inputIdx, value) =>
-                changeReleaseHandler(idx, inputIdx, value)
-              }
-              deleteReleaseHandler={() => deleteReleaseHandler(idx)}
             />
           </div>
         ))}
       </div>
-      <PlusSquareOutlined className="add-btn" onClick={addReleaseHandler} />
+      <PlusSquareOutlined className="add-btn" onClick={addRelease} />
     </div>
   );
 }
-
-Releases.propTypes = {
-  releases: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  setReleases: PropTypes.func.isRequired,
-};
 
 export default Releases;

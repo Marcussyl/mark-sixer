@@ -1,8 +1,9 @@
-import PropTypes from 'prop-types';
 import '../scss/results.scss';
 import { AntDesignOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Space } from 'antd';
 import { createStyles } from 'antd-style';
+import { ResultContext } from '../App';
+import { useContext } from 'react';
 
 const useStyle = createStyles(({ prefixCls, css }) => ({
     linearGradientButton: css`
@@ -27,8 +28,9 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
         }
     `,
 }));
-function Results (props) {
-    const { results, checkHandler } = props
+
+function Results () {
+    const { results, checkHandler } = useContext(ResultContext);
     const { styles } = useStyle();
 
     return (
@@ -73,13 +75,6 @@ function Results (props) {
         </div>
       </div>
     );
-}
-
-
-
-Results.propTypes = {
-    results: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))).isRequired,
-    checkHandler: PropTypes.func
 }
 
 export default Results

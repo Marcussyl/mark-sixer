@@ -7,21 +7,22 @@ import { DiffOutlined, HighlightOutlined, BarChartOutlined } from '@ant-design/i
 import { Tabs } from 'antd';
 
 export const DrawContext = React.createContext();
+export const ReleaseContext = React.createContext();
+export const ResultContext = React.createContext();
 
 function App() {
   const [draws, setDraws] = useState([]);
-  const [releases, setReleases] = useState([]); //1st element: release number
-  const [results, setResults] = useState([[]]); //[[[release no, draw1 & release1 matches], [release no, draw1 & release2 matches]],[[release no, draw2 & release1 matches]]]
-
-  function updateDraw(drawIdx, fieldIdx, value) {
-    // In React, you should never mutate state directly because it can lead to inconsistencies in the UI and prevent React from detecting changes properly.
-    const updatedDraws = [...draws];
-    updatedDraws[drawIdx][fieldIdx] = value;
-    setDraws(updatedDraws);
-  }
+  const [releases, setReleases] = useState([]);
+  const [results, setResults] = useState([[]]);
 
   function addDraw() {
     const updatedDraws = [...draws, ["", "", "", "", "", ""]];
+    setDraws(updatedDraws);
+  }
+  
+  function updateDraw(drawIdx, fieldIdx, value) {
+    const updatedDraws = [...draws];
+    updatedDraws[drawIdx][fieldIdx] = value;
     setDraws(updatedDraws);
   }
 
@@ -29,6 +30,23 @@ function App() {
     const updatedDraws = [...draws];
     updatedDraws.splice(idx, 1);
     setDraws(updatedDraws);
+  }
+
+  function addRelease() {
+    const updatedReleases = [...releases, ["", "", "", "", "", "", ""]];
+    setReleases(updatedReleases);
+  }
+
+  function updateRelease(releaseIdx, fieldIdx, value) {
+    const updatedReleases = [...releases];
+    updatedReleases[releaseIdx][fieldIdx] = value;
+    setReleases(updatedReleases);
+  }
+
+  function deleteRelease(idx) {
+    const updatedReleases = [...releases];
+    updatedReleases.splice(idx, 1);
+    setReleases(updatedReleases);
   }
 
   /**
@@ -58,18 +76,20 @@ function App() {
 
   const DrawComponent = () => (
     <DrawContext.Provider value={{draws, addDraw, updateDraw, deleteDraw, setDraws}}>
-      <Draws draws={draws} setDraws={setDraws} />
+      <Draws/>
     </DrawContext.Provider>
   )
 
   const ReleaseComponent = () => (
-    <div>
-      <Releases releases={releases} setReleases={setReleases} />
-    </div>
+    <ReleaseContext.Provider value={{releases, addRelease, updateRelease, deleteRelease, setReleases}}> 
+      <Releases/>
+    </ReleaseContext.Provider>
   )
 
   const MatchComponent = () => (
-    <Results results={results} checkHandler={checkHandler}/>
+    <ResultContext.Provider value={{results, checkHandler}}>
+      <Results/>
+    </ResultContext.Provider>
   )
 
   const tabNames = ['Draws', 'Releases', 'Matches'];

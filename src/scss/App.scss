@@ -34,6 +34,10 @@
     max-width: 768px;
     margin: auto;
 
+    .ant-upload-wrapper {
+      width: 100%;
+    }
+
     .add-btn {
       width: fit-content;
       font-size: 20px;
@@ -73,6 +77,10 @@
         padding-inline: 40px;
         max-height: 300px;
         overflow-y: auto;
+
+        .draw, .release {
+          display: flex;
+        }
       }
     }
 
