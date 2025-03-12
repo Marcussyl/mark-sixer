@@ -2,10 +2,11 @@ import PropTypes from 'prop-types';
 import { DeleteOutlined } from "@ant-design/icons";
 
 function Release (props) {
-    const {release, deleteReleaseHandler, changeReleaseHandler} = props
+    const {id, release, deleteReleaseHandler, changeReleaseHandler} = props
 
     return (
-      <div className="release">
+        <div className="release">
+        <label htmlFor="draw" className='caveat-400'>{id+1}</label> &nbsp;&nbsp;
         <input
           type="text"
           id="termNum"
@@ -76,6 +77,7 @@ function Release (props) {
 }
 
 Release.propTypes = {
+    id: PropTypes.number.isRequired,
     release: PropTypes.arrayOf(PropTypes.string).isRequired,
     deleteReleaseHandler: PropTypes.func.isRequired,
     changeReleaseHandler: PropTypes.func.isRequired,
