@@ -45,7 +45,8 @@ function App() {
   
   function updateDraw(drawIdx, fieldIdx, value) {
     const updatedDraws = [...draws];
-    updatedDraws[drawIdx][fieldIdx] = value;
+    updatedDraws[drawIdx][fieldIdx] = value.toString();
+    console.log(JSON.stringify(updatedDraws));
     setDraws(updatedDraws);
     setDrawFocusIdx([drawIdx, fieldIdx]);
     // console.log([drawIdx, fieldIdx]);
@@ -66,7 +67,7 @@ function App() {
 
   function updateRelease(releaseIdx, fieldIdx, value) {
     const updatedReleases = [...releases];
-    updatedReleases[releaseIdx][fieldIdx] = value;
+    updatedReleases[releaseIdx][fieldIdx] = value.toString();
     setReleases(updatedReleases);
     setRelFocusIdx([releaseIdx, fieldIdx]);
   }
