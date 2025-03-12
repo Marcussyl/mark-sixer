@@ -43,12 +43,12 @@ function Draws() {
 
     const onFileChange = (file) => {
         Tesseract.recognize(file, 'eng', {
-        logger: (m) => {
-            //console.log(m);
-            if (m.status === "recognizing text") {
-            setProgress(m.progress);
-            }
-        },
+            // logger: (m) => {
+            //     //console.log(m);
+            //     if (m.status === "recognizing text") {
+            //     setProgress(m.progress);
+            //     }
+            // },
         })
         .then(({ data: { text } }) => {
             console.log(`Raw text: ${text}`);
@@ -103,8 +103,7 @@ function Draws() {
             </p>
             <p className="ant-upload-text">Click or drag file to this area to upload</p>
             <p className="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-            banned files.
+                Upload the image to extract text!
             </p>
         </Dragger>
         <div className="draw-container">

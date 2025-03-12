@@ -59,7 +59,7 @@ function Draw (props) {
           onChange={(event) => updateDraw(id, 5, event.target.value)}
         />
         &nbsp;&nbsp;
-        <DeleteOutlined onClick={deleteDraw} className='delete-btn'/>
+        <DeleteOutlined onClick={() => deleteDraw(id)} className='delete-btn'/>
       </div>
     );
     
