@@ -1,10 +1,11 @@
 import Draws from "./components/draws.jsx";
 import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./scss/App.scss";
 import { DiffOutlined, HighlightOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
+// import { log } from "@techstark/opencv-js";
 
 export const DrawContext = React.createContext();
 export const ReleaseContext = React.createContext();
@@ -13,9 +14,10 @@ export const ResultContext = React.createContext();
 function App() {
   const [draws, setDraws] = useState([]);
   const [releases, setReleases] = useState([]);
-  const [results, setResults] = useState([[]]);
-  const [drawFocusIdx, setDrawFocusIdx] = useState([0,0]);
-  const [relFocusIdx, setRelFocusIdx] = useState([0,0]);
+  const [results, setResults] = useState([]);
+  // const [results, setResults] = useState([[]]);
+  const [drawFocusIdx, setDrawFocusIdx] = useState([0, 0]);
+  const [relFocusIdx, setRelFocusIdx] = useState([0, 0]);
   const inputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
 
@@ -26,8 +28,8 @@ function App() {
     if (inputRef.current[rowIdx][fieldIdx]) {
       inputRef.current[rowIdx][fieldIdx].focus();
     }
-  }, [draws, drawFocusIdx])
-  
+  }, [draws, drawFocusIdx]);
+
   useEffect(() => {
     console.log("focusing...");
     const rowIdx = relFocusIdx[0];
@@ -35,20 +37,50 @@ function App() {
     if (releaseInputRef.current[rowIdx][fieldIdx]) {
       releaseInputRef.current[rowIdx][fieldIdx].focus();
     }
-  }, [releases, relFocusIdx])
+  }, [releases, relFocusIdx]);
+
+  /**
+   * check if there are matches between draws and releases lists
+   * store the matches in results state
+   */
+  const checkHandler = useCallback(
+   () => {
+    let newResults = [];
+    for (let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
+      let draw = draws[drawIdx];
+      newResults[drawIdx] = [];
+      for (let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
+        let release = releases[releaseIdx].slice(1);
+        let tempResult = [releases[releaseIdx][0]];
+        for (let i = 0; i < 6; i++) {
+          if (release.indexOf(draw[i]) !== -1) {
+            tempResult.push(draw[i]);
+          }
+        }
+        if (tempResult.length >= 4) {
+          newResults[drawIdx].push(tempResult);
+          setResults(newResults);
+        }
+      }
+    }
+  }, [draws, releases])
+    
+  // useEffect(() => {
+  //   checkHandler();
+  // }, [draws, releases, checkHandler]);
 
   function addDraw() {
     const updatedDraws = [...draws, ["", "", "", "", "", ""]];
     setDraws(updatedDraws);
-    inputRef.current.push([])
+    inputRef.current.push([]);
   }
-  
+
   function updateDraw(drawIdx, fieldIdx, value) {
-    if(value.length === 2) {
-      const newFieldIdx = (fieldIdx + 1) > 5 ? fieldIdx : fieldIdx + 1;
+    if (value.length === 2) {
+      const newFieldIdx = fieldIdx + 1 > 5 ? fieldIdx : fieldIdx + 1;
       setDrawFocusIdx([drawIdx, newFieldIdx]);
     } else {
-      setDrawFocusIdx([drawIdx, fieldIdx])
+      setDrawFocusIdx([drawIdx, fieldIdx]);
     }
     const updatedDraws = [...draws];
     updatedDraws[drawIdx][fieldIdx] = value.trimEnd().replace(/\*$/, "");
@@ -85,68 +117,71 @@ function App() {
     setReleases(updatedReleases);
   }
 
-  /**
-   * check if there are matches between draws and releases lists
-   * store the matches in results state
-   */
-  const checkHandler = () => {
-    let newResults = [];
-    for (let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
-      let draw = draws[drawIdx];
-      newResults[drawIdx] = [];
-      for (let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
-        let release = releases[releaseIdx].slice(1);
-        let tempResult = [releases[releaseIdx][0]];
-        for (let i = 0; i < 6; i++) {
-          if (release.indexOf(draw[i]) !== -1) {
-            tempResult.push(draw[i]);
-          }
-        }
-        if (tempResult.length >= 4) {
-          newResults[drawIdx].push(tempResult);
-          setResults(newResults);
-        }
-      }
+  function onTabChange(key) {
+    console.log(key);
+    if (key === "3") {
+      checkHandler();
     }
-  };
+  }
 
   const DrawComponent = () => (
-    <DrawContext.Provider value={{draws, addDraw, updateDraw, deleteDraw, setDraws, inputRef}}>
-      <Draws/>
+    <DrawContext.Provider
+      value={{ draws, addDraw, updateDraw, deleteDraw, setDraws, inputRef }}
+    >
+      <Draws />
     </DrawContext.Provider>
-  )
+  );
 
   const ReleaseComponent = () => (
-    <ReleaseContext.Provider value={{releases, addRelease, updateRelease, deleteRelease, setReleases, releaseInputRef}}> 
-      <Releases/>
+    <ReleaseContext.Provider
+      value={{
+        releases,
+        addRelease,
+        updateRelease,
+        deleteRelease,
+        setReleases,
+        releaseInputRef,
+      }}
+    >
+      <Releases />
     </ReleaseContext.Provider>
-  )
+  );
 
   const MatchComponent = () => (
-    <ResultContext.Provider value={{results, checkHandler}}>
-      <Results/>
+    <ResultContext.Provider value={{ results, checkHandler }}>
+      <Results />
     </ResultContext.Provider>
-  )
+  );
 
-  const tabNames = ['Draws', 'Releases', 'Matches'];
+  const tabNames = ["Draws", "Releases", "Matches"];
 
   return (
     <>
       {/* <h1>Hello world!</h1> */}
       <div className="main-container">
-        <h1 className="titan-one-regular"> Mark Sixer </h1> 
+        <h1 className="titan-one-regular"> Mark Sixer </h1>
         <Tabs
           defaultActiveKey="1"
           centered
-          items={[DiffOutlined, HighlightOutlined, BarChartOutlined].map((Icon, i) => {
-            const id = String(i + 1);
-            return {
-              key: id,
-              label: `${tabNames[i]}`,
-              children: id === '1' ? <DrawComponent/> : id === '2' ? <ReleaseComponent/> : <MatchComponent/>,
-              icon: <Icon />,
-            };
-          })}
+          onChange={onTabChange}
+          items={[DiffOutlined, HighlightOutlined, BarChartOutlined].map(
+            (Icon, i) => {
+              const id = String(i + 1);
+              return {
+                key: id,
+                label: `${tabNames[i]}`,
+                children:
+                  id === "1" ? (
+                    <DrawComponent />
+                  ) : id === "2" ? (
+                    <ReleaseComponent />
+                  ) : (
+                    <MatchComponent />
+                  ),
+                icon: <Icon />,
+              };
+            }
+          )}
         />
       </div>
     </>
