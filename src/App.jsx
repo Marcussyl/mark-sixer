@@ -1,7 +1,7 @@
 import Draws from "./components/draws.jsx";
 import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./scss/App.scss";
 import { DiffOutlined, HighlightOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
@@ -14,10 +14,33 @@ function App() {
   const [draws, setDraws] = useState([]);
   const [releases, setReleases] = useState([]);
   const [results, setResults] = useState([[]]);
+  const [drawFocusIdx, setDrawFocusIdx] = useState([0,0]);
+  const [relFocusIdx, setRelFocusIdx] = useState([0,0]);
+  const inputRef = useRef([[]]);
+  const releaseInputRef = useRef([[]]);
+
+  useEffect(() => {
+    console.log("focusing...");
+    const rowIdx = drawFocusIdx[0];
+    const fieldIdx = drawFocusIdx[1];
+    if (inputRef.current[rowIdx][fieldIdx]) {
+      inputRef.current[rowIdx][fieldIdx].focus();
+    }
+  }, [draws, drawFocusIdx])
+  
+  useEffect(() => {
+    console.log("focusing...");
+    const rowIdx = relFocusIdx[0];
+    const fieldIdx = relFocusIdx[1];
+    if (releaseInputRef.current[rowIdx][fieldIdx]) {
+      releaseInputRef.current[rowIdx][fieldIdx].focus();
+    }
+  }, [releases, relFocusIdx])
 
   function addDraw() {
     const updatedDraws = [...draws, ["", "", "", "", "", ""]];
     setDraws(updatedDraws);
+    inputRef.current.push([])
   }
   
   function updateDraw(drawIdx, fieldIdx, value) {
@@ -25,6 +48,9 @@ function App() {
     updatedDraws[drawIdx][fieldIdx] = value.toString();
     console.log(JSON.stringify(updatedDraws));
     setDraws(updatedDraws);
+    setDrawFocusIdx([drawIdx, fieldIdx]);
+    // console.log([drawIdx, fieldIdx]);
+    // console.log("new inputRef:"+inputRef.current);
   }
 
   function deleteDraw(idx) {
@@ -36,12 +62,14 @@ function App() {
   function addRelease() {
     const updatedReleases = [...releases, ["", "", "", "", "", "", ""]];
     setReleases(updatedReleases);
+    releaseInputRef.current.push([]);
   }
 
   function updateRelease(releaseIdx, fieldIdx, value) {
     const updatedReleases = [...releases];
     updatedReleases[releaseIdx][fieldIdx] = value.toString();
     setReleases(updatedReleases);
+    setRelFocusIdx([releaseIdx, fieldIdx]);
   }
 
   function deleteRelease(idx) {
@@ -76,13 +104,13 @@ function App() {
   };
 
   const DrawComponent = () => (
-    <DrawContext.Provider value={{draws, addDraw, updateDraw, deleteDraw, setDraws}}>
+    <DrawContext.Provider value={{draws, addDraw, updateDraw, deleteDraw, setDraws, inputRef}}>
       <Draws/>
     </DrawContext.Provider>
   )
 
   const ReleaseComponent = () => (
-    <ReleaseContext.Provider value={{releases, addRelease, updateRelease, deleteRelease, setReleases}}> 
+    <ReleaseContext.Provider value={{releases, addRelease, updateRelease, deleteRelease, setReleases, releaseInputRef}}> 
       <Releases/>
     </ReleaseContext.Provider>
   )
