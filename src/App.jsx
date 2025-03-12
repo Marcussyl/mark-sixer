@@ -44,13 +44,15 @@ function App() {
   }
   
   function updateDraw(drawIdx, fieldIdx, value) {
+    if(value.length === 2) {
+      const newFieldIdx = (fieldIdx + 1) > 5 ? fieldIdx : fieldIdx + 1;
+      setDrawFocusIdx([drawIdx, newFieldIdx]);
+    } else {
+      setDrawFocusIdx([drawIdx, fieldIdx])
+    }
     const updatedDraws = [...draws];
-    updatedDraws[drawIdx][fieldIdx] = value.toString();
-    console.log(JSON.stringify(updatedDraws));
+    updatedDraws[drawIdx][fieldIdx] = value.trimEnd();
     setDraws(updatedDraws);
-    setDrawFocusIdx([drawIdx, fieldIdx]);
-    // console.log([drawIdx, fieldIdx]);
-    // console.log("new inputRef:"+inputRef.current);
   }
 
   function deleteDraw(idx) {
@@ -66,10 +68,15 @@ function App() {
   }
 
   function updateRelease(releaseIdx, fieldIdx, value) {
+    if (value.length === 2) {
+      const newFieldIdx = fieldIdx + 1 > 8 ? fieldIdx : fieldIdx + 1;
+      setRelFocusIdx([releaseIdx, newFieldIdx]);
+    } else {
+      setRelFocusIdx([releaseIdx, fieldIdx]);
+    }
     const updatedReleases = [...releases];
-    updatedReleases[releaseIdx][fieldIdx] = value.toString();
+    updatedReleases[releaseIdx][fieldIdx] = value.trimEnd();
     setReleases(updatedReleases);
-    setRelFocusIdx([releaseIdx, fieldIdx]);
   }
 
   function deleteRelease(idx) {
