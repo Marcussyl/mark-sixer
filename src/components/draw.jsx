@@ -13,7 +13,7 @@ function Draw (props) {
         <label htmlFor="draw" className='caveat-400'>{id + 1}</label> &nbsp;&nbsp;
         <div className='input-container'>    
             <input
-            type="text"
+            type="number"
             id="drawNum1"
             name="drawNum1"
             value={draw[0]}
@@ -21,7 +21,7 @@ function Draw (props) {
             />
             -
             <input
-            type="text"
+            type="number"
             id="drawNum2"
             name="drawNum2"
             value={draw[1]}
@@ -29,7 +29,7 @@ function Draw (props) {
             />
             -
             <input
-            type="text"
+            type="number"
             id="drawNum3"
             name="drawNum3"
             value={draw[2]}
@@ -37,7 +37,7 @@ function Draw (props) {
             />
             -
             <input
-            type="text"
+            type="number"
             id="drawNum4"
             name="drawNum4"
             value={draw[3]}
@@ -45,7 +45,7 @@ function Draw (props) {
             />
             -
             <input
-            type="text"
+            type="number"
             id="drawNum5"
             name="drawNum5"
             value={draw[4]}
@@ -53,7 +53,7 @@ function Draw (props) {
             />
             -
             <input
-            type="text"
+            type="number"
             id="drawNum6"
             name="drawNum6"
             value={draw[5]}
