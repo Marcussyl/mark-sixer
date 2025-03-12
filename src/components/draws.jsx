@@ -3,11 +3,14 @@ import { useState, useContext } from 'react'
 import Tesseract from 'tesseract.js'
 import Draw from './draw.jsx'
 import { DrawContext } from '../App.jsx'
-import { PlusSquareOutlined, InboxOutlined } from "@ant-design/icons";
-import { Upload } from "antd";
+import {
+  PlusSquareOutlined,
+  InboxOutlined,
+} from "@ant-design/icons";
+import { Upload, Progress, Flex } from "antd";
 
 function Draws() {
-    // const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(0);
     const [match, setMatch] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,6 +23,7 @@ function Draws() {
         multiple: false,
         action: '',
         beforeUpload: (file) => {
+            document.querySelector('#progress-bar').style.display = 'block';
             onFileChange(file);
             return false;
         },
@@ -43,12 +47,11 @@ function Draws() {
 
     const onFileChange = (file) => {
         Tesseract.recognize(file, 'eng', {
-            // logger: (m) => {
-            //     //console.log(m);
-            //     if (m.status === "recognizing text") {
-            //     setProgress(m.progress);
-            //     }
-            // },
+            logger: (m) => {
+                if (m.status === "recognizing text") {
+                    setProgress(m.progress);
+                }
+            },
         })
         .then(({ data: { text } }) => {
             console.log(`Raw text: ${text}`);
@@ -92,20 +95,23 @@ function Draws() {
 
     return (
       <div className="draws-container">
-        {/* <h2>Your Draws</h2> */}
-        {/* <div className={"tesseract-container"}>
-          <input type="file" onChange={onFileChange} />
-          <progress value={progress} max={1} />
-        </div> */}
-        <Dragger {...props}>
+        <Flex gap={"small"} vertical>
+          <Dragger {...props}>
             <p className="ant-upload-drag-icon">
-            <InboxOutlined />
+              <InboxOutlined />
             </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">
-                Upload the image to extract text!
+            <p className="ant-upload-text">
+              Click or drag file to this area to upload
             </p>
-        </Dragger>
+            <p className="ant-upload-hint">Upload the image to extract text!</p>
+          </Dragger>
+          <Progress
+            id="progress-bar"
+            percent={progress * 1000}
+            showInfo={false}
+            style={{ display: "none" }}
+          />
+        </Flex>
         <div className="draw-container">
           {draws.map((draw, idx) => (
             <Draw key={idx} id={idx} />
