@@ -2,17 +2,11 @@ import PropTypes from 'prop-types'
 import { useContext } from 'react'
 import { DrawContext } from '../App'
 import { DeleteOutlined } from "@ant-design/icons";
-import { InputNumber } from 'antd';
 
 function Draw (props) {
     const {id} = props
     const {draws, deleteDraw, updateDraw, inputRef} = useContext(DrawContext)
     const draw = draws[id]
-
-    // const onChange = (value) => {
-    //     console.log(value);
-    //     updateDraw(id, 1, value)
-    // };
 
     return (
       <div className="draw">
@@ -26,7 +20,6 @@ function Draw (props) {
                     ref={(el) => {inputRef.current[id][0] = el}}
             onChange={(event) => updateDraw(id, 0, event.target.value)}
                 />
-//                 <InputNumber size="small" min={1} max={100000} onChange={(value) => updateDraw(id, 0, value)} value={draw[0]} type='tel'/>
             -
             <input
             type="tel"
