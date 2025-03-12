@@ -51,7 +51,7 @@ function App() {
       setDrawFocusIdx([drawIdx, fieldIdx])
     }
     const updatedDraws = [...draws];
-    updatedDraws[drawIdx][fieldIdx] = value.trimEnd();
+    updatedDraws[drawIdx][fieldIdx] = value.trimEnd().replace(/\*$/, "");
     setDraws(updatedDraws);
   }
 
