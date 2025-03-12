@@ -5,7 +5,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 
 function Draw (props) {
     const {id} = props
-    const {draws, deleteDraw, updateDraw} = useContext(DrawContext)
+    const {draws, deleteDraw, updateDraw, inputRef} = useContext(DrawContext)
     const draw = draws[id]
 
     return (
@@ -13,50 +13,56 @@ function Draw (props) {
         <label htmlFor="draw" className='caveat-400'>{id + 1}</label> &nbsp;&nbsp;
         <div className='input-container'>    
             <input
-            type="number"
+            type="tel"
             id="drawNum1"
             name="drawNum1"
-            value={draw[0]}
+                    value={draw[0]}
+                    ref={(el) => {inputRef.current[id][0] = el}}
             onChange={(event) => updateDraw(id, 0, event.target.value)}
             />
             -
             <input
-            type="number"
+            type="tel"
             id="drawNum2"
             name="drawNum2"
-            value={draw[1]}
+                    value={draw[1]}
+                    ref={(el) => {inputRef.current[id][1] = el}}
             onChange={(event) => updateDraw(id, 1, event.target.value)}
             />
             -
             <input
-            type="number"
+            type="tel"
             id="drawNum3"
             name="drawNum3"
-            value={draw[2]}
+                    value={draw[2]}
+                    ref={(el) => {inputRef.current[id][2] = el}}
             onChange={(event) => updateDraw(id, 2, event.target.value)}
             />
             -
             <input
-            type="number"
+            type="tel"
             id="drawNum4"
             name="drawNum4"
-            value={draw[3]}
+                    value={draw[3]}
+                    ref={(el) => {inputRef.current[id][3] = el}}
             onChange={(event) => updateDraw(id, 3, event.target.value)}
             />
             -
             <input
-            type="number"
+            type="tel"
             id="drawNum5"
             name="drawNum5"
-            value={draw[4]}
+                    value={draw[4]}
+                    ref={(el) => {inputRef.current[id][4] = el}}
             onChange={(event) => updateDraw(id, 4, event.target.value)}
             />
             -
             <input
-            type="number"
+            type="tel"
             id="drawNum6"
             name="drawNum6"
-            value={draw[5]}
+                    value={draw[5]}
+                    ref={(el) => {inputRef.current[id][5] = el}}
             onChange={(event) => updateDraw(id, 5, event.target.value)}
             />
         </div>

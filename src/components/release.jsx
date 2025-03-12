@@ -5,7 +5,7 @@ import { useContext } from 'react';
 
 function Release (props) {
     const { id } = props
-    const { releases, updateRelease, deleteRelease } = useContext(ReleaseContext)
+    const { releases, updateRelease, deleteRelease, releaseInputRef } = useContext(ReleaseContext)
     const release = releases[id];
 
     return (
@@ -13,66 +13,74 @@ function Release (props) {
         <label htmlFor="draw" className='caveat-400'>{id + 1}</label> &nbsp;&nbsp;
         <div className="input-container">
             <input
-            type="text"
+            type="tel"
             id="termNum"
             name="termNum"
-            value={release[0]}
+                    value={release[0]}
+                    ref={(el) => {releaseInputRef.current[id][0] = el}}
             onChange={(event) => updateRelease(id, 0, event.target.value)}
             />{" "}
             &nbsp;
             <input
-            type="text"
+            type="tel"
             id="releaseNum1"
             name="releaseNum1"
-            value={release[1]}
+                    value={release[1]}
+                    ref={(el) => {releaseInputRef.current[id][1] = el}}
             onChange={(event) => updateRelease(id, 1, event.target.value)}
             />
             -
             <input
-            type="text"
+            type="tel"
             id="releaseNum2"
             name="releaseNum2"
-            value={release[2]}
+                    value={release[2]}
+                    ref={(el) => {releaseInputRef.current[id][2] = el}}
             onChange={(event) => updateRelease(id, 2, event.target.value)}
             />
             -
             <input
-            type="text"
+            type="tel"
             id="releaseNum3"
             name="releaseNum3"
-            value={release[3]}
+                    value={release[3]}
+                    ref={(el) => {releaseInputRef.current[id][3] = el}}
             onChange={(event) => updateRelease(id, 3, event.target.value)}
             />
             -
             <input
-            type="text"
+            type="tel"
             id="releaseNum4"
             name="releaseNum4"
-            value={release[4]}
+                    value={release[4]}
+                    ref={(el) => {releaseInputRef.current[id][4] = el}}
             onChange={(event) => updateRelease(id, 4, event.target.value)}
             />
             -
             <input
-            type="text"
+            type="tel"
             id="releaseNum5"
             name="releaseNum5"
-            value={release[5]}
+                    value={release[5]}
+                    ref={(el) => {releaseInputRef.current[id][5] = el}}
             onChange={(event) => updateRelease(id, 5, event.target.value)}
             />
             -
             <input
-            type="text"
+            type="tel"
             id="releaseNum6"
             name="releaseNum6"
-            value={release[6]}
+                    value={release[6]}
+                    ref={(el) => {releaseInputRef.current[id][6] = el}}
             onChange={(event) => updateRelease(id, 6, event.target.value)}
             />
             &nbsp; / &nbsp;
             <input
-            type="text"
+            type="tel"
             id="releaseNum7"
             name="releaseNum7"
-            value={release[7]}
+                    value={release[7]}
+                    ref={(el) => {releaseInputRef.current[id][7] = el}}
             onChange={(event) => updateRelease(id, 7, event.target.value)}
             />
         </div>
