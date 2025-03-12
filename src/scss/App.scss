@@ -76,6 +76,7 @@
         gap: 10px;
         max-height: 300px;
         overflow-y: auto;
+        max-height: 150px;
 
         .draw, .release {
           display: flex;
@@ -96,7 +97,7 @@
 
       .release-container{
         padding-inline: 5px;
-        
+
         .release {
           input:first-of-type,input:last-of-type {
             background-color: #f6d4d2;
@@ -105,73 +106,69 @@
       }
 
     }
+
+    .results-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0;
+      color: rgb(77, 77, 77);
+      
+      .result-container{
+        width: 100%;
+        color: black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-wrap: wrap;
+        row-gap: 1rem;
+        column-gap: 1rem;
+        // max-height: 500px;
+        overflow-y: auto;
+        scrollbar-color: black lightgrey;
+        
+        .draw-match-container{
+          width: 90%;
+          border: 1px black dashed;
+          text-align: left;
+          padding: 1rem;
+          background-color: lightgoldenrodyellow;
+          border-radius: 20px;
+        
+          .draw-match-container h4{
+            margin: .2rem;
+            padding: 0;
+        
+            .release-match-container p{
+              display: inline;
+        
+              .release-number {
+                font-weight: bold;
+                color: lightcoral;
+              }
+            }
+          }
+        }
+      }
+    }
   }
-}
-
-// .left-container {
-//   width: 50%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-// }
-
-// .right-container{
-//   width: 50%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-
-//   h1 {
-//     font-family: "Bodoni MT Black";
-//   }
-// }
-
-// .input-container {
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-around;
-//   align-items: center;
-// }
-
-.check-button {
-  width: 13rem;
-  height: 3rem;
-  background-color: #EEB5EB;
-  color: black;
-  font-weight: bold;
-  font-size: large;
 }
 
 @media screen and (max-width: 768px) {
   .main-container {
-    // flex-direction: column;
-
     h1 {
       font-size: 3rem;
     }
   }
-  .left-container {
-    width: 100%;
-    order: 1;
-  }
-  .right-container {
-    width: 100%;
-    order: 0;
-  }
-  .result-container {
-    max-height: 250px;
-  }
-  .draw-container {
-    max-height: 150px;
-  }
-  .release-container {
-    max-height: 150px;
-  }
-  input[type="text"] {
-    width: 9%;
-    height: 17px;
-  }
+  // .result-container {
+  //   max-height: 250px;
+  // }
+  // .draw-container {
+  //   max-height: 150px;
+  // }
+  // .release-container {
+  //   max-height: 150px;
+  // }
 }
