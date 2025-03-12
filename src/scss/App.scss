@@ -47,7 +47,7 @@
     input[type='text'] {
       width: 40px;
       height: 20px;
-      background-color: #F6D4D2;
+      // background-color: #F6D4D2;
       color: black;
       border-radius: 10px;
     }
@@ -79,19 +79,25 @@
     .draws-container {
       background-color: #A1A9FE;
 
-      .tesseract-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      // .tesseract-container {
+      //   display: flex;
+      //   justify-content: center;
+      //   align-items: center;
 
-        input[type="file"] {
-          width: 55%;
-        }
-      }
+      //   input[type="file"] {
+      //     width: 55%;
+      //   }
+      // }
     }
 
     .releases-container {
       background-color: #6BCFDC;
+
+      .release {
+        input:first-of-type {
+          background-color: #f6d4d2;
+        }
+      }
     }
   }
 }

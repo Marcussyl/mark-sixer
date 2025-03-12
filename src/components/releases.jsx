@@ -6,7 +6,7 @@ import {
   SearchOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-import { Button, Flex } from "antd";
+import { Button, Flex, InputNumber } from "antd";
 
 function Releases(props) {
   const { releases, setReleases } = props;
@@ -44,22 +44,12 @@ function Releases(props) {
     setReleases(newReleases);
   };
 
+  const onChange = (value) => {
+    console.log('changed', value);
+  };
+
   return (
     <div className="releases-container">
-      <div className="release-container">
-        {releases.map((release, idx) => (
-          <div key={idx}>
-            <Release
-              release={release}
-              changeReleaseHandler={(inputIdx, value) =>
-                changeReleaseHandler(idx, inputIdx, value)
-              }
-              deleteReleaseHandler={() => deleteReleaseHandler(idx)}
-            />
-          </div>
-        ))}
-      </div>
-      <PlusSquareOutlined className="add-btn" onClick={addReleaseHandler} />
       <Flex gap="small" vertical>
         <Flex gap="small" align="center" wrap>
           <Button
@@ -70,12 +60,28 @@ function Releases(props) {
               }
             }
             onClick={() => enterLoading(3)}
-            style={{ background: "#F6D4D2" }}
+            // style={{ background: "#F6D4D2" }}
           >
-            Loading Icon
+            Get releases
           </Button>
+          <InputNumber min={1} max={10} defaultValue={5} onChange={onChange} changeOnWheel />
         </Flex>
       </Flex>
+      <div className="release-container">
+        {releases.map((release, idx) => (
+          <div key={idx}>
+            <Release
+              id={idx}
+              release={release}
+              changeReleaseHandler={(inputIdx, value) =>
+                changeReleaseHandler(idx, inputIdx, value)
+              }
+              deleteReleaseHandler={() => deleteReleaseHandler(idx)}
+            />
+          </div>
+        ))}
+      </div>
+      <PlusSquareOutlined className="add-btn" onClick={addReleaseHandler} />
     </div>
   );
 }

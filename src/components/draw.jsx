@@ -10,7 +10,7 @@ function Draw (props) {
 
     return (
       <div className="draw">
-        <label htmlFor="draw">{id}</label> &nbsp;&nbsp;
+        <label htmlFor="draw" className='caveat-400'>{id+1}</label> &nbsp;&nbsp;
         <input
           type="text"
           id="drawNum1"

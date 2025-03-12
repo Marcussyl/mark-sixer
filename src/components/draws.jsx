@@ -3,16 +3,30 @@ import { useState, useContext } from 'react'
 import Tesseract from 'tesseract.js'
 import Draw from './draw.jsx'
 import { DrawContext } from '../App.jsx'
-import { PlusSquareOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Flex } from "antd";
+import { PlusSquareOutlined, InboxOutlined } from "@ant-design/icons";
+import { Upload } from "antd";
 
 function Draws() {
-    const [progress, setProgress] = useState(0);
+    // const [progress, setProgress] = useState(0);
     const [match, setMatch] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     //Draws handlers
-    const {draws, addDraw, setDraws} = useContext(DrawContext);
+    const { draws, addDraw, setDraws } = useContext(DrawContext);
+    
+    const { Dragger } = Upload;
+    const props = {
+        name: 'file',
+        multiple: false,
+        action: '',
+        beforeUpload: (file) => {
+            onFileChange(file);
+            return false;
+        },
+        onDrop(e) {
+            onFileChange(e.dataTransfer.files);
+        },
+    };
 
     const processResult = (result) => {
         const pattern = /(\d+\+\d+\+\d+\+\d+\+\d+\+\d+)/g;
@@ -27,8 +41,8 @@ function Draws() {
         setIsModalOpen(true);
     };
 
-    const onFileChange = (e) => {
-        Tesseract.recognize(e.target.files[0], 'eng', {
+    const onFileChange = (file) => {
+        Tesseract.recognize(file, 'eng', {
         logger: (m) => {
             //console.log(m);
             if (m.status === "recognizing text") {
@@ -41,6 +55,20 @@ function Draws() {
             processResult(text);
         });
     };
+    // const onFileChange = (e) => {
+    //     Tesseract.recognize(e.target.files[0], 'eng', {
+    //     logger: (m) => {
+    //         //console.log(m);
+    //         if (m.status === "recognizing text") {
+    //         setProgress(m.progress);
+    //         }
+    //     },
+    //     })
+    //     .then(({ data: { text } }) => {
+    //         console.log(`Raw text: ${text}`);
+    //         processResult(text);
+    //     });
+    // };
 
     //Modal handlers
     const handleInputChange = (idx, value) => {
@@ -65,10 +93,20 @@ function Draws() {
     return (
       <div className="draws-container">
         {/* <h2>Your Draws</h2> */}
-        <div className={"tesseract-container"}>
+        {/* <div className={"tesseract-container"}>
           <input type="file" onChange={onFileChange} />
           <progress value={progress} max={1} />
-        </div>
+        </div> */}
+        <Dragger {...props}>
+            <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+            <p className="ant-upload-hint">
+            Support for a single or bulk upload. Strictly prohibited from uploading company data or other
+            banned files.
+            </p>
+        </Dragger>
         <div className="draw-container">
           {draws.map((draw, idx) => (
             <Draw key={idx} id={idx} />
