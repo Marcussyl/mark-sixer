@@ -75,7 +75,7 @@ function App() {
       setRelFocusIdx([releaseIdx, fieldIdx]);
     }
     const updatedReleases = [...releases];
-    updatedReleases[releaseIdx][fieldIdx] = value.trimEnd();
+    updatedReleases[releaseIdx][fieldIdx] = value.trimEnd().replace(/\*$/, "");
     setReleases(updatedReleases);
   }
 
