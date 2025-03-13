@@ -24,10 +24,10 @@ function Results () {
                 <div className="result-container">
                     <Flex direction="vertical" size={16} gap={"small"} justify="center" wrap>
                         {results.map(
-                            (result, idx) => (
+                            (drawMatch, idx) => (
                                 <Card key={`draw ${idx}`} size="small" title={`Draw ${idx}`} style={{ width: 300 }}>
                                     {   
-                                        result.map((releaseMatch, idx) => (
+                                        drawMatch.map((releaseMatch, idx) => (
                                             <Flex key={`release ${idx}`} gap={"small"}>
                                                 <div className="release-number caveat-400">{`${releaseMatch[0]}: `}</div>
                                                 <Space>
