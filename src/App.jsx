@@ -225,7 +225,7 @@ function App() {
         )}
       />
       <FloatButton.Group
-        trigger="hover"
+        trigger="click"
         type="primary"
         style={{
           insetInlineEnd: 24,
