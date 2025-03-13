@@ -58,29 +58,27 @@ function Releases() {
 
   return (
     <div className="releases-container">
-      <Flex gap="small" vertical>
-        <Flex gap="small" align="center" wrap>
-          <Button
-            icon={<SearchOutlined />}
-            loading={
-              loadings[3] && {
-                icon: <SyncOutlined spin />,
-              }
+      <Flex gap="small" justify="center" wrap>
+        <Button
+          icon={<SearchOutlined />}
+          loading={
+            loadings[3] && {
+              icon: <SyncOutlined spin />,
             }
-            onClick={() => enterLoading(3)}
-            // style={{ background: "#F6D4D2" }}
-          >
-            Retrieve releases
+          }
+          onClick={() => enterLoading(3)}
+          // style={{ background: "#F6D4D2" }}
+        >
+          Retrieve releases
+        </Button>
+        <Dropdown menu={menuProps}>
+          <Button>
+            <Space>
+              <div id="dropdown-text">No. of rel to retrieve</div>
+              <DownOutlined />
+            </Space>
           </Button>
-          <Dropdown menu={menuProps}>
-            <Button>
-              <Space>
-                <div id="dropdown-text">No. of rel to retrieve</div>
-                <DownOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
-        </Flex>
+        </Dropdown>
       </Flex>
       <div className="release-container">
         {releases.map((release, idx) => (

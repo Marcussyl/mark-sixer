@@ -77,9 +77,7 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
-        max-height: 300px;
         overflow-y: auto;
-        max-height: 150px;
 
         .draw, .release {
           display: flex;
@@ -92,6 +90,7 @@
     
       .draw-container {
         padding-inline: 30px;
+        max-height: 150px;
       }
     }
 
@@ -100,6 +99,7 @@
 
       .release-container{
         padding-inline: 5px;
+        max-height: 250px;
 
         .release {
           input:first-of-type,input:last-of-type {
