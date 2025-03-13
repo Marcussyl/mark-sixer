@@ -1,37 +1,9 @@
-import '../scss/results.scss';
-import { AntDesignOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Space, Result } from "antd";
-import { createStyles } from 'antd-style';
+import { Result, Card, Space, Flex } from "antd";
 import { ResultContext } from '../App';
 import { useContext } from 'react';
 
-const useStyle = createStyles(({ prefixCls, css }) => ({
-    linearGradientButton: css`
-        &.${prefixCls}-btn-primary:not([disabled]):not(.${prefixCls}-btn-dangerous) {
-        > span {
-            position: relative;
-        }
-    
-        &::before {
-            content: '';
-            background: linear-gradient(135deg, #6253e1, #04befe);
-            position: absolute;
-            inset: -1px;
-            opacity: 1;
-            transition: all 0.3s;
-            border-radius: inherit;
-        }
-    
-        &:hover::before {
-            opacity: 0;
-        }
-        }
-    `,
-}));
-
 function Results () {
-    const { results, checkHandler } = useContext(ResultContext);
-    const { styles } = useStyle();
+    const { results } = useContext(ResultContext);
 
     if(results.length === 0) {
         return (
@@ -40,114 +12,44 @@ function Results () {
                     <Result
                         status="404"
                         title="404"
-                        subTitle="Sorry, the page you visited does not exist."
+                        subTitle="Sorry, the matches you find does not exist  :("
                         // extra={<Button type="primary">Back Home</Button>}
                     />
                 </div>
-                {/* <ConfigProvider
-                    button={{
-                    className: styles.linearGradientButton,
-                    }}
-                >
-                    <Space>
-                    <Button
-                        type="primary"
-                        size="large"
-                        icon={<AntDesignOutlined />}
-                        onClick={checkHandler}
-                    >
-                        Check
-                    </Button>
-                    </Space>
-                </ConfigProvider> */}
             </div>
         )
     } else {
         return (
             <div className="results-container">
                 <div className="result-container">
-                    {results.map(
-                        (result, idx) => (
-                            <div key={`draw ${idx}`} className="draw-match-container">
-                            <h4>{`Draw ${idx}`}</h4>
-                            {result.map((releaseMatch, idx) => (
-                                <div
-                                key={`release ${idx}`}
-                                className="release-match-container"
-                                >
-                                <p className="release-number">{`${releaseMatch[0]}: `}</p>
-                                <p>{releaseMatch.slice(1).join(", ")}</p>
-                                </div>
-                            ))}
-                            </div>
-                        )
-                    )}
+                    <Flex direction="vertical" size={16} gap={"small"} justify="center" wrap>
+                        {results.map(
+                            (result, idx) => (
+                                <Card key={`draw ${idx}`} size="small" title={`Draw ${idx}`} style={{ width: 300 }}>
+                                    {   
+                                        result.map((releaseMatch, idx) => (
+                                            <Flex key={`release ${idx}`} gap={"small"}>
+                                                <div className="release-number caveat-400">{`${releaseMatch[0]}: `}</div>
+                                                <Space>
+                                                    {
+                                                        releaseMatch.slice(1).map((match, idx) => {
+                                                            if (match !== '') {
+                                                                return <img key={idx} src={`/public/assets/balls/${match}.svg`} alt={`${match}`} width={"30"} height={"30"}/>
+                                                            }
+                                                        })
+                                                    }
+                                                </Space>
+                                            </Flex>
+                                        ))
+                                    }
+                                </Card>
+                            )
+                        )}
+                    </Flex>
                 </div>
-                {/* <ConfigProvider
-                    button={{
-                    className: styles.linearGradientButton,
-                    }}
-                >
-                    <Space>
-                    <Button
-                        type="primary"
-                        size="large"
-                        icon={<AntDesignOutlined />}
-                        onClick={checkHandler}
-                    >
-                        Check
-                    </Button>
-                    </Space>
-                </ConfigProvider> */}
             </div>
         )
     }
-
-    // return (
-    //   <div className="results-container">
-    //     <div className="result-container">
-    //     {
-    //         if(results.length === 0) {
-                
-    //         } else {
-    //             results.map(
-    //                 (result, idx) =>
-    //                 result.length > 0 && (
-    //                     <div key={`draw ${idx}`} className="draw-match-container">
-    //                     <h4>{`Draw ${idx}`}</h4>
-    //                     {result.map((releaseMatch, idx) => (
-    //                         <div
-    //                         key={`release ${idx}`}
-    //                         className="release-match-container"
-    //                         >
-    //                         <p className="release-number">{`${releaseMatch[0]}: `}</p>
-    //                         <p>{releaseMatch.slice(1).join(", ")}</p>
-    //                         </div>
-    //                     ))}
-    //                     </div>
-    //                 )
-    //             )
-    //         }
-    //     }
-    //       <ConfigProvider
-    //         button={{
-    //           className: styles.linearGradientButton,
-    //         }}
-    //       >
-    //         <Space>
-    //           <Button
-    //             type="primary"
-    //             size="large"
-    //             icon={<AntDesignOutlined />}
-    //             onClick={checkHandler}
-    //           >
-    //             Check
-    //           </Button>
-    //         </Space>
-    //       </ConfigProvider>
-    //     </div>
-    //   </div>
-    // );
 }
 
 export default Results
