@@ -17,7 +17,7 @@ function App() {
   const [results, setResults] = useState([]);
   const [drawFocusIdx, setDrawFocusIdx] = useState([0, 0]);
   const [relFocusIdx, setRelFocusIdx] = useState([0, 0]);
-  const inputRef = useRef([[]]);
+  const drawInputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -25,8 +25,8 @@ function App() {
     console.log("focusing...");
     const rowIdx = drawFocusIdx[0];
     const fieldIdx = drawFocusIdx[1];
-    if (inputRef.current[rowIdx][fieldIdx]) {
-      inputRef.current[rowIdx][fieldIdx].focus();
+    if (drawInputRef.current[rowIdx][fieldIdx]) {
+      drawInputRef.current[rowIdx][fieldIdx].focus();
     }
   }, [draws, drawFocusIdx]);
 
@@ -106,8 +106,12 @@ function App() {
     // console.log("Data retrieved successfully:", data);
     const updatedDraws = [...draws, ...prevDraws];
     const updatedReleases= [...releases, ...prevReleases];
-    console.log(updatedDraws);
-    console.log(updateRelease);
+    drawInputRef.current.push(...Array.from({length: prevDraws.length}, ()=>[]));
+    releaseInputRef.current.push(
+      ...Array.from({ length: prevReleases.length }, () => [])
+    );
+    console.log(`updatedDraws: ${JSON.stringify(updatedDraws)}`);
+    console.log(`updateRelease: ${JSON.stringify(updatedReleases)}`);
     setDraws(updatedDraws);
     setReleases(updatedReleases);
     openMessage('syncStates', 'success', 'States retrieved successfully');
@@ -116,7 +120,7 @@ function App() {
   function addDraw() {
     const updatedDraws = [...draws, ["", "", "", "", "", ""]];
     setDraws(updatedDraws);
-    inputRef.current.push([]);
+    drawInputRef.current.push([]);
   }
 
   function updateDraw(drawIdx, fieldIdx, value) {
@@ -135,7 +139,7 @@ function App() {
     const updatedDraws = [...draws];
     updatedDraws.splice(idx, 1);
     setDraws(updatedDraws);
-  }
+  } 
 
   function addRelease() {
     const updatedReleases = [...releases, ["", "", "", "", "", "", ""]];
@@ -199,7 +203,7 @@ function App() {
 
   const DrawComponent = () => (
     <DrawContext.Provider
-      value={{ draws, addDraw, updateDraw, deleteDraw, setDraws, inputRef }}
+      value={{ draws, addDraw, updateDraw, deleteDraw, setDraws, inputRef: drawInputRef }}
     >
       <Draws />
     </DrawContext.Provider>
