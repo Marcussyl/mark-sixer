@@ -63,7 +63,7 @@ function App() {
         headers: {
           "Content-Type": "application/json",
           // "X-Access-Key": import.meta.env.VITE_API_KEY, //https://dev.to/ebereplenty/how-to-use-environment-variables-in-a-reactjs-app-with-vite-3lh0
-          "X-Access-Key": "$2a$10$fCSP7fbhCIa4FwLQj9Z3kOhmc1vmRHGkom7/dNwjzlkOlyMSV/pVi"
+          "X-Access-Key": process.env.AccessKey,
         },
         body: JSON.stringify(states),
       });
@@ -87,8 +87,7 @@ function App() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "X-Access-Key":
-          "$2a$10$fCSP7fbhCIa4FwLQj9Z3kOhmc1vmRHGkom7/dNwjzlkOlyMSV/pVi",
+        "X-Access-Key": process.env.AccessKey,
       },
     });
 
@@ -98,7 +97,15 @@ function App() {
     }
 
     const data = await response.json();
-    console.log("Data retrieved successfully:", data);
+    const prevDraws= data["record"]["draws"]
+    const prevReleases = data["record"]["releases"];
+    // console.log(`prevDraws: ${JSON.stringify(prevDraws)}`);
+    // console.log(`prevDraws: ${JSON.stringify(prevReleases)}`);
+    // console.log("Data retrieved successfully:", data);
+    const updatedDraws = [...draws, ...prevDraws];
+    const updatedReleases= [...releases, ...prevReleases];
+    setDraws(updatedDraws);
+    setReleases(updatedReleases);
     openMessage('syncStates', 'success', 'States retrieved successfully');
   }
 
