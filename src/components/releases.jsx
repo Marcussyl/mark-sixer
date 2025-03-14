@@ -16,7 +16,7 @@ function Releases() {
   const handleMenuClick = (e) => {
     document.querySelector(
       "#dropdown-text"
-    ).innerHTML = `Get latest draw results online (count: ${e.key})`;
+    ).innerHTML = `Get draw results online (count: ${e.key})`;
     setRetCount(e.key);
   };
 
@@ -63,7 +63,7 @@ function Releases() {
           onClick={handleButtonClick}
         >
           <div id="dropdown-text">
-            Get latest draw results online
+            Get draw results online
           </div>
         </Dropdown.Button>
       </Flex>
