@@ -63,7 +63,8 @@ function App() {
         headers: {
           "Content-Type": "application/json",
           // "X-Access-Key": import.meta.env.VITE_API_KEY, //https://dev.to/ebereplenty/how-to-use-environment-variables-in-a-reactjs-app-with-vite-3lh0
-          "X-Access-Key": process.env.AccessKey,
+          "X-Access-Key":
+            "$2a$10$fCSP7fbhCIa4FwLQj9Z3kOhmc1vmRHGkom7/dNwjzlkOlyMSV/pVi",
         },
         body: JSON.stringify(states),
       });
@@ -87,7 +88,8 @@ function App() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "X-Access-Key": process.env.AccessKey,
+        "X-Access-Key":
+          "$2a$10$fCSP7fbhCIa4FwLQj9Z3kOhmc1vmRHGkom7/dNwjzlkOlyMSV/pVi",
       },
     });
 
