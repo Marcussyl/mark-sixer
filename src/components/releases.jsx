@@ -89,7 +89,7 @@ function Releases() {
         ))}
       </div>
       <PlusSquareOutlined className="add-btn" onClick={addRelease} />
-      <Tooltip title="Clear all draws" className='clear-btn'>
+      <Tooltip title="Clear all entries" className='clear-btn'>
         <Button type="default" shape="circle" icon={<ClearOutlined />} onClick={() => setReleases([])}/>
       </Tooltip>
     </div>

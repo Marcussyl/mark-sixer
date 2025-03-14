@@ -4,7 +4,7 @@ import Results from "./components/results.jsx";
 import React, { useEffect, useRef, useState } from "react";
 import "./scss/App.scss";
 import { DiffOutlined, HighlightOutlined, BarChartOutlined, FileSyncOutlined, CloudUploadOutlined, CloudDownloadOutlined } from '@ant-design/icons';
-import { Tabs, FloatButton } from 'antd';
+import { Tabs, FloatButton, message } from 'antd';
 
 export const DrawContext = React.createContext();
 export const ReleaseContext = React.createContext();
@@ -14,11 +14,11 @@ function App() {
   const [draws, setDraws] = useState([]);
   const [releases, setReleases] = useState([]);
   const [results, setResults] = useState([]);
-  // const [results, setResults] = useState([[]]);
   const [drawFocusIdx, setDrawFocusIdx] = useState([0, 0]);
   const [relFocusIdx, setRelFocusIdx] = useState([0, 0]);
   const inputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
+  // const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     console.log("focusing...");
@@ -38,16 +38,73 @@ function App() {
     }
   }, [releases, relFocusIdx]);
 
-  function backupData () {
-    const jsonString = JSON.stringify(draws, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'data.json';
-    a.click();
-    URL.revokeObjectURL(url);
+  // function openMessage (key, type, message) {
+  //   messageApi.open({
+  //     key,
+  //     type: type,
+  //     content: message,
+  //   });
+  // }
+
+  async function backupData() {
+    const binUrl = "https://api.jsonbin.io/v3/b/67d30f688960c979a570e782";
+    const states = {
+      draws: draws,
+      releases: releases
+    }
+    console.log(JSON.stringify(states));
+    console.log(import.meta.env.VITE_API_KEY);
+
+    try {
+      const response = await fetch(binUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          // "X-Access-Key": import.meta.env.VITE_API_KEY, //https://dev.to/ebereplenty/how-to-use-environment-variables-in-a-reactjs-app-with-vite-3lh0
+          "X-Access-Key": "$2a$10$fCSP7fbhCIa4FwLQj9Z3kOhmc1vmRHGkom7/dNwjzlkOlyMSV/pVi"
+        },
+        body: JSON.stringify(states),
+      });
+
+      if (!response.ok) {
+        const errorMessage = `Error: ${response.status} ${response.statusText}`;
+        console.error(errorMessage);
+      }
+
+      const data = await response.json();
+      console.log("Update successful:", data);
+    } catch (error) {
+      console.error("Error updating resource:", error);
+    }
   }
+  // async function backupData() {
+  //   const url = "https://api.jsonbin.io/v3/b/67d30f688960c979a570e782";
+  //   const messageKey = "syncStates";
+  //   console.log("backing up data...");
+  //   const reuqestBody = {
+  //     draws: draws,
+  //     releases: releases
+  //   }
+    
+  //   openMessage(messageKey, 'loading', "Backing up states...");
+  //   const response = await fetch(url, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify(reuqestBody)
+  //   })
+
+  //   if (!response.ok) {
+  //     const errorMessage = `Error: ${response.status} ${response.statusText}`;
+  //     openMessage(messageKey,"error", errorMessage)
+  //     console.error(errorMessage);
+  //   }
+
+  //   openMessage(messageKey, "success", "Data retrieved successfully");
+  //   const data = await response.json();
+  //   console.log("Data retrieved successfully:", data);
+  // }
 
   function retrieveData () {
 
@@ -225,6 +282,7 @@ function App() {
         )}
       />
       <FloatButton.Group
+        className="float-btn"
         trigger="click"
         type="primary"
         style={{
@@ -232,8 +290,9 @@ function App() {
         }}
         icon={<FileSyncOutlined />}
       >
-        <FloatButton icon={<CloudUploadOutlined />} onClick={backupData}/>
-        <FloatButton icon={<CloudDownloadOutlined />} onClick={retrieveData}/>
+        {/* {contextHolder} */}
+        <FloatButton icon={<CloudUploadOutlined />} onClick={backupData} tooltip="Backup states"/>
+        <FloatButton icon={<CloudDownloadOutlined />} onClick={retrieveData} tooltip="Retrieve states"/>
       </FloatButton.Group>
     </div>
   );
