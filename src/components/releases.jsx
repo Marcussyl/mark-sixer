@@ -16,7 +16,7 @@ function Releases() {
   const handleMenuClick = (e) => {
     document.querySelector(
       "#dropdown-text"
-    ).innerHTML = `Get draw results online (count: ${e.key})`;
+    ).innerHTML = `Get draw results online (${e.key})`;
     setRetCount(e.key);
   };
 
