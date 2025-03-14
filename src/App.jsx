@@ -259,9 +259,11 @@ function App() {
         )}
       />
       <FloatButton.Group
+        key={"left"}
         className="float-btn"
         trigger="click"
         type="primary"
+        placement="left"
         style={{
           insetInlineEnd: 24,
         }}
