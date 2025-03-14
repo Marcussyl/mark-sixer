@@ -6,8 +6,9 @@ import {
   SyncOutlined,
   DownOutlined,
   DollarTwoTone,
+  ClearOutlined
 } from "@ant-design/icons";
-import { Button, Flex, Dropdown, Space } from "antd";
+import { Button, Flex, Dropdown, Space, Tooltip } from "antd";
 import { ReleaseContext } from "../App.jsx";
 
 // const handleButtonClick = (e) => {
@@ -17,7 +18,7 @@ import { ReleaseContext } from "../App.jsx";
 
 
 function Releases() {
-  const { releases, addRelease } = useContext(ReleaseContext);
+  const { releases, addRelease, setReleases } = useContext(ReleaseContext);
   const [loadings, setLoadings] = useState([]);
   const [retCount, setRetCount] = useState(5);
 
@@ -88,6 +89,9 @@ function Releases() {
         ))}
       </div>
       <PlusSquareOutlined className="add-btn" onClick={addRelease} />
+      <Tooltip title="Clear all draws" className='clear-btn'>
+        <Button type="default" shape="circle" icon={<ClearOutlined />} onClick={() => setReleases([])}/>
+      </Tooltip>
     </div>
   );
 }

@@ -71,6 +71,7 @@
       max-width: 768px;
       border-radius: 25px;
       color: black;
+      position: relative;
 
       .draw-container, .release-container {
         display: flex;
@@ -83,6 +84,13 @@
         .draw, .release {
           display: flex;
         }
+      }
+
+      .clear-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 20px;
       }
     }
 

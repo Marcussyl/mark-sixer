@@ -1,4 +1,4 @@
-import { Modal } from 'antd'
+import { Modal, Tooltip, Button } from 'antd'
 import { useState, useContext } from 'react'
 import Tesseract from 'tesseract.js'
 import Draw from './draw.jsx'
@@ -8,6 +8,7 @@ import {
   InboxOutlined,
 } from "@ant-design/icons";
 import { Upload, Progress, Flex } from "antd";
+import { ClearOutlined } from '@ant-design/icons';
 
 function Draws() {
     const [progress, setProgress] = useState(0);
@@ -118,6 +119,9 @@ function Draws() {
           ))}
         </div>
         <PlusSquareOutlined className="add-btn" onClick={addDraw} />
+        <Tooltip title="Clear all draws" className='clear-btn'>
+            <Button type="default" shape="circle" icon={<ClearOutlined />} onClick={() => setDraws([])}/>
+        </Tooltip>
         {/* <Flex gap="small" vertical>
           <Flex wrap gap="small">
             <Button
