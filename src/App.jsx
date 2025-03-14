@@ -106,6 +106,8 @@ function App() {
     // console.log("Data retrieved successfully:", data);
     const updatedDraws = [...draws, ...prevDraws];
     const updatedReleases= [...releases, ...prevReleases];
+    console.log(updatedDraws);
+    console.log(updateRelease);
     setDraws(updatedDraws);
     setReleases(updatedReleases);
     openMessage('syncStates', 'success', 'States retrieved successfully');
