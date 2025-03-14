@@ -9,6 +9,7 @@ import { Tabs, FloatButton, message } from 'antd';
 export const DrawContext = React.createContext();
 export const ReleaseContext = React.createContext();
 export const ResultContext = React.createContext();
+const binUrl = "https://api.jsonbin.io/v3/b/67d30f688960c979a570e782";
 
 function App() {
   const [draws, setDraws] = useState([]);
@@ -18,7 +19,7 @@ function App() {
   const [relFocusIdx, setRelFocusIdx] = useState([0, 0]);
   const inputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
-  // const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     console.log("focusing...");
@@ -38,16 +39,17 @@ function App() {
     }
   }, [releases, relFocusIdx]);
 
-  // function openMessage (key, type, message) {
-  //   messageApi.open({
-  //     key,
-  //     type: type,
-  //     content: message,
-  //   });
-  // }
+  function openMessage (key, type, message) {
+    messageApi.open({
+      key,
+      type: type,
+      content: message,
+    });
+  }
 
   async function backupData() {
-    const binUrl = "https://api.jsonbin.io/v3/b/67d30f688960c979a570e782";
+    openMessage('syncStates','loading','Backing up states...')
+    
     const states = {
       draws: draws,
       releases: releases
@@ -73,41 +75,31 @@ function App() {
 
       const data = await response.json();
       console.log("Update successful:", data);
+      openMessage('syncStates', 'success', 'States received successfully');
     } catch (error) {
       console.error("Error updating resource:", error);
     }
   }
-  // async function backupData() {
-  //   const url = "https://api.jsonbin.io/v3/b/67d30f688960c979a570e782";
-  //   const messageKey = "syncStates";
-  //   console.log("backing up data...");
-  //   const reuqestBody = {
-  //     draws: draws,
-  //     releases: releases
-  //   }
-    
-  //   openMessage(messageKey, 'loading', "Backing up states...");
-  //   const response = await fetch(url, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify(reuqestBody)
-  //   })
 
-  //   if (!response.ok) {
-  //     const errorMessage = `Error: ${response.status} ${response.statusText}`;
-  //     openMessage(messageKey,"error", errorMessage)
-  //     console.error(errorMessage);
-  //   }
+  async function retrieveData () {
+    openMessage("syncStates", "loading", "Getting states...");
+    const response = await fetch(binUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Key":
+          "$2a$10$fCSP7fbhCIa4FwLQj9Z3kOhmc1vmRHGkom7/dNwjzlkOlyMSV/pVi",
+      },
+    });
 
-  //   openMessage(messageKey, "success", "Data retrieved successfully");
-  //   const data = await response.json();
-  //   console.log("Data retrieved successfully:", data);
-  // }
+    if (!response.ok) {
+      const errorMessage = `Error: ${response.status} ${response.statusText}`;
+      console.error(errorMessage);
+    }
 
-  function retrieveData () {
-
+    const data = await response.json();
+    console.log("Data retrieved successfully:", data);
+    openMessage('syncStates', 'success', 'States retrieved successfully');
   }
 
   function addDraw() {
@@ -162,36 +154,6 @@ function App() {
  * check if there are matches between draws and releases lists
  * store the matches in results state
  */
-  // function checkHandler() {
-  //   let updatedRes = new Map(); // {drawId: {releaseId: [], releaseId: []}}
-  //   // for each draw
-  //   for (let dId = 0; dId < draws.length; dId++) {
-  //     let draw = draws[dId];
-  //     // for each release
-  //     for (let rId = 0; rId < releases.length; rId++) {
-  //       let release = releases[rId].slice(1);
-  //       const temp = [];
-  //       // compare is release numbers are exist in draw
-  //       for (let i = 0; i < 7; i++) {
-  //         if (release[i] !== '' && draw.includes(release[i])) {
-  //           console.log(`found match: ${release[i]}`);
-  //           temp.push(release[i]);
-  //         }
-  //       }
-  //       console.log(JSON.stringify(temp));
-  //       // if there're at least 3 matches, append it into corresponding drawId's array
-  //       if (temp.length >= 3) {
-  //         updatedRes.set("test", "haha")
-  //         if (!updatedRes.has(dId)) {
-  //           updatedRes.set(dId, new Map());
-  //         }
-  //         updatedRes.get(dId).set(rId, temp);
-  //       }
-  //     }
-  //   }
-
-  //   setResults(updatedRes);
-  // }
   function checkHandler() {
     let newResults = []; // e.g. newResults[drawId][releaseId]
     
@@ -290,7 +252,7 @@ function App() {
         }}
         icon={<FileSyncOutlined />}
       >
-        {/* {contextHolder} */}
+        {contextHolder}
         <FloatButton icon={<CloudUploadOutlined />} onClick={backupData} tooltip="Backup states"/>
         <FloatButton icon={<CloudDownloadOutlined />} onClick={retrieveData} tooltip="Retrieve states"/>
       </FloatButton.Group>
