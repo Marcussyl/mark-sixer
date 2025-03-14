@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="./public/assets/icon.png" />
+    <link rel="icon" type="image/png" href="/assets/icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Titan+One&family=Caveat:wght@400..700&display=swap" rel="stylesheet">
@@ -14,5 +14,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      const floatBtn = document.querySelector('.ant-float-btn-group');
+      if (window.innerWidth <= 425) {
+        floatBtn.classList.remove('ant-float-btn-group-top');
+        floatBtn.classList.add('ant-float-btn-group-left');
+      }
+    </script>
   </body>
 </html>
