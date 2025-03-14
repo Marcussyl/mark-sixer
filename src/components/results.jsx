@@ -34,7 +34,7 @@ function Results () {
                                                     {
                                                         releaseMatch.slice(1).map((match, idx) => {
                                                             if (match !== '') {
-                                                                return <img key={idx} src={`/assets/balls/${match}.svg`} alt={`${match}`} width={"30"} height={"30"}/>
+                                                                return <img key={idx} src={`/public/assets/balls/${match}.svg`} alt={`${match}`} width={"30"} height={"30"}/>
                                                             }
                                                         })
                                                     }
