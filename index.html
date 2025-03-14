@@ -14,14 +14,23 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script>
+    <!-- <script>
       const floatBtn = document.querySelector('.ant-float-btn-group');
-      if (window.innerWidth <= 425) {
-        // floatBtn.classList.remove('ant-float-btn-group-top');
-        // floatBtn.classList.add('ant-float-btn-group-left');
-        floatBtn.style.bottom = '10px';
-        floatBtn.style.right = '10px';
-      }
-    </script>
+      const updateFloatBtnPosition = () => {
+        console.log('updating float button position...');
+        if (floatBtn) {
+          if (window.innerWidth <= 425) {
+            floatBtn.classList.remove('css-dev-only-do-not-override-240cud');
+            floatBtn.setAttribute('style', 'bottom: 10px !important;');
+            floatBtn.setAttribute('style', 'right: 10px !important;');
+          } else {
+            floatBtn.style.bottom = ''; // Reset or provide alternative styles
+            floatBtn.style.right = '';
+          }
+        }
+      };
+      window.addEventListener('resize', updateFloatBtnPosition);
+      updateFloatBtnPosition();
+    </script> -->
   </body>
 </html>

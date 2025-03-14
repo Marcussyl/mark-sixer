@@ -3,7 +3,14 @@ import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
 import React, { useEffect, useRef, useState } from "react";
 import "./scss/App.scss";
-import { DiffOutlined, HighlightOutlined, BarChartOutlined, FileSyncOutlined, CloudUploadOutlined, CloudDownloadOutlined } from '@ant-design/icons';
+import {
+  DiffOutlined,
+  HighlightOutlined,
+  BarChartOutlined,
+  CloudSyncOutlined,
+  CloudUploadOutlined,
+  CloudDownloadOutlined,
+} from "@ant-design/icons";
 import { Tabs, FloatButton, message } from 'antd';
 
 export const DrawContext = React.createContext();
@@ -22,7 +29,6 @@ function App() {
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    console.log("focusing...");
     const rowIdx = drawFocusIdx[0];
     const fieldIdx = drawFocusIdx[1];
     if (drawInputRef.current[rowIdx][fieldIdx]) {
@@ -31,7 +37,6 @@ function App() {
   }, [draws, drawFocusIdx]);
 
   useEffect(() => {
-    console.log("focusing...");
     const rowIdx = relFocusIdx[0];
     const fieldIdx = relFocusIdx[1];
     if (releaseInputRef.current[rowIdx][fieldIdx]) {
@@ -71,6 +76,7 @@ function App() {
 
       if (!response.ok) {
         const errorMessage = `Error: ${response.status} ${response.statusText}`;
+        openMessage("syncStates", "error", errorMessage);
         console.error(errorMessage);
       }
 
@@ -203,7 +209,7 @@ function App() {
 
   const DrawComponent = () => (
     <DrawContext.Provider
-      value={{ draws, addDraw, updateDraw, deleteDraw, setDraws, inputRef: drawInputRef }}
+      value={{ draws, addDraw, updateDraw, deleteDraw, setDraws, drawInputRef }}
     >
       <Draws />
     </DrawContext.Provider>
@@ -218,6 +224,7 @@ function App() {
         deleteRelease,
         setReleases,
         releaseInputRef,
+        openMessage,
       }}
     >
       <Releases />
@@ -265,11 +272,19 @@ function App() {
         style={{
           insetInlineEnd: 24,
         }}
-        icon={<FileSyncOutlined />}
+        icon={<CloudSyncOutlined />}
       >
         {contextHolder}
-        <FloatButton icon={<CloudUploadOutlined />} onClick={backupData} tooltip="Backup states"/>
-        <FloatButton icon={<CloudDownloadOutlined />} onClick={retrieveData} tooltip="Retrieve states"/>
+        <FloatButton
+          icon={<CloudUploadOutlined />}
+          onClick={backupData}
+          tooltip="Backup states"
+        />
+        <FloatButton
+          icon={<CloudDownloadOutlined />}
+          onClick={retrieveData}
+          tooltip="Retrieve states"
+        />
       </FloatButton.Group>
     </div>
   );

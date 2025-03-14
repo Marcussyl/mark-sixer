@@ -2,31 +2,42 @@ import Release from "./release.jsx";
 import { useState, useContext } from "react";
 import {
   PlusSquareOutlined,
-  SearchOutlined,
-  SyncOutlined,
-  DownOutlined,
+  FieldNumberOutlined,
   DollarTwoTone,
   ClearOutlined
 } from "@ant-design/icons";
-import { Button, Flex, Dropdown, Space, Tooltip } from "antd";
+import { Button, Flex, Dropdown, Tooltip } from "antd";
 import { ReleaseContext } from "../App.jsx";
 
-// const handleButtonClick = (e) => {
-//   message.info("Click on left button.");
-//   console.log("click left button", e);
-// };
-
-
 function Releases() {
-  const { releases, addRelease, setReleases } = useContext(ReleaseContext);
-  const [loadings, setLoadings] = useState([]);
+  const { releases, addRelease, setReleases, openMessage } = useContext(ReleaseContext);
   const [retCount, setRetCount] = useState(5);
 
   const handleMenuClick = (e) => {
     document.querySelector(
       "#dropdown-text"
-    ).innerHTML = `No. of rel to retrieve: ${e.key}`;
+    ).innerHTML = `Get latest draw results online (count: ${e.key})`;
     setRetCount(e.key);
+  };
+
+  const handleButtonClick = async () => {
+    console.log('Button clicked');
+    openMessage('getDrawResult', 'loading', 'Getting draw results...');
+    const url = `https://mark-six-results-scraper.netlify.app/api/mark-six-results?count=${retCount}`;
+    console.log(`url: ${url}`);
+    const response = await fetch(url, {
+      method: "GET",
+    })
+
+    if (!response.ok) {
+      const errorMessage = `Error: ${response.status} ${response.statusText}`;
+      openMessage("getDrawResult", "error", errorMessage);
+      console.error(errorMessage);
+    }
+
+    const data = await response.json()
+    console.log(JSON.stringify(data));
+    openMessage("getDrawResult", "success", "Get draw results successfully");
   };
 
   const menuItems = ((count) => {
@@ -42,44 +53,19 @@ function Releases() {
     onClick: handleMenuClick,
   };
 
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 3000);
-  };
-
   return (
     <div className="releases-container">
       <Flex gap="small" justify="center" wrap>
-        <Button
-          icon={<SearchOutlined />}
-          loading={
-            loadings[3] && {
-              icon: <SyncOutlined spin />,
-            }
-          }
-          onClick={() => enterLoading(3)}
-          // style={{ background: "#F6D4D2" }}
+        <Dropdown.Button
+          menu={menuProps}
+          placement="bottom"
+          icon={<FieldNumberOutlined />}
+          onClick={handleButtonClick}
         >
-          Retrieve releases
-        </Button>
-        <Dropdown menu={menuProps}>
-          <Button>
-            <Space>
-              <div id="dropdown-text">No. of rel to retrieve</div>
-              <DownOutlined />
-            </Space>
-          </Button>
-        </Dropdown>
+          <div id="dropdown-text">
+            Get latest draw results online
+          </div>
+        </Dropdown.Button>
       </Flex>
       <div className="release-container">
         {releases.map((release, idx) => (
@@ -89,8 +75,13 @@ function Releases() {
         ))}
       </div>
       <PlusSquareOutlined className="add-btn" onClick={addRelease} />
-      <Tooltip title="Clear all entries" className='clear-btn'>
-        <Button type="default" shape="circle" icon={<ClearOutlined />} onClick={() => setReleases([])}/>
+      <Tooltip title="Clear all entries" className="clear-btn">
+        <Button
+          type="default"
+          shape="circle"
+          icon={<ClearOutlined />}
+          onClick={() => setReleases([])}
+        />
       </Tooltip>
     </div>
   );
