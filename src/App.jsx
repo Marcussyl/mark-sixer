@@ -232,7 +232,7 @@ function App() {
             temp.push(release[i]);
           }
         }
-        if (temp.length >= 3) {
+        if (temp.length >= 4) { // the first element is the release id, should be ignored
           if (newResults[drawIdx] === undefined) {
             newResults[drawIdx] = [];
           }
