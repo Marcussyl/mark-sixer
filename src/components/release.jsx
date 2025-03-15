@@ -23,7 +23,7 @@ function Release (props) {
               releaseInputRef.current[id][0] = el;
             }}
             onChange={(event) => updateRelease(id, 0, event.target.value)}
-          />{" "}
+          />
           &nbsp;
           <input
             type="tel"
