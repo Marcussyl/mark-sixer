@@ -60,7 +60,7 @@ function App() {
     const draws = window.localStorage.getItem('Mark_Sixer_Draws')
     const releases = window.localStorage.getItem('Mark_Sixer_Releases')
     const results = window.localStorage.getItem('Mark_Sixer_Results')
-    const activeTabKey = window.localStorage.getItem('Mark_Sixer_ActiveTabKey') || '0';
+    const activeTabKey = window.localStorage.getItem('Mark_Sixer_ActiveTabKey');
     // console.log(`draws: ${draws}, releases: ${releases}, results: ${results}`)
 
     if (draws && releases && results) {
