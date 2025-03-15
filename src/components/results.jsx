@@ -39,9 +39,9 @@ function Results () {
                                                                     key={idx}
                                                                     src={`https://marcussyl.github.io/mark-sixer/assets/balls/${match}.svg`}
                                                                     alt={`${match}`}
-                                                                    width={"30"}
+                                                                    width={"28"}
                                                                     height={
-                                                                      "30"
+                                                                      "28"
                                                                     }
                                                                   />
                                                                 );
