@@ -10,7 +10,8 @@ import { Button, Flex, Dropdown, Tooltip } from "antd";
 import { ReleaseContext } from "../App.jsx";
 
 function Releases() {
-  const { releases, addRelease, setReleases, openMessage } = useContext(ReleaseContext);
+  const { releases, addRelease, setReleases, releaseInputRef, setMsgKey, setMsgType, setMsg } =
+    useContext(ReleaseContext);
   const [retCount, setRetCount] = useState(5);
 
   const handleMenuClick = (e) => {
@@ -21,8 +22,9 @@ function Releases() {
   };
 
   const handleButtonClick = async () => {
-    console.log('Button clicked');
-    openMessage('getDrawResult', 'loading', 'Getting draw results...');
+    setMsgKey("getDrawResult");
+    setMsgType("loading");
+    setMsg("Getting draw results...");
     const url = `https://mark-six-results-scraper.netlify.app/api/mark-six-results?count=${retCount}`;
     console.log(`url: ${url}`);
     const response = await fetch(url, {
@@ -31,13 +33,28 @@ function Releases() {
 
     if (!response.ok) {
       const errorMessage = `Error: ${response.status} ${response.statusText}`;
-      openMessage("getDrawResult", "error", errorMessage);
+      setMsgKey("getDrawResult");
+      setMsgType("error");
+      setMsg(errorMessage);
       console.error(errorMessage);
     }
 
     const data = await response.json()
-    console.log(JSON.stringify(data));
-    openMessage("getDrawResult", "success", "Get draw results successfully");
+    // console.log(JSON.stringify(data));
+    setMsgKey("getDrawResult");
+    setMsgType("success");
+    setMsg("Get draw results successfully");
+
+    const transformedData = data.map((item) => {
+      const id = item.id.split("/")[1];
+      return [id, ...item.results];
+    });
+    // console.log(transformedData);
+
+    releaseInputRef.current.push(...Array.from({length: transformedData.length}, () => []));
+
+    const updatedRelease = [...releases, ...transformedData];
+    setReleases(updatedRelease);
   };
 
   const menuItems = ((count) => {
@@ -63,7 +80,7 @@ function Releases() {
           onClick={handleButtonClick}
         >
           <div id="dropdown-text">
-            Get draw results online
+            Get draw results online (5)
           </div>
         </Dropdown.Button>
       </Flex>

@@ -1,7 +1,7 @@
 import Draws from "./components/draws.jsx";
 import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import "./scss/App.scss";
 import {
   DiffOutlined,
@@ -27,6 +27,24 @@ function App() {
   const drawInputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
   const [messageApi, contextHolder] = message.useMessage();
+  const [msgKey, setMsgKey] = useState();
+  const [msgType, setMsgType] = useState();
+  const [msg, setMsg] = useState();
+
+  const openMessage = useCallback(
+    (key, type, message) => {
+      messageApi.open({
+        key,
+        type: type,
+        content: message,
+      });
+    },
+    [messageApi]
+  ); 
+
+  useEffect(() => {
+    openMessage(msgKey, msgType, msg);
+  }, [msgKey, msgType, msg, openMessage])
 
   useEffect(() => {
     const rowIdx = drawFocusIdx[0];
@@ -44,23 +62,15 @@ function App() {
     }
   }, [releases, relFocusIdx]);
 
-  function openMessage (key, type, message) {
-    messageApi.open({
-      key,
-      type: type,
-      content: message,
-    });
-  }
-
   async function backupData() {
-    openMessage('syncStates','loading','Backing up states...')
+    setMsgKey("syncStates");
+    setMsgType("loading");
+    setMsg("Backing up states...");
     
     const states = {
       draws: draws,
       releases: releases
     }
-    console.log(JSON.stringify(states));
-    console.log(import.meta.env.VITE_API_KEY);
 
     try {
       const response = await fetch(binUrl, {
@@ -76,13 +86,17 @@ function App() {
 
       if (!response.ok) {
         const errorMessage = `Error: ${response.status} ${response.statusText}`;
-        openMessage("syncStates", "error", errorMessage);
+        setMsgKey("syncStates");
+        setMsgType("error");
+        setMsg(errorMessage);
         console.error(errorMessage);
       }
 
       const data = await response.json();
       console.log("Update successful:", data);
-      openMessage('syncStates', 'success', 'States received successfully');
+      setMsgKey("syncStates");
+      setMsgType("success");
+      setMsg("States received successfully");
     } catch (error) {
       console.error("Error updating resource:", error);
     }
@@ -154,7 +168,8 @@ function App() {
   }
 
   function updateRelease(releaseIdx, fieldIdx, value) {
-    if (value.length === 2) {
+    // first field should take 3 numbers
+    if((fieldIdx === 0 && value.length === 3) || (fieldIdx !== 0 && value.length === 2)){
       const newFieldIdx = fieldIdx + 1 > 8 ? fieldIdx : fieldIdx + 1;
       setRelFocusIdx([releaseIdx, newFieldIdx]);
     } else {
@@ -225,6 +240,9 @@ function App() {
         setReleases,
         releaseInputRef,
         openMessage,
+        setMsgKey,
+        setMsgType,
+        setMsg
       }}
     >
       <Releases />
