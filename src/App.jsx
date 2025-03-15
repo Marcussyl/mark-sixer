@@ -24,6 +24,7 @@ function App() {
   const [results, setResults] = useState([]);
   const [drawFocusIdx, setDrawFocusIdx] = useState([0, 0]);
   const [relFocusIdx, setRelFocusIdx] = useState([0, 0]);
+  const [activeTabKey, setActiveTabKey] = useState("0");
   const drawInputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -59,6 +60,7 @@ function App() {
     const draws = window.localStorage.getItem('Mark_Sixer_Draws')
     const releases = window.localStorage.getItem('Mark_Sixer_Releases')
     const results = window.localStorage.getItem('Mark_Sixer_Results')
+    const activeTabKey = window.localStorage.getItem('Mark_Sixer_ActiveTabKey') || '0';
     // console.log(`draws: ${draws}, releases: ${releases}, results: ${results}`)
 
     if (draws && releases && results) {
@@ -73,6 +75,10 @@ function App() {
         openMessage('loadData', 'error', `Error parsing stored data from localstorage ${error}`);
       }
     }
+
+    if (activeTabKey) {
+      setActiveTabKey(activeTabKey);
+    }
   }, [openMessage])
 
   useEffect(() => {
@@ -86,6 +92,10 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem('Mark_Sixer_Results', JSON.stringify(results))
   }, [results])
+  
+  useEffect(() => {
+    window.localStorage.setItem('Mark_Sixer_ActiveTabKey', activeTabKey)
+  }, [activeTabKey])
 
   useEffect(() => {
     const rowIdx = relFocusIdx[0];
@@ -244,6 +254,7 @@ function App() {
   }
 
   function onTabChange(key) {
+    setActiveTabKey(key);
     if (key === "3") {
       checkHandler();
     }
@@ -287,6 +298,7 @@ function App() {
       <h1 className="titan-one-regular"> Mark Sixer </h1>
       <Tabs
         defaultActiveKey="1"
+        activeKey={activeTabKey}
         centered
         onChange={onTabChange}
         items={[DiffOutlined, HighlightOutlined, BarChartOutlined].map(
