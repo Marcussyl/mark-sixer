@@ -16,7 +16,7 @@ function Draws() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     //Draws handlers
-    const { draws, addDraw, setDraws, drawInputRef } = useContext(DrawContext);
+    const { draws, addDraw, setDraws, drawInputRef, openMessage } = useContext(DrawContext);
     
     const { Dragger } = Upload;
     const props = {
@@ -40,7 +40,8 @@ function Draws() {
         if (matches) {
         setMatch(matches)
         } else {
-            console.log("No matches found.");
+          console.log("No matches found.");
+          openMessage('processResult', 'default', 'No matches found in the scanned text');
         }
         
         setIsModalOpen(true);
@@ -55,7 +56,7 @@ function Draws() {
             },
         })
         .then(({ data: { text } }) => {
-            console.log(`Raw text: ${text}`);
+            // console.log(`Raw text: ${text}`);
             processResult(text);
         });
     };
