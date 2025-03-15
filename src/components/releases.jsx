@@ -10,7 +10,7 @@ import { Button, Flex, Dropdown, Tooltip } from "antd";
 import { ReleaseContext } from "../App.jsx";
 
 function Releases() {
-  const { releases, addRelease, setReleases, releaseInputRef, setMsgKey, setMsgType, setMsg } =
+  const { releases, addRelease, setReleases, releaseInputRef, openMessage, contextHolder } =
     useContext(ReleaseContext);
   const [retCount, setRetCount] = useState(5);
 
@@ -22,39 +22,43 @@ function Releases() {
   };
 
   const handleButtonClick = async () => {
-    setMsgKey("getDrawResult");
-    setMsgType("loading");
-    setMsg("Getting draw results...");
-    const url = `https://mark-six-results-scraper.netlify.app/api/mark-six-results?count=${retCount}`;
-    console.log(`url: ${url}`);
-    const response = await fetch(url, {
-      method: "GET",
-    })
-
-    if (!response.ok) {
-      const errorMessage = `Error: ${response.status} ${response.statusText}`;
-      setMsgKey("getDrawResult");
-      setMsgType("error");
-      setMsg(errorMessage);
-      console.error(errorMessage);
+    try {
+      openMessage('getReleases', 'loading', 'Getting draw results...', 0);
+      // openMessage('getReleases', 'success', 'Get draw results successfully');
+      const url = `https://mark-six-results-scraper.netlify.app/api/mark-six-results?count=${retCount}`;
+      const response = await fetch(url, {
+        method: "GET",
+      })
+  
+      if (!response.ok) {
+        const errorMessage = `Error: ${response.status} ${response.statusText}`;
+        console.log('there is an error');
+        setTimeout(() => {
+          // openMessage('getReleases', 'success', 'Get draw results successfully');
+          openMessage('getReleases', 'error', errorMessage);
+        }, 100);
+        console.error(errorMessage);
+      }
+  
+      const data = await response.json()
+      // console.log(JSON.stringify(data));
+  
+      const transformedData = data.map((item) => {
+        const id = item.id.split("/")[1];
+        return [id, ...item.results];
+      });
+      // console.log(transformedData);
+    
+      setTimeout(() => {
+        openMessage('getReleases', 'success', 'Get draw results successfully');
+      }, 100); // delay message to ensure it shows after re-render (re-render will cover the message from showing up) 
+      releaseInputRef.current.push(...Array.from({ length: transformedData.length }, () => []));
+      const updatedRelease = [...releases, ...transformedData];
+      setReleases(updatedRelease);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      openMessage('getReleases', 'error', 'Error fetching data');
     }
-
-    const data = await response.json()
-    // console.log(JSON.stringify(data));
-    setMsgKey("getDrawResult");
-    setMsgType("success");
-    setMsg("Get draw results successfully");
-
-    const transformedData = data.map((item) => {
-      const id = item.id.split("/")[1];
-      return [id, ...item.results];
-    });
-    // console.log(transformedData);
-
-    releaseInputRef.current.push(...Array.from({length: transformedData.length}, () => []));
-
-    const updatedRelease = [...releases, ...transformedData];
-    setReleases(updatedRelease);
   };
 
   const menuItems = ((count) => {
@@ -73,6 +77,7 @@ function Releases() {
   return (
     <div className="releases-container">
       <Flex gap="small" justify="center" wrap>
+        {contextHolder}
         <Dropdown.Button
           menu={menuProps}
           placement="bottom"

@@ -1,7 +1,7 @@
 import Draws from "./components/draws.jsx";
 import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./scss/App.scss";
 import {
   DiffOutlined,
@@ -27,24 +27,16 @@ function App() {
   const drawInputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
   const [messageApi, contextHolder] = message.useMessage();
-  const [msgKey, setMsgKey] = useState();
-  const [msgType, setMsgType] = useState();
-  const [msg, setMsg] = useState();
 
-  const openMessage = useCallback(
-    (key, type, message) => {
-      messageApi.open({
-        key,
-        type: type,
-        content: message,
-      });
-    },
-    [messageApi]
-  ); 
-
-  useEffect(() => {
-    openMessage(msgKey, msgType, msg);
-  }, [msgKey, msgType, msg, openMessage])
+  const openMessage = (key, type, message, duration = 2) => {
+    console.log(`opening message: ${key}, ${type}, ${message}}`);
+    messageApi.open({
+      key,
+      type: type,
+      content: message,
+      duration: duration
+    });
+  }
 
   useEffect(() => {
     const rowIdx = drawFocusIdx[0];
@@ -63,9 +55,7 @@ function App() {
   }, [releases, relFocusIdx]);
 
   async function backupData() {
-    setMsgKey("syncStates");
-    setMsgType("loading");
-    setMsg("Backing up states...");
+    openMessage("syncStates", "loading", "Backing up states...");
     
     const states = {
       draws: draws,
@@ -86,17 +76,13 @@ function App() {
 
       if (!response.ok) {
         const errorMessage = `Error: ${response.status} ${response.statusText}`;
-        setMsgKey("syncStates");
-        setMsgType("error");
-        setMsg(errorMessage);
+        openMessage("syncStates", "error", errorMessage);
         console.error(errorMessage);
       }
 
       const data = await response.json();
       console.log("Update successful:", data);
-      setMsgKey("syncStates");
-      setMsgType("success");
-      setMsg("States received successfully");
+      openMessage("syncStates", "success", "States received successfully");
     } catch (error) {
       console.error("Error updating resource:", error);
     }
@@ -240,9 +226,7 @@ function App() {
         setReleases,
         releaseInputRef,
         openMessage,
-        setMsgKey,
-        setMsgType,
-        setMsg
+        contextHolder
       }}
     >
       <Releases />
