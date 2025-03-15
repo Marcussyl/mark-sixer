@@ -16,7 +16,7 @@ function Draws() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     //Draws handlers
-    const { draws, addDraw, setDraws } = useContext(DrawContext);
+    const { draws, addDraw, setDraws, drawInputRef } = useContext(DrawContext);
     
     const { Dragger } = Upload;
     const props = {
@@ -59,20 +59,6 @@ function Draws() {
             processResult(text);
         });
     };
-    // const onFileChange = (e) => {
-    //     Tesseract.recognize(e.target.files[0], 'eng', {
-    //     logger: (m) => {
-    //         //console.log(m);
-    //         if (m.status === "recognizing text") {
-    //         setProgress(m.progress);
-    //         }
-    //     },
-    //     })
-    //     .then(({ data: { text } }) => {
-    //         console.log(`Raw text: ${text}`);
-    //         processResult(text);
-    //     });
-    // };
 
     //Modal handlers
     const handleInputChange = (idx, value) => {
@@ -83,11 +69,12 @@ function Draws() {
     }
 
     const handleOk = () => {
-        setIsModalOpen(false);
-        //update the draws list
-        const convertedMatch = match.map((mat) => (mat.split('+')))
-        const updatedDraws = [...draws, ...convertedMatch]
-        setDraws(updatedDraws)
+      setIsModalOpen(false);
+      drawInputRef.current.push(...Array.from({length: match.length}, ()=>[]));
+      //update the draws list
+      const convertedMatch = match.map((mat) => (mat.split('+')))
+      const updatedDraws = [...draws, ...convertedMatch]
+      setDraws(updatedDraws)
     };
 
     const handleCancel = () => {
@@ -135,12 +122,13 @@ function Draws() {
 
         {/* pop-up window for users to confirm matches after extracting text from image */}
         <Modal
-          title="Match results"
+          title="Draws found"
           centered
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
         >
+          <Flex gap={"small"} wrap>
           {match &&
             match.map((mat, idx) => (
               <input
@@ -149,6 +137,7 @@ function Draws() {
                 onChange={(event) => handleInputChange(idx, event.target.value)}
               />
             ))}
+          </Flex>
         </Modal>
       </div>
     );
