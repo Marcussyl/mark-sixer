@@ -32,7 +32,7 @@ function Releases() {
   
       if (!response.ok) {
         const errorMessage = `Error: ${response.status} ${response.statusText}`;
-        console.log('there is an error');
+        console.error('there is an error');
         setTimeout(() => {
           // openMessage('getReleases', 'success', 'Get draw results successfully');
           openMessage('getReleases', 'error', errorMessage);
@@ -42,6 +42,11 @@ function Releases() {
   
       const data = await response.json()
       // console.log(JSON.stringify(data));
+
+      if (data.length === 0) { 
+        openMessage('getReleases', 'error', 'No draw results retrieved, please try again');
+        return;
+      }
   
       const transformedData = data.map((item) => {
         const id = item.id.split("/")[1];
@@ -53,7 +58,7 @@ function Releases() {
         openMessage('getReleases', 'success', 'Get draw results successfully');
       }, 100); // delay message to ensure it shows after re-render (re-render will cover the message from showing up) 
       releaseInputRef.current.push(...Array.from({ length: transformedData.length }, () => []));
-      const updatedRelease = [...releases, ...transformedData];
+      const updatedRelease = [...transformedData, ...releases]; // newly retrieved releases should be added at the top of existing releases
       setReleases(updatedRelease);
     } catch (error) {
       console.error("Error fetching data:", error);
