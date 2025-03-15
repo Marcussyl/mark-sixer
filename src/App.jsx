@@ -24,19 +24,10 @@ function App() {
   const [results, setResults] = useState([]);
   const [drawFocusIdx, setDrawFocusIdx] = useState([0, 0]);
   const [relFocusIdx, setRelFocusIdx] = useState([0, 0]);
-  const [activeTabKey, setActiveTabKey] = useState();
+  const [activeTabKey, setActiveTabKey] = useState('1');
   const drawInputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
   const [messageApi, contextHolder] = message.useMessage();
-
-  // const openMessage = (key, type, message, duration = 2) => {
-  //   messageApi.open({
-  //     key,
-  //     type: type,
-  //     content: message,
-  //     duration: duration
-  //   });
-  // }
 
   const openMessage = useCallback((key, type, message, duration = 2) => {
     messageApi.open({
