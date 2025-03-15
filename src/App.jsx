@@ -1,7 +1,7 @@
 import Draws from "./components/draws.jsx";
 import Releases from "./components/releases.jsx";
 import Results from "./components/results.jsx";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./scss/App.scss";
 import {
   DiffOutlined,
@@ -28,15 +28,23 @@ function App() {
   const releaseInputRef = useRef([[]]);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const openMessage = (key, type, message, duration = 2) => {
-    console.log(`opening message: ${key}, ${type}, ${message}}`);
+  // const openMessage = (key, type, message, duration = 2) => {
+  //   messageApi.open({
+  //     key,
+  //     type: type,
+  //     content: message,
+  //     duration: duration
+  //   });
+  // }
+
+  const openMessage = useCallback((key, type, message, duration = 2) => {
     messageApi.open({
       key,
       type: type,
       content: message,
       duration: duration
     });
-  }
+  }, [messageApi]);
 
   useEffect(() => {
     const rowIdx = drawFocusIdx[0];
@@ -45,6 +53,39 @@ function App() {
       drawInputRef.current[rowIdx][fieldIdx].focus();
     }
   }, [draws, drawFocusIdx]);
+
+  // localstorage persistence
+  useEffect(() => {
+    const draws = window.localStorage.getItem('Mark_Sixer_Draws')
+    const releases = window.localStorage.getItem('Mark_Sixer_Releases')
+    const results = window.localStorage.getItem('Mark_Sixer_Results')
+    // console.log(`draws: ${draws}, releases: ${releases}, results: ${results}`)
+
+    if (draws && releases && results) {
+      try {
+        drawInputRef.current.push(...Array.from({ length: JSON.parse(draws).length }, () => []));
+        releaseInputRef.current.push(...Array.from({ length: JSON.parse(releases).length }, () => []));
+        setDraws(JSON.parse(draws));
+        setReleases(JSON.parse(releases));
+        setResults(JSON.parse(results));
+      } catch (error) {
+        console.error('Error parsing stored data:', error);
+        openMessage('loadData', 'error', `Error parsing stored data from localstorage ${error}`);
+      }
+    }
+  }, [openMessage])
+
+  useEffect(() => {
+    window.localStorage.setItem('Mark_Sixer_Draws', JSON.stringify(draws))
+  }, [draws])
+
+  useEffect(() => {
+    window.localStorage.setItem('Mark_Sixer_Releases', JSON.stringify(releases))
+  }, [releases])
+
+  useEffect(() => {
+    window.localStorage.setItem('Mark_Sixer_Results', JSON.stringify(results))
+  }, [results])
 
   useEffect(() => {
     const rowIdx = relFocusIdx[0];
