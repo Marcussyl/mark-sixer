@@ -78,7 +78,7 @@
       .draw-container, .release-container {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         gap: 10px;
         overflow-y: auto;
@@ -105,7 +105,11 @@
     
       .draw-container {
         padding-inline: 30px;
-        max-height: 150px;
+        max-height: 180px; // to show at least 5 entried
+
+        @media (max-width: 425) {
+          max-height: 150px;
+        }
       }
     }
 
@@ -113,7 +117,7 @@
       background-color: #6BCFDC;
 
       .release-container{
-        padding-inline: 5px;
+        padding-inline: 17px;
         max-height: 250px;
 
         .release {
