@@ -24,7 +24,7 @@ function App() {
   const [results, setResults] = useState([]);
   const [drawFocusIdx, setDrawFocusIdx] = useState([0, 0]);
   const [relFocusIdx, setRelFocusIdx] = useState([0, 0]);
-  const [activeTabKey, setActiveTabKey] = useState("0");
+  const [activeTabKey, setActiveTabKey] = useState();
   const drawInputRef = useRef([[]]);
   const releaseInputRef = useRef([[]]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -77,6 +77,7 @@ function App() {
     }
 
     if (activeTabKey) {
+      console.log(activeTabKey);
       setActiveTabKey(activeTabKey);
     }
   }, [openMessage])
