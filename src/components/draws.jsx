@@ -128,6 +128,7 @@ function Draws() {
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
+          className='draws-found-modal'
         >
           <Flex gap={"small"} wrap>
           {match &&
@@ -136,6 +137,7 @@ function Draws() {
                 key={idx}
                 value={mat}
                 onChange={(event) => handleInputChange(idx, event.target.value)}
+                style={{backgroundColor: '#fff', color: 'black', borderRadius: '15px'}}
               />
             ))}
           </Flex>
