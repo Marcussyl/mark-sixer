@@ -52,7 +52,6 @@ function App() {
     const releases = window.localStorage.getItem('Mark_Sixer_Releases')
     const results = window.localStorage.getItem('Mark_Sixer_Results')
     const activeTabKey = window.localStorage.getItem('Mark_Sixer_ActiveTabKey');
-    // console.log(`draws: ${draws}, releases: ${releases}, results: ${results}`)
 
     if (draws && releases && results) {
       try {
@@ -68,7 +67,6 @@ function App() {
     }
 
     if (activeTabKey) {
-      console.log(activeTabKey);
       setActiveTabKey(activeTabKey);
     }
   }, [openMessage])
@@ -123,8 +121,6 @@ function App() {
         console.error(errorMessage);
       }
 
-      const data = await response.json();
-      console.log("Update successful:", data);
       openMessage("syncStates", "success", "States received successfully");
     } catch (error) {
       console.error("Error updating resource:", error);
@@ -150,17 +146,12 @@ function App() {
     const data = await response.json();
     const prevDraws= data["record"]["draws"]
     const prevReleases = data["record"]["releases"];
-    // console.log(`prevDraws: ${JSON.stringify(prevDraws)}`);
-    // console.log(`prevDraws: ${JSON.stringify(prevReleases)}`);
-    // console.log("Data retrieved successfully:", data);
     const updatedDraws = [...draws, ...prevDraws];
     const updatedReleases= [...releases, ...prevReleases];
     drawInputRef.current.push(...Array.from({length: prevDraws.length}, ()=>[]));
     releaseInputRef.current.push(
       ...Array.from({ length: prevReleases.length }, () => [])
     );
-    console.log(`updatedDraws: ${JSON.stringify(updatedDraws)}`);
-    console.log(`updateRelease: ${JSON.stringify(updatedReleases)}`);
     setDraws(updatedDraws);
     setReleases(updatedReleases);
     openMessage('syncStates', 'success', 'States retrieved successfully');

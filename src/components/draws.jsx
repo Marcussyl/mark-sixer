@@ -56,7 +56,6 @@ function Draws() {
             },
         })
         .then(({ data: { text } }) => {
-            // console.log(`Raw text: ${text}`);
             processResult(text);
         });
     };
@@ -65,7 +64,6 @@ function Draws() {
     const handleInputChange = (idx, value) => {
         const updatedMatch = [...match]
         updatedMatch[idx] = value
-        console.log(updatedMatch)
         setMatch(updatedMatch)
     }
 

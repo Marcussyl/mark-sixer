@@ -1,0 +1,36 @@
+<html>
+  <head></head>
+  <body>
+    <div class="three">
+      three
+      <div class="two">
+        two
+        <div class="one">one</div>
+      </div>
+    </div>
+
+    <script>
+      function logText(e) {
+        e.stopPropagation();
+        console.log(this.classList.value);
+      }
+
+      const divs = document.querySelectorAll('div');
+      divs.forEach(div => div.addEventListener('click', logText, {
+        capture: false
+      }))
+    </script>
+    <style>
+      .three {
+        background-color: pink;
+      }
+      .two {
+        background-color: orange;
+      }
+      .one {
+        background-color: aqua;
+      }
+    </style>
+  </body>
+</html>
+

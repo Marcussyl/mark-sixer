@@ -41,7 +41,6 @@ function Releases() {
       }
   
       const data = await response.json()
-      // console.log(JSON.stringify(data));
 
       if (data.length === 0) { 
         openMessage('getReleases', 'error', 'No draw results retrieved, please try again');
@@ -52,7 +51,6 @@ function Releases() {
         const id = item.id.split("/")[1];
         return [id, ...item.results];
       });
-      // console.log(transformedData);
     
       setTimeout(() => {
         openMessage('getReleases', 'success', 'Get draw results successfully');
