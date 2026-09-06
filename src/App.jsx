@@ -182,7 +182,8 @@ function App() {
   } 
 
   function addRelease() {
-    const updatedReleases = [...releases, ["", "", "", "", "", "", ""]];
+    // id + 6 main numbers + special number
+    const updatedReleases = [...releases, ["", "", "", "", "", "", "", ""]];
     setReleases(updatedReleases);
     releaseInputRef.current.push([]);
   }
@@ -206,10 +207,6 @@ function App() {
     setReleases(updatedReleases);
   }
 
-  /**
- * check if there are matches between draws and releases lists
- * store the matches in results state
- */
   /** Treat "04" and "4" as the same Mark Six number. */
   function normalizeBallNumber(value) {
     if (value === '' || value == null) return null;
@@ -217,30 +214,57 @@ function App() {
     return Number.isFinite(num) ? num : null;
   }
 
+  /** Map main-hit count + special to HK Mark Six prize tiers. */
+  function getPrize(mainHitCount, hasSpecial) {
+    if (mainHitCount === 6) return "頭獎";
+    if (mainHitCount === 5 && hasSpecial) return "二獎";
+    if (mainHitCount === 5) return "三獎";
+    if (mainHitCount === 4 && hasSpecial) return "四獎";
+    if (mainHitCount === 4) return "五獎";
+    if (mainHitCount === 3 && hasSpecial) return "六獎";
+    if (mainHitCount === 3) return "七獎";
+    return null;
+  }
+
+  /**
+   * Compare each ticket (draw) to each result (release).
+   * Main numbers and special are scored separately for real prize tiers.
+   */
   function checkHandler() {
-    let newResults = []; // e.g. newResults[drawId][releaseId]
-    
+    let newResults = []; // newResults[drawIdx] = [{ releaseId, prize, mainHits, specialHit }]
+
     for (let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
-      let draw = draws[drawIdx];
-      const drawNums = draw
+      const drawNums = draws[drawIdx]
         .map(normalizeBallNumber)
         .filter((n) => n !== null);
-      
-      for (let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
-        let release = releases[releaseIdx].slice(1);
-        let temp = [releases[releaseIdx][0]];
 
-        for (let i = 0; i < 7; i++) {
-          const releaseNum = normalizeBallNumber(release[i]);
-          if (releaseNum !== null && drawNums.includes(releaseNum)) {
-            temp.push(release[i]);
+      for (let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
+        const row = releases[releaseIdx];
+        const releaseId = row[0];
+        const mainBalls = row.slice(1, 7);
+        const specialNum = normalizeBallNumber(row[7]);
+
+        const mainHits = [];
+        for (const ball of mainBalls) {
+          const n = normalizeBallNumber(ball);
+          if (n !== null && drawNums.includes(n) && !mainHits.includes(n)) {
+            mainHits.push(n);
           }
         }
-        if (temp.length >= 4) { // the first element is the release id, should be ignored
+
+        const hasSpecial = specialNum !== null && drawNums.includes(specialNum);
+        const prize = getPrize(mainHits.length, hasSpecial);
+
+        if (prize) {
           if (newResults[drawIdx] === undefined) {
             newResults[drawIdx] = [];
           }
-          newResults[drawIdx].push(temp);
+          newResults[drawIdx].push({
+            releaseId,
+            prize,
+            mainHits,
+            specialHit: hasSpecial ? specialNum : null,
+          });
         }
       }
     }
