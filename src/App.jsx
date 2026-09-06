@@ -319,21 +319,20 @@ function App() {
         const mainHits = matchedMains.length;
         const prize = getPrizeTier(mainHits, specialHit);
 
-        // Keep legacy threshold: at least 3 main hits (prize tier 7+)
-        if (mainHits >= 3) {
-          drawMatches.push({
-            releaseId,
-            releaseIdx,
-            prize,
-            mainHits,
-            specialHit,
-            matchedMains,
-            matchedSpecial: specialHit ? specialBall : null,
-            drawNums,
-            releaseMains: mainBalls,
-            releaseSpecial: specialBall,
-          });
-        }
+        // Include ALL valid draw×release comparisons (winners and non-winners)
+        // so the Matches page can render non-winner ticket cards.
+        drawMatches.push({
+          releaseId,
+          releaseIdx,
+          prize,
+          mainHits,
+          specialHit,
+          matchedMains,
+          matchedSpecial: specialHit ? specialBall : null,
+          drawNums,
+          releaseMains: mainBalls,
+          releaseSpecial: specialBall,
+        });
       }
 
       if (drawMatches.length > 0) {
