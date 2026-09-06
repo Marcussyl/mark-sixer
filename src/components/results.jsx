@@ -1,65 +1,288 @@
-import { Result, Card, Space, Flex } from "antd";
+import { useContext, useMemo, useState } from 'react';
 import { ResultContext } from '../App';
-import { useContext } from 'react';
+import Ball from './Ball';
+import { padBall, normalizeBallNumber } from '../utils/balls';
+import {
+  PrinterOutlined,
+  FileExcelOutlined,
+  ShareAltOutlined,
+  ReloadOutlined,
+} from '@ant-design/icons';
 
-function Results () {
-    const { results } = useContext(ResultContext);
+function Results() {
+  const { results, checkHandler, draws, releases } = useContext(ResultContext);
+  const [winnersOnly, setWinnersOnly] = useState(false);
 
-    if(results.length === 0) {
-        return (
-            <div className="results-container">
-                <div className="result-container">
-                    <Result
-                        status="404"
-                        title="404"
-                        subTitle="Sorry, the matches you find does not exist  :("
-                        // extra={<Button type="primary">Back Home</Button>}
-                    />
-                </div>
+  const flat = useMemo(() => {
+    const rows = [];
+    (results || []).forEach((drawMatches, drawIdx) => {
+      if (!drawMatches) return;
+      drawMatches.forEach((m, matchIdx) => {
+        // Support legacy array shape: [releaseId, ...matchedNums]
+        if (Array.isArray(m)) {
+          rows.push({
+            drawIdx,
+            matchIdx,
+            legacy: true,
+            releaseId: m[0],
+            matched: m.slice(1).filter(Boolean),
+            prize: null,
+            mainHits: m.length - 1,
+            specialHit: false,
+            drawNums: draws?.[drawIdx]?.map(normalizeBallNumber) || [],
+          });
+        } else {
+          rows.push({ drawIdx, matchIdx, legacy: false, ...m });
+        }
+      });
+    });
+    return rows;
+  }, [results, draws]);
+
+  const winners = flat.filter((r) => r.prize != null || (r.legacy && r.mainHits >= 3));
+  const visible = winnersOnly ? winners : flat;
+  const winnerCount = winners.length;
+
+  if (!results || results.length === 0 || flat.length === 0) {
+    return (
+      <div className="ms-page ms-page--matches">
+        <div className="ms-page__head">
+          <div>
+            <div className="ms-eyebrow">
+              <span className="ms-eyebrow__dot" />
+              AUDIT WORKBENCH
             </div>
-        )
-    } else {
-        return (
-            <div className="results-container">
-                <div className="result-container">
-                    <Flex direction="vertical" size={16} gap={"small"} justify="center" wrap>
-                        {results.map(
-                            (drawMatch, idx) => (
-                                <Card key={`draw ${idx}`} size="small" title={`Draw ${idx}`} style={{ width: 300 }}>
-                                    {   
-                                        drawMatch.map((releaseMatch, idx) => (
-                                            <Flex key={`release ${idx}`} gap={"small"}>
-                                                <div className="release-number caveat-400">{`${releaseMatch[0]}: `}</div>
-                                                <Space>
-                                                    {
-                                                        releaseMatch.slice(1).map((match, idx) => {
-                                                            if (match !== '') {
-                                                                return (
-                                                                  <img
-                                                                    key={idx}
-                                                                    src={`https://marcussyl.github.io/mark-sixer/assets/balls/${match}.svg`}
-                                                                    alt={`${match}`}
-                                                                    width={"28"}
-                                                                    height={
-                                                                      "28"
-                                                                    }
-                                                                  />
-                                                                );
-                                                            }
-                                                        })
-                                                    }
-                                                </Space>
-                                            </Flex>
-                                        ))
-                                    }
-                                </Card>
-                            )
-                        )}
-                    </Flex>
+            <h1 className="ms-page__title">
+              核對中獎 <span>Matches</span>
+            </h1>
+          </div>
+          <button type="button" className="ms-btn ms-btn--primary" onClick={() => checkHandler?.()}>
+            <ReloadOutlined /> 重新核對 Re-check
+          </button>
+        </div>
+        <div className="ms-card ms-empty-state">
+          <h2>尚未發現符合獎級的注項</h2>
+          <p className="ms-muted">
+            請先在「我的獎券」與「開獎結果」填入完整資料，再回到此頁核對。
+            <br />
+            Need ≥3 main hits for a listed match (七獎起).
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="ms-page ms-page--matches">
+      <div className="ms-audit-banner">
+        <div>
+          <div className="ms-audit-banner__status">
+            即時核對完成 · AUDIT COMPLETE
+          </div>
+          <h1 className="ms-audit-banner__title">
+            發現 {winnerCount} 張中獎獎券 · {winnerCount} Winning Ticket
+            {winnerCount === 1 ? '' : 's'} Detected
+          </h1>
+        </div>
+        <div className="ms-audit-banner__stats ms-soon-panel">
+          <div>
+            <span className="ms-label-caps">TOTAL PAYOUT</span>
+            <strong>HK$ —</strong>
+            <span className="ms-soon-badge">Soon</span>
+          </div>
+          <div>
+            <span className="ms-label-caps">RETURN ROI</span>
+            <strong>—</strong>
+            <span className="ms-soon-badge">Soon</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="ms-filter-row">
+        <button
+          type="button"
+          className={`ms-filter${!winnersOnly ? ' is-active' : ''}`}
+          onClick={() => setWinnersOnly(false)}
+        >
+          All Checks ({flat.length})
+        </button>
+        <button
+          type="button"
+          className={`ms-filter${winnersOnly ? ' is-active' : ''}`}
+          onClick={() => setWinnersOnly(true)}
+        >
+          Winners Only ({winnerCount})
+        </button>
+        <button type="button" className="ms-btn ms-btn--ghost ms-btn--sm" onClick={() => checkHandler?.()}>
+          <ReloadOutlined /> Re-check
+        </button>
+      </div>
+
+      <div className="ms-layout">
+        <div className="ms-layout__main">
+          {visible.map((row) => {
+            const drawLine = draws?.[row.drawIdx] || [];
+            const prizeLabel = row.prize
+              ? `${row.prize.labelZh} ${row.prize.labelEn}`
+              : row.legacy
+                ? `${row.mainHits} hits`
+                : '—';
+
+            return (
+              <article key={`${row.drawIdx}-${row.matchIdx}`} className="ms-match-card">
+                <div className="ms-match-card__meta">
+                  <span>
+                    注項 Draw #{row.drawIdx + 1} · 期數 {row.releaseId}
+                  </span>
+                  {row.prize && (
+                    <span className="ms-prize-badge">
+                      {row.prize.labelZh} · {row.prize.labelEn}
+                    </span>
+                  )}
                 </div>
+                <p className="ms-match-card__summary">
+                  {row.legacy
+                    ? `Matched numbers vs release ${row.releaseId}`
+                    : `${row.mainHits} Mains${row.specialHit ? ' + Special' : ''} / MATCHED ${
+                        row.mainHits + (row.specialHit ? 1 : 0)
+                      } OF 7`}
+                </p>
+                <div className="ms-match-card__balls">
+                  {row.legacy
+                    ? row.matched.map((n, i) => <Ball key={i} value={n} hit size="md" />)
+                    : (row.drawNums || drawLine.map(normalizeBallNumber)).map((n, i) => {
+                        const isMainHit = row.matchedMains?.includes(n);
+                        const isSpecialHit =
+                          row.specialHit && n === row.matchedSpecial;
+                        const isHit = isMainHit || isSpecialHit;
+                        return (
+                          <Ball
+                            key={i}
+                            value={n}
+                            hit={isHit}
+                            miss={!isHit}
+                            special={isSpecialHit}
+                            size="md"
+                          />
+                        );
+                      })}
+                </div>
+                {!row.legacy && row.releaseMains && (
+                  <div className="ms-match-card__official">
+                    <span className="ms-label-caps">官方開獎 Official</span>
+                    <div className="ms-match-card__balls">
+                      {row.releaseMains.map((n, i) => (
+                        <Ball
+                          key={i}
+                          value={n}
+                          hit={row.matchedMains?.includes(n)}
+                          miss={!row.matchedMains?.includes(n)}
+                          size="sm"
+                        />
+                      ))}
+                      <span className="ms-plus">+</span>
+                      <Ball
+                        value={row.releaseSpecial}
+                        special
+                        hit={row.specialHit}
+                        miss={!row.specialHit}
+                        size="sm"
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className="ms-match-card__foot">
+                  <span className="ms-muted">
+                    TID · D{row.drawIdx + 1}-R{padBall(row.releaseId) || row.releaseId}
+                  </span>
+                  <span className="ms-link ms-soon">領獎指引 Claiming Guide · Soon</span>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <aside className="ms-layout__side">
+          <section className="ms-card">
+            <div className="ms-card__head">
+              <h2>官方開獎參考</h2>
             </div>
-        )
-    }
+            {releases?.[0] ? (
+              <div className="ms-side-release">
+                <span className="ms-badge-id">#{releases[0][0]}</span>
+                <div className="ms-match-card__balls">
+                  {releases[0].slice(1, 7).map((n, i) => (
+                    <Ball key={i} value={n} size="sm" />
+                  ))}
+                  <span className="ms-plus">+</span>
+                  <Ball value={releases[0][7]} special size="sm" />
+                </div>
+              </div>
+            ) : (
+              <p className="ms-muted">無開獎資料</p>
+            )}
+            <div className="ms-side-stats ms-soon-panel">
+              <div>
+                <span className="ms-label-caps">Turnover</span>
+                <span>—</span>
+                <span className="ms-soon-badge">Soon</span>
+              </div>
+              <div>
+                <span className="ms-label-caps">Next Jackpot</span>
+                <span>—</span>
+                <span className="ms-soon-badge">Soon</span>
+              </div>
+            </div>
+          </section>
+
+          <section className="ms-card">
+            <div className="ms-card__head">
+              <h2>獎級 Prize Tiers</h2>
+            </div>
+            <table className="ms-tier-table">
+              <thead>
+                <tr>
+                  <th>獎</th>
+                  <th>條件</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['1', '6 主號'],
+                  ['2', '5 + 特別'],
+                  ['3', '5 主號'],
+                  ['4', '4 + 特別'],
+                  ['5', '4 主號'],
+                  ['6', '3 + 特別'],
+                  ['7', '3 主號'],
+                ].map(([t, c]) => {
+                  const hit = winners.some((w) => w.prize?.tier === Number(t));
+                  return (
+                    <tr key={t} className={hit ? 'is-hit' : ''}>
+                      <td>{t}st–7th [{t}]</td>
+                      <td>{c}{hit ? ' ✓' : ''}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </section>
+
+          <div className="ms-side-actions">
+            <button type="button" className="ms-btn ms-btn--ghost ms-soon" disabled>
+              <PrinterOutlined /> Print Report · Soon
+            </button>
+            <button type="button" className="ms-btn ms-btn--ghost ms-soon" disabled>
+              <FileExcelOutlined /> Export CSV · Soon
+            </button>
+            <button type="button" className="ms-btn ms-btn--primary ms-soon" disabled>
+              <ShareAltOutlined /> Share Results · Soon
+            </button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
 }
 
-export default Results
+export default Results;
