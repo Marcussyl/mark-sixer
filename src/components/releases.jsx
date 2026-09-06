@@ -28,19 +28,19 @@ function Releases() {
   const handleButtonClick = async () => {
     try {
       setFetching(true);
-      openMessage('getReleases', 'loading', 'Getting draw results...', 0);
+      openMessage('getReleases', 'loading', '正在獲取開獎結果…', 0);
       const url = `https://mark-six-results-scraper.netlify.app/api/mark-six-results?count=${retCount}`;
       const response = await fetch(url, { method: 'GET' });
 
       if (!response.ok) {
-        const errorMessage = `Error: ${response.status} ${response.statusText}`;
+        const errorMessage = `錯誤：${response.status} ${response.statusText}`;
         setTimeout(() => openMessage('getReleases', 'error', errorMessage), 100);
         return;
       }
 
       const data = await response.json();
       if (data.length === 0) {
-        openMessage('getReleases', 'error', 'No draw results retrieved, please try again');
+        openMessage('getReleases', 'error', '未能取得開獎結果，請再試一次');
         return;
       }
 
@@ -53,7 +53,7 @@ function Releases() {
       });
 
       setTimeout(() => {
-        openMessage('getReleases', 'success', 'Get draw results successfully');
+        openMessage('getReleases', 'success', '已成功獲取開獎結果');
       }, 100);
       releaseInputRef.current.push(
         ...Array.from({ length: transformedData.length }, () => [])
@@ -61,7 +61,7 @@ function Releases() {
       setReleases([...transformedData, ...releases]);
     } catch (error) {
       console.error('Error fetching data:', error);
-      openMessage('getReleases', 'error', 'Error fetching data');
+      openMessage('getReleases', 'error', '獲取資料時發生錯誤');
     } finally {
       setFetching(false);
     }
@@ -78,17 +78,17 @@ function Releases() {
         <div>
           <div className="ms-eyebrow">
             <span className="ms-eyebrow__dot" />
-            OFFICIAL HKJC LEDGER
+            官方開獎紀錄
             <span className="ms-eyebrow__sep">·</span>
             <span className="ms-eyebrow__zh">權威官方獎號資料庫</span>
           </div>
           <div className="ms-page__title-row">
             <h1 className="ms-page__title">
-              開獎結果 <span>Releases</span>
+              開獎結果
             </h1>
             <span className="ms-chip ms-soon">
               <span className="ms-sync-badge__dot" />
-              HKJC Live Feed · Soon
+              馬會即時更新（即將推出）
             </span>
           </div>
         </div>
@@ -103,7 +103,7 @@ function Releases() {
             disabled={fetching}
           >
             <SyncOutlined spin={fetching} />
-            獲取最新結果 Sync Official
+            獲取最新結果
           </button>
           <Dropdown
             menu={{ items: menuItems, onClick: handleMenuClick, selectedKeys: [String(retCount)] }}
@@ -116,7 +116,7 @@ function Releases() {
         <div className="ms-toolbar__right">
           <button type="button" className="ms-btn ms-btn--ghost" onClick={addRelease}>
             <PlusOutlined />
-            手動輸入開獎 + Manual Add
+            手動輸入開獎
           </button>
           <Tooltip title="全部清除">
             <button
@@ -130,7 +130,7 @@ function Releases() {
               <ClearOutlined />
             </button>
           </Tooltip>
-          <Tooltip title="匯出 · use footer / float Export">
+          <Tooltip title="請使用頁尾或右下角按鈕匯出">
             <button type="button" className="ms-icon-btn ms-soon" disabled>
               <DownloadOutlined />
             </button>
@@ -140,7 +140,7 @@ function Releases() {
 
       <div className="ms-release-list">
         {releases.length === 0 && (
-          <div className="ms-empty ms-card">尚未載入開獎 · Fetch or add manually</div>
+          <div className="ms-empty ms-card">尚未載入開獎 — 可獲取最新結果或手動輸入</div>
         )}
         {releases.map((_, idx) => (
           <Release key={idx} id={idx} />
@@ -149,12 +149,12 @@ function Releases() {
 
       <div className="ms-card ms-dual-engine">
         <div>
-          <strong>Dual-Engine Ledger</strong>
+          <strong>雙重資料來源</strong>
           <p className="ms-muted">
             官方結果經 scraper API 拉取並存於本機 localStorage。獎金／投注額帳本為預覽。
           </p>
         </div>
-        <span className="ms-chip ms-soon">本地 SQLite IndexedDB · Soon</span>
+        <span className="ms-chip ms-soon">本地 SQLite／IndexedDB（即將推出）</span>
       </div>
     </div>
   );

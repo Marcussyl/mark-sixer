@@ -36,18 +36,18 @@ function Release({ id }) {
                 releaseInputRef.current[id][0] = el;
               }}
               onChange={(event) => updateRelease(id, 0, event.target.value)}
-              aria-label={`Release ${id + 1} draw ID`}
+              aria-label={`開獎 ${id + 1} 期數`}
             />
           </span>
-          <span className="ms-muted">開獎期數 Draw #{id + 1}</span>
+          <span className="ms-muted">開獎期數 #{id + 1}</span>
         </div>
         <div className="ms-row__actions">
-          <Tooltip title="複製 · Copy">
+          <Tooltip title="複製">
             <button type="button" className="ms-icon-btn ms-icon-btn--sm" onClick={copyLine}>
               <CopyOutlined />
             </button>
           </Tooltip>
-          <Tooltip title="刪除 · Delete">
+          <Tooltip title="刪除">
             <button
               type="button"
               className="ms-icon-btn ms-icon-btn--sm ms-icon-btn--danger"
@@ -56,7 +56,7 @@ function Release({ id }) {
               <DeleteOutlined />
             </button>
           </Tooltip>
-          <span className="ms-icon-btn ms-icon-btn--sm ms-soon" aria-disabled title="Share Soon">
+          <span className="ms-icon-btn ms-icon-btn--sm ms-soon" aria-disabled title="分享（即將推出）">
             <span className="material-symbols-outlined" style={{ fontSize: 16 }}>share</span>
           </span>
         </div>
@@ -79,7 +79,7 @@ function Release({ id }) {
                   releaseInputRef.current[id][fieldIdx] = el;
                 }}
                 onChange={(event) => updateRelease(id, fieldIdx, event.target.value)}
-                aria-label={`Release ${id + 1} main ${i + 1}`}
+                aria-label={`開獎 ${id + 1} 主號 ${i + 1}`}
               />
             </div>
           );
@@ -100,23 +100,23 @@ function Release({ id }) {
               releaseInputRef.current[id][7] = el;
             }}
             onChange={(event) => updateRelease(id, 7, event.target.value)}
-            aria-label={`Release ${id + 1} special`}
+            aria-label={`開獎 ${id + 1} 特別號碼`}
           />
-          <span className="ms-special-label">特別號碼 SPECIAL</span>
+          <span className="ms-special-label">特別號碼</span>
         </div>
       </div>
 
       <div className="ms-release-card__ledger ms-soon-panel">
         <div>
-          <span className="ms-label-caps">頭獎派彩 1ST PRIZE</span>
-          <span className="ms-soon-badge">Soon</span>
+          <span className="ms-label-caps">頭獎派彩</span>
+          <span className="ms-soon-badge">即將推出</span>
         </div>
         <div>
           <span className="ms-label-caps">二獎 / 三獎</span>
           <span className="ms-muted">—</span>
         </div>
         <div>
-          <span className="ms-label-caps">TURNOVER</span>
+          <span className="ms-label-caps">投注額</span>
           <span className="ms-muted">—</span>
         </div>
       </div>

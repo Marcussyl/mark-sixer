@@ -22,7 +22,7 @@ function Ball({ value, special = false, hit, miss, size = 'md', empty = false })
     .join(' ');
 
   return (
-    <span className={classes} title={special ? '特別號碼 Special' : undefined}>
+    <span className={classes} title={special ? '特別號碼' : undefined}>
       <span className="ms-ball__num">{display || '··'}</span>
     </span>
   );

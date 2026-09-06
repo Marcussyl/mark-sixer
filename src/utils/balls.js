@@ -28,13 +28,13 @@ export function ballColorGroup(value) {
 export function validateDrawLine(nums) {
   const parsed = nums.map(normalizeBallNumber);
   if (parsed.some((n) => n === null)) {
-    return { ok: false, message: '請填滿 6 個號碼 · Fill all 6 numbers' };
+    return { ok: false, message: '請填滿 6 個號碼' };
   }
   if (parsed.some((n) => n < 1 || n > 49)) {
-    return { ok: false, message: '號碼須為 1–49 · Numbers must be 1–49' };
+    return { ok: false, message: '號碼須為 1–49' };
   }
   if (new Set(parsed).size !== parsed.length) {
-    return { ok: false, message: '號碼不可重複 · Numbers must be unique' };
+    return { ok: false, message: '號碼不可重複' };
   }
   return { ok: true };
 }
@@ -42,21 +42,21 @@ export function validateDrawLine(nums) {
 /** Validate release: id + 6 mains + special. */
 export function validateReleaseLine(fields) {
   if (!fields[0] || String(fields[0]).trim() === '') {
-    return { ok: false, message: '請輸入期數 · Enter draw ID' };
+    return { ok: false, message: '請輸入期數' };
   }
   const mains = fields.slice(1, 7).map(normalizeBallNumber);
   const special = normalizeBallNumber(fields[7]);
   if (mains.some((n) => n === null) || special === null) {
-    return { ok: false, message: '請填滿 6 主號 + 特別號碼 · Fill 6 mains + special' };
+    return { ok: false, message: '請填滿 6 個主號及特別號碼' };
   }
   if ([...mains, special].some((n) => n < 1 || n > 49)) {
-    return { ok: false, message: '號碼須為 1–49 · Numbers must be 1–49' };
+    return { ok: false, message: '號碼須為 1–49' };
   }
   if (new Set(mains).size !== mains.length) {
-    return { ok: false, message: '主號不可重複 · Main numbers must be unique' };
+    return { ok: false, message: '主號不可重複' };
   }
   if (mains.includes(special)) {
-    return { ok: false, message: '特別號碼不可與主號重複 · Special cannot duplicate a main' };
+    return { ok: false, message: '特別號碼不可與主號重複' };
   }
   return { ok: true };
 }

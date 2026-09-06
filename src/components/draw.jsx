@@ -36,23 +36,23 @@ function Draw({ id }) {
                 drawInputRef.current[id][fieldIdx] = el;
               }}
               onChange={(event) => updateDraw(id, fieldIdx, event.target.value)}
-              aria-label={`Draw ${id + 1} number ${fieldIdx + 1}`}
+              aria-label={`注項 ${id + 1} 號碼 ${fieldIdx + 1}`}
             />
           </div>
         ))}
       </div>
       <div className="ms-row__actions">
-        <Tooltip title="複製 · Copy">
-          <button type="button" className="ms-icon-btn ms-icon-btn--sm" onClick={copyLine} aria-label="Copy">
+        <Tooltip title="複製">
+          <button type="button" className="ms-icon-btn ms-icon-btn--sm" onClick={copyLine} aria-label="複製">
             <CopyOutlined />
           </button>
         </Tooltip>
-        <Tooltip title="刪除 · Delete">
+        <Tooltip title="刪除">
           <button
             type="button"
             className="ms-icon-btn ms-icon-btn--sm ms-icon-btn--danger"
             onClick={() => deleteDraw(id)}
-            aria-label="Delete"
+            aria-label="刪除"
           >
             <DeleteOutlined />
           </button>

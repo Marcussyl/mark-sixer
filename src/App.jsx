@@ -27,9 +27,9 @@ export const ResultContext = React.createContext();
 const binUrl = "https://api.jsonbin.io/v3/b/67d30f688960c979a570e782";
 
 const TABS = [
-  { key: "3", id: "matches", labelZh: "核對中獎", labelEn: "Matches" },
-  { key: "1", id: "draws", labelZh: "我的獎券", labelEn: "Draws" },
-  { key: "2", id: "releases", labelZh: "開獎結果", labelEn: "Releases" },
+  { key: "3", id: "matches", labelZh: "核對中獎" },
+  { key: "1", id: "draws", labelZh: "我的獎券" },
+  { key: "2", id: "releases", labelZh: "開獎結果" },
 ];
 
 function App() {
@@ -83,7 +83,7 @@ function App() {
         openMessage(
           "loadData",
           "error",
-          `Error parsing stored data from localstorage ${error}`
+          `無法讀取本機儲存資料：${error}`
         );
       }
     }
@@ -118,7 +118,7 @@ function App() {
   }, [releases, relFocusIdx]);
 
   async function backupData() {
-    openMessage("syncStates", "loading", "Backing up states...");
+    openMessage("syncStates", "loading", "正在備份…");
     const states = { draws, releases };
     try {
       const response = await fetch(binUrl, {
@@ -134,19 +134,19 @@ function App() {
         openMessage(
           "syncStates",
           "error",
-          `Error: ${response.status} ${response.statusText}`
+          `錯誤：${response.status} ${response.statusText}`
         );
         return;
       }
-      openMessage("syncStates", "success", "States backed up successfully");
+      openMessage("syncStates", "success", "備份成功");
     } catch (error) {
       console.error("Error updating resource:", error);
-      openMessage("syncStates", "error", "Backup failed");
+      openMessage("syncStates", "error", "備份失敗");
     }
   }
 
   async function retrieveData() {
-    openMessage("syncStates", "loading", "Getting states...");
+    openMessage("syncStates", "loading", "正在取得備份…");
     try {
       const response = await fetch(binUrl, {
         method: "GET",
@@ -160,7 +160,7 @@ function App() {
         openMessage(
           "syncStates",
           "error",
-          `Error: ${response.status} ${response.statusText}`
+          `錯誤：${response.status} ${response.statusText}`
         );
         return;
       }
@@ -175,10 +175,10 @@ function App() {
       );
       setDraws([...draws, ...prevDraws]);
       setReleases([...releases, ...prevReleases]);
-      openMessage("syncStates", "success", "States retrieved successfully");
+      openMessage("syncStates", "success", "已成功還原備份");
     } catch (error) {
       console.error("Error retrieving:", error);
-      openMessage("syncStates", "error", "Retrieve failed");
+      openMessage("syncStates", "error", "還原失敗");
     }
   }
 
@@ -198,7 +198,7 @@ function App() {
     a.download = `mark-sixer-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    openMessage("localExport", "success", "已匯出本機 JSON · Local JSON exported");
+    openMessage("localExport", "success", "已匯出本機 JSON");
   }
 
   function importLocalJson(file) {
@@ -226,7 +226,7 @@ function App() {
           `已匯入 ${nextDraws.length} 注 / ${nextReleases.length} 期`
         );
       } catch (err) {
-        openMessage("localImport", "error", `匯入失敗 · Import failed: ${err.message}`);
+        openMessage("localImport", "error", `匯入失敗：${err.message}`);
       }
     };
     reader.readAsText(file);
@@ -414,7 +414,7 @@ function App() {
             </div>
           </div>
 
-          <nav className="ms-tabs" role="tablist" aria-label="Primary">
+          <nav className="ms-tabs" role="tablist" aria-label="主要導覽">
             {TABS.map((tab) => (
               <button
                 key={tab.key}
@@ -425,30 +425,29 @@ function App() {
                 onClick={() => onTabChange(tab.key)}
               >
                 <span className="ms-tabs__zh">{tab.labelZh}</span>
-                <span className="ms-tabs__en">{tab.labelEn}</span>
               </button>
             ))}
           </nav>
 
           <div className="ms-header__actions">
-            <div className="ms-sync-badge ms-soon" title="Soon — live HKJC sync not wired">
+            <div className="ms-sync-badge ms-soon" title="即時馬會同步尚未接駁（即將推出）">
               <span className="ms-sync-badge__dot" />
               <span className="ms-sync-badge__label">
-                HKJC SYNC: <strong>Soon</strong>
+                馬會同步：<strong>即將推出</strong>
               </span>
             </div>
-            <Tooltip title="搜尋 · Soon">
-              <button type="button" className="ms-icon-btn ms-soon" disabled aria-label="Search Soon">
+            <Tooltip title="搜尋（即將推出）">
+              <button type="button" className="ms-icon-btn ms-soon" disabled aria-label="搜尋（即將推出）">
                 <SearchOutlined />
               </button>
             </Tooltip>
-            <Tooltip title="設定 · Soon">
-              <button type="button" className="ms-icon-btn ms-soon" disabled aria-label="Settings Soon">
+            <Tooltip title="設定（即將推出）">
+              <button type="button" className="ms-icon-btn ms-soon" disabled aria-label="設定（即將推出）">
                 <SettingOutlined />
               </button>
             </Tooltip>
-            <Tooltip title="帳戶 · Soon">
-              <button type="button" className="ms-icon-btn ms-avatar ms-soon" disabled aria-label="Profile Soon">
+            <Tooltip title="帳戶（即將推出）">
+              <button type="button" className="ms-icon-btn ms-avatar ms-soon" disabled aria-label="帳戶（即將推出）">
                 <UserOutlined />
               </button>
             </Tooltip>
@@ -467,8 +466,8 @@ function App() {
       <footer className="ms-footer">
         <div className="ms-footer__inner">
           <div className="ms-footer__meta">
-            <strong>Mark Sixer V2.4 AUDITED</strong>
-            <span>獨立核對工具 · 與香港馬會無關 · Not affiliated with HKJC</span>
+            <strong>Mark Sixer V2.4</strong>
+            <span>獨立核對工具，與香港馬會無關</span>
           </div>
           <div className="ms-footer__links">
             <button type="button" className="ms-footer__link" onClick={exportLocalJson}>
@@ -492,13 +491,13 @@ function App() {
               }}
             />
             <span className="ms-footer__link ms-soon" aria-disabled>
-              雲端備份 Soon
+              雲端備份（即將推出）
             </span>
             <span className="ms-footer__link ms-soon" aria-disabled>
-              開獎歷史 Soon
+              開獎歷史（即將推出）
             </span>
             <span className="ms-footer__link ms-soon" aria-disabled>
-              系統設置 Soon
+              系統設置（即將推出）
             </span>
           </div>
         </div>
@@ -514,22 +513,22 @@ function App() {
         <FloatButton
           icon={<CloudUploadOutlined />}
           onClick={backupData}
-          tooltip="Backup to JSONBin"
+          tooltip="備份至雲端"
         />
         <FloatButton
           icon={<CloudDownloadOutlined />}
           onClick={retrieveData}
-          tooltip="Retrieve from JSONBin"
+          tooltip="從雲端還原"
         />
         <FloatButton
           icon={<ExportOutlined />}
           onClick={exportLocalJson}
-          tooltip="Export local JSON"
+          tooltip="匯出本機 JSON"
         />
         <FloatButton
           icon={<ImportOutlined />}
           onClick={() => fileImportRef.current?.click()}
-          tooltip="Import local JSON"
+          tooltip="匯入本機 JSON"
         />
       </FloatButton.Group>
     </div>

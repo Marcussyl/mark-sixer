@@ -56,7 +56,7 @@ function Draws() {
       openMessage?.(
         'processResult',
         'default',
-        'No matches found in the scanned text'
+        '掃描文字中未找到注項'
       );
       setMatch([]);
     }
@@ -77,7 +77,7 @@ function Draws() {
         processResult(text);
       })
       .catch((err) => {
-        openMessage?.('ocr', 'error', `OCR failed: ${err.message}`);
+        openMessage?.('ocr', 'error', `辨識失敗：${err.message}`);
       })
       .finally(() => setOcrBusy(false));
   };
@@ -110,13 +110,13 @@ function Draws() {
         <div>
           <div className="ms-eyebrow">
             <span className="ms-eyebrow__dot" />
-            PORTFOLIO VAULT
+            獎券庫
             <span className="ms-eyebrow__sep">/</span>
             <span className="ms-eyebrow__zh">六合彩自選及機票庫</span>
           </div>
           <div className="ms-page__title-row">
             <h1 className="ms-page__title">
-              我的獎券 <span>Draws</span>
+              我的獎券
             </h1>
             <span className="ms-chip">
               <strong>{validCount}</strong> 注有效獎券 · {draws.length} 條記錄
@@ -130,13 +130,13 @@ function Draws() {
             onClick={() => setShowOcr((v) => !v)}
           >
             <ScanOutlined />
-            拍照辨識 OCR
+            拍照辨識
           </button>
           <button type="button" className="ms-btn ms-btn--primary" onClick={addDraw}>
             <PlusOutlined />
             手動新增注項
           </button>
-          <Tooltip title="全部清除 Clear All">
+          <Tooltip title="全部清除">
             <button
               type="button"
               className="ms-icon-btn"
@@ -144,7 +144,7 @@ function Draws() {
                 clearDraws?.();
                 setDraws([]);
               }}
-              aria-label="Clear all"
+              aria-label="全部清除"
             >
               <ClearOutlined />
             </button>
@@ -161,19 +161,19 @@ function Draws() {
                   <div className="ms-ocr__drop-head">
                     <ScanOutlined />
                     <span>彩票光學掃描</span>
-                    <span className="ms-chip ms-chip--amber">File Upload</span>
+                    <span className="ms-chip ms-chip--amber">檔案上傳</span>
                   </div>
-                  <div className="ms-ocr__viewfinder ms-soon" aria-disabled title="Camera viewfinder Soon — use file upload">
+                  <div className="ms-ocr__viewfinder ms-soon" aria-disabled title="相機取景即將推出 — 請先使用檔案上傳">
                     <span className="material-symbols-outlined">photo_camera</span>
-                    <span>相機取景 Soon</span>
-                    <span className="ms-soon-badge">Soon</span>
+                    <span>相機取景（即將推出）</span>
+                    <span className="ms-soon-badge">即將推出</span>
                   </div>
                   <Dragger {...props} className="ms-ocr__dragger">
                     <p className="ant-upload-drag-icon">
                       <InboxOutlined />
                     </p>
                     <p className="ant-upload-text">點擊或拖放彩票圖片上傳</p>
-                    <p className="ant-upload-hint">Click or drag ticket image · real OCR path</p>
+                    <p className="ant-upload-hint">點擊或拖放彩票圖片以上傳辨識</p>
                   </Dragger>
                   {(ocrBusy || progress > 0) && (
                     <Progress
@@ -186,7 +186,7 @@ function Draws() {
                   )}
                 </div>
                 <div className="ms-ocr__hint">
-                  <p className="ms-label-caps">Neural Parser</p>
+                  <p className="ms-label-caps">智能辨識</p>
                   <h2>辨識結果校對及確認</h2>
                   <p className="ms-muted">
                     上傳後會彈出校對視窗。號碼須為 1–49 且不重複。
@@ -194,7 +194,7 @@ function Draws() {
                   <ul className="ms-rules">
                     <li>6 個主號 · 範圍 1–49</li>
                     <li>不可重複</li>
-                    <li>支援單式自選 / 機票格式 OCR</li>
+                    <li>支援單式自選／機票格式辨識</li>
                   </ul>
                 </div>
               </div>
@@ -204,11 +204,11 @@ function Draws() {
           <section className="ms-card">
             <div className="ms-card__head">
               <h2>待核對獎券清單</h2>
-              <span className="ms-muted">{draws.length} lines</span>
+              <span className="ms-muted">{draws.length} 注</span>
             </div>
             <div className="ms-list">
               {draws.length === 0 && (
-                <div className="ms-empty">尚未新增注項 · No draws yet — add manually or OCR</div>
+                <div className="ms-empty">尚未新增注項 — 可手動輸入或拍照辨識</div>
               )}
               {draws.map((_, idx) => (
                 <Draw key={idx} id={idx} />
@@ -217,7 +217,7 @@ function Draws() {
             <div className="ms-card__foot">
               <span className="ms-muted">
                 總投注金額估計: <strong>HK$ {(draws.length * 10).toFixed(2)}</strong>
-                <span className="ms-soon-inline"> · 禮券批次 Soon</span>
+                <span className="ms-soon-inline"> · 禮券批次（即將推出）</span>
               </span>
               <button type="button" className="ms-btn ms-btn--primary" onClick={onCheckMatches}>
                 立即核對本期中獎
@@ -230,17 +230,17 @@ function Draws() {
           <section className="ms-card ms-soon-panel">
             <div className="ms-card__head">
               <h2>智能機票生成器</h2>
-              <span className="ms-soon-badge">Soon</span>
+              <span className="ms-soon-badge">即將推出</span>
             </div>
-            <p className="ms-muted">Smart Generator — visible, not wired</p>
+            <p className="ms-muted">智能生成器 — 介面預覽，尚未接駁</p>
             <div className="ms-chip-row" aria-disabled>
               {[1, 3, 5, 10].map((n) => (
                 <span key={n} className="ms-chip ms-chip--inert">{n} 注</span>
               ))}
             </div>
-            <label className="ms-check ms-soon"><input type="checkbox" disabled /> 避開冷號 Avoid cold</label>
-            <label className="ms-check ms-soon"><input type="checkbox" disabled /> 色波平衡 Color balance</label>
-            <label className="ms-check ms-soon"><input type="checkbox" disabled /> 單雙平衡 Odd/Even</label>
+            <label className="ms-check ms-soon"><input type="checkbox" disabled /> 避開冷號</label>
+            <label className="ms-check ms-soon"><input type="checkbox" disabled /> 色波平衡</label>
+            <label className="ms-check ms-soon"><input type="checkbox" disabled /> 單雙平衡</label>
             <button type="button" className="ms-btn ms-btn--amber ms-soon" disabled>
               生成並填入注項
             </button>
@@ -251,7 +251,7 @@ function Draws() {
               <h2>離線備份與同步</h2>
             </div>
             <p className="ms-muted">使用右下角雲端按鈕或頁尾匯出/匯入 JSON</p>
-            <p className="ms-muted ms-soon">自動同步 IndexedDB · Soon</p>
+            <p className="ms-muted ms-soon">自動同步 IndexedDB（即將推出）</p>
           </section>
 
           <section className="ms-card">
@@ -269,7 +269,7 @@ function Draws() {
       </div>
 
       <Modal
-        title="辨識結果校對 · Draws found"
+        title="辨識結果校對"
         centered
         open={isModalOpen}
         onOk={handleOk}

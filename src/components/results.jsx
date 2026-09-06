@@ -50,14 +50,14 @@ function Results() {
           <div>
             <div className="ms-eyebrow">
               <span className="ms-eyebrow__dot" />
-              AUDIT WORKBENCH
+              核對工作台
             </div>
             <h1 className="ms-page__title">
-              核對中獎 <span>Matches</span>
+              核對中獎
             </h1>
           </div>
           <button type="button" className="ms-btn ms-btn--primary" onClick={() => checkHandler?.()}>
-            <ReloadOutlined /> 重新核對 Re-check
+            <ReloadOutlined /> 重新核對
           </button>
         </div>
         <div className="ms-card ms-empty-state">
@@ -65,7 +65,7 @@ function Results() {
           <p className="ms-muted">
             請先在「我的獎券」與「開獎結果」填入完整資料，再回到此頁核對。
             <br />
-            Need ≥3 main hits for a listed match (七獎起).
+            至少對中 3 個主號才會列出（七獎起）。
           </p>
         </div>
       </div>
@@ -77,23 +77,22 @@ function Results() {
       <div className="ms-audit-banner">
         <div>
           <div className="ms-audit-banner__status">
-            即時核對完成 · AUDIT COMPLETE
+            即時核對完成
           </div>
           <h1 className="ms-audit-banner__title">
-            發現 {winnerCount} 張中獎獎券 · {winnerCount} Winning Ticket
-            {winnerCount === 1 ? '' : 's'} Detected
+            發現 {winnerCount} 張中獎獎券
           </h1>
         </div>
         <div className="ms-audit-banner__stats ms-soon-panel">
           <div>
-            <span className="ms-label-caps">TOTAL PAYOUT</span>
+            <span className="ms-label-caps">總派彩</span>
             <strong>HK$ —</strong>
-            <span className="ms-soon-badge">Soon</span>
+            <span className="ms-soon-badge">即將推出</span>
           </div>
           <div>
-            <span className="ms-label-caps">RETURN ROI</span>
+            <span className="ms-label-caps">回報率</span>
             <strong>—</strong>
-            <span className="ms-soon-badge">Soon</span>
+            <span className="ms-soon-badge">即將推出</span>
           </div>
         </div>
       </div>
@@ -104,17 +103,17 @@ function Results() {
           className={`ms-filter${!winnersOnly ? ' is-active' : ''}`}
           onClick={() => setWinnersOnly(false)}
         >
-          All Checks ({flat.length})
+          全部核對（{flat.length}）
         </button>
         <button
           type="button"
           className={`ms-filter${winnersOnly ? ' is-active' : ''}`}
           onClick={() => setWinnersOnly(true)}
         >
-          Winners Only ({winnerCount})
+          只看中獎（{winnerCount}）
         </button>
         <button type="button" className="ms-btn ms-btn--ghost ms-btn--sm" onClick={() => checkHandler?.()}>
-          <ReloadOutlined /> Re-check
+          <ReloadOutlined /> 重新核對
         </button>
       </div>
 
@@ -122,30 +121,24 @@ function Results() {
         <div className="ms-layout__main">
           {visible.map((row) => {
             const drawLine = draws?.[row.drawIdx] || [];
-            const prizeLabel = row.prize
-              ? `${row.prize.labelZh} ${row.prize.labelEn}`
-              : row.legacy
-                ? `${row.mainHits} hits`
-                : '—';
-
             return (
               <article key={`${row.drawIdx}-${row.matchIdx}`} className="ms-match-card">
                 <div className="ms-match-card__meta">
                   <span>
-                    注項 Draw #{row.drawIdx + 1} · 期數 {row.releaseId}
+                    注項 #{row.drawIdx + 1} · 期數 {row.releaseId}
                   </span>
                   {row.prize && (
                     <span className="ms-prize-badge">
-                      {row.prize.labelZh} · {row.prize.labelEn}
+                      {row.prize.labelZh}
                     </span>
                   )}
                 </div>
                 <p className="ms-match-card__summary">
                   {row.legacy
-                    ? `Matched numbers vs release ${row.releaseId}`
-                    : `${row.mainHits} Mains${row.specialHit ? ' + Special' : ''} / MATCHED ${
+                    ? `與期數 ${row.releaseId} 對中的號碼`
+                    : `主號 ${row.mainHits} 個${row.specialHit ? ' + 特別號碼' : ''}／對中 ${
                         row.mainHits + (row.specialHit ? 1 : 0)
-                      } OF 7`}
+                      }／7`}
                 </p>
                 <div className="ms-match-card__balls">
                   {row.legacy
@@ -169,7 +162,7 @@ function Results() {
                 </div>
                 {!row.legacy && row.releaseMains && (
                   <div className="ms-match-card__official">
-                    <span className="ms-label-caps">官方開獎 Official</span>
+                    <span className="ms-label-caps">官方開獎</span>
                     <div className="ms-match-card__balls">
                       {row.releaseMains.map((n, i) => (
                         <Ball
@@ -193,9 +186,9 @@ function Results() {
                 )}
                 <div className="ms-match-card__foot">
                   <span className="ms-muted">
-                    TID · D{row.drawIdx + 1}-R{padBall(row.releaseId) || row.releaseId}
+                    編號 · D{row.drawIdx + 1}-R{padBall(row.releaseId) || row.releaseId}
                   </span>
-                  <span className="ms-link ms-soon">領獎指引 Claiming Guide · Soon</span>
+                  <span className="ms-link ms-soon">領獎指引（即將推出）</span>
                 </div>
               </article>
             );
@@ -223,21 +216,21 @@ function Results() {
             )}
             <div className="ms-side-stats ms-soon-panel">
               <div>
-                <span className="ms-label-caps">Turnover</span>
+                <span className="ms-label-caps">投注額</span>
                 <span>—</span>
-                <span className="ms-soon-badge">Soon</span>
+                <span className="ms-soon-badge">即將推出</span>
               </div>
               <div>
-                <span className="ms-label-caps">Next Jackpot</span>
+                <span className="ms-label-caps">下期頭獎</span>
                 <span>—</span>
-                <span className="ms-soon-badge">Soon</span>
+                <span className="ms-soon-badge">即將推出</span>
               </div>
             </div>
           </section>
 
           <section className="ms-card">
             <div className="ms-card__head">
-              <h2>獎級 Prize Tiers</h2>
+              <h2>獎級</h2>
             </div>
             <table className="ms-tier-table">
               <thead>
@@ -259,7 +252,7 @@ function Results() {
                   const hit = winners.some((w) => w.prize?.tier === Number(t));
                   return (
                     <tr key={t} className={hit ? 'is-hit' : ''}>
-                      <td>{t}st–7th [{t}]</td>
+                      <td>{t} 獎</td>
                       <td>{c}{hit ? ' ✓' : ''}</td>
                     </tr>
                   );
@@ -270,13 +263,13 @@ function Results() {
 
           <div className="ms-side-actions">
             <button type="button" className="ms-btn ms-btn--ghost ms-soon" disabled>
-              <PrinterOutlined /> Print Report · Soon
+              <PrinterOutlined /> 列印報告（即將推出）
             </button>
             <button type="button" className="ms-btn ms-btn--ghost ms-soon" disabled>
-              <FileExcelOutlined /> Export CSV · Soon
+              <FileExcelOutlined /> 匯出 CSV（即將推出）
             </button>
             <button type="button" className="ms-btn ms-btn--primary ms-soon" disabled>
-              <ShareAltOutlined /> Share Results · Soon
+              <ShareAltOutlined /> 分享結果（即將推出）
             </button>
           </div>
         </aside>
