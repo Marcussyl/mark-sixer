@@ -465,7 +465,7 @@ function App() {
       <footer className="ms-footer">
         <div className="ms-footer__inner">
           <div className="ms-footer__meta">
-            <strong>Mark Sixer V2.4</strong>
+            <strong>Mark Sixer v0.2.0</strong>
             <span>獨立核對工具，與香港馬會無關</span>
           </div>
           <div className="ms-footer__links">
