@@ -164,14 +164,22 @@ function App() {
   }
 
   function updateDraw(drawIdx, fieldIdx, value) {
-    if (value.length === 2) {
+    const siblings = draws[drawIdx].filter((_, i) => i !== fieldIdx);
+    const result = validateBallEntry(value, siblings);
+    if (!result.ok) {
+      openMessage("ballValidation", "warning", result.reason);
+      setDrawFocusIdx([drawIdx, fieldIdx]);
+      return;
+    }
+
+    if (result.value.length === 2) {
       const newFieldIdx = fieldIdx + 1 > 5 ? fieldIdx : fieldIdx + 1;
       setDrawFocusIdx([drawIdx, newFieldIdx]);
     } else {
       setDrawFocusIdx([drawIdx, fieldIdx]);
     }
     const updatedDraws = [...draws];
-    updatedDraws[drawIdx][fieldIdx] = value.trimEnd().replace(/\*$/, "");
+    updatedDraws[drawIdx][fieldIdx] = result.value;
     setDraws(updatedDraws);
   }
 
@@ -189,15 +197,46 @@ function App() {
   }
 
   function updateRelease(releaseIdx, fieldIdx, value) {
-    // first field should take 3 numbers
-    if((fieldIdx === 0 && value.length === 3) || (fieldIdx !== 0 && value.length === 2)){
-      const newFieldIdx = fieldIdx + 1 > 8 ? fieldIdx : fieldIdx + 1;
+    const cleaned = String(value ?? "").trimEnd().replace(/\*$/, "");
+
+    // Draw id field (3 chars) — not a ball number
+    if (fieldIdx === 0) {
+      if (cleaned !== "" && !/^\d{0,3}$/.test(cleaned)) {
+        openMessage("ballValidation", "warning", "Draw id should be digits only");
+        setRelFocusIdx([releaseIdx, fieldIdx]);
+        return;
+      }
+      if (cleaned.length === 3) {
+        const newFieldIdx = fieldIdx + 1 > 7 ? fieldIdx : fieldIdx + 1;
+        setRelFocusIdx([releaseIdx, newFieldIdx]);
+      } else {
+        setRelFocusIdx([releaseIdx, fieldIdx]);
+      }
+      const updatedReleases = [...releases];
+      updatedReleases[releaseIdx][fieldIdx] = cleaned;
+      setReleases(updatedReleases);
+      return;
+    }
+
+    // Ball fields: 6 mains + special (all must be unique within the row)
+    const siblings = releases[releaseIdx]
+      .slice(1)
+      .filter((_, i) => i !== fieldIdx - 1);
+    const result = validateBallEntry(cleaned, siblings);
+    if (!result.ok) {
+      openMessage("ballValidation", "warning", result.reason);
+      setRelFocusIdx([releaseIdx, fieldIdx]);
+      return;
+    }
+
+    if (result.value.length === 2) {
+      const newFieldIdx = fieldIdx + 1 > 7 ? fieldIdx : fieldIdx + 1;
       setRelFocusIdx([releaseIdx, newFieldIdx]);
     } else {
       setRelFocusIdx([releaseIdx, fieldIdx]);
     }
     const updatedReleases = [...releases];
-    updatedReleases[releaseIdx][fieldIdx] = value.trimEnd().replace(/\*$/, "");
+    updatedReleases[releaseIdx][fieldIdx] = result.value;
     setReleases(updatedReleases);
   }
 
@@ -212,6 +251,42 @@ function App() {
     if (value === '' || value == null) return null;
     const num = Number(String(value).trim());
     return Number.isFinite(num) ? num : null;
+  }
+
+  /**
+   * Validate a ball field on entry.
+   * Allows empty and a lone "0" (typing "05"). Full check (1–49 + unique) when the value is a complete number.
+   */
+  function validateBallEntry(rawValue, siblingValues) {
+    const cleaned = String(rawValue ?? "").trimEnd().replace(/\*$/, "");
+    if (cleaned === "") {
+      return { ok: true, value: "" };
+    }
+    if (!/^\d{1,2}$/.test(cleaned)) {
+      return { ok: false, reason: "Enter digits only (1–49)" };
+    }
+    // Still typing a leading zero (e.g. "0" → "05")
+    if (cleaned === "0") {
+      return { ok: true, value: cleaned };
+    }
+
+    const num = Number(cleaned);
+    const isComplete = cleaned.length === 2 || (cleaned.length === 1 && num >= 1 && num <= 9);
+
+    if (isComplete && (num < 1 || num > 49)) {
+      return { ok: false, reason: "Number must be between 1 and 49" };
+    }
+
+    if (isComplete) {
+      const taken = siblingValues
+        .map(normalizeBallNumber)
+        .filter((n) => n !== null);
+      if (taken.includes(num)) {
+        return { ok: false, reason: "Number already used in this row" };
+      }
+    }
+
+    return { ok: true, value: cleaned };
   }
 
   /** Map main-hit count + special to HK Mark Six prize tiers. */
@@ -280,7 +355,7 @@ function App() {
 
   const DrawComponent = () => (
     <DrawContext.Provider
-      value={{ draws, addDraw, updateDraw, deleteDraw, setDraws, drawInputRef }}
+      value={{ draws, addDraw, updateDraw, deleteDraw, setDraws, drawInputRef, openMessage }}
     >
       <Draws />
     </DrawContext.Provider>
