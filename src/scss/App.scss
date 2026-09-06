@@ -678,46 +678,45 @@
   }
 }
 
-/* OCR */
-.ms-ocr__grid {
-  display: grid;
-  gap: 1rem;
-  @media (min-width: 768px) {
-    grid-template-columns: 5fr 7fr;
-  }
+/* OCR — full-width drop zone (avoid broken 2-col collapse) */
+.ms-ocr {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .ms-ocr__drop-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
   font-weight: 600;
 }
 
-.ms-ocr__viewfinder {
-  height: 100px;
-  border-radius: 12px;
-  background: var(--ms-surface-muted);
-  border: 2px dashed var(--ms-border-strong);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  color: var(--ms-muted);
-  margin-bottom: 10px;
-  position: relative;
-  .material-symbols-outlined { font-size: 28px; }
-  .ms-soon-badge { position: absolute; top: 8px; right: 8px; }
-}
-
 .ms-ocr__dragger {
+  width: 100%;
+  display: block;
+
+  &.ant-upload,
+  .ant-upload {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  &.ant-upload-drag,
   .ant-upload-drag {
+    width: 100% !important;
+    min-height: 168px;
     border-radius: 12px !important;
     border-color: var(--ms-border-strong) !important;
     background: var(--ms-bg) !important;
     &:hover { border-color: var(--ms-vermilion) !important; }
+  }
+
+  .ant-upload-btn,
+  .ant-upload-drag-container {
+    width: 100% !important;
+    display: block !important;
   }
 }
 
