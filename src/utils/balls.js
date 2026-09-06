@@ -3,6 +3,13 @@ export const BALL_RED = new Set([1, 2, 7, 8, 12, 13, 18, 19, 23, 24, 29, 30, 34,
 export const BALL_BLUE = new Set([3, 4, 9, 10, 14, 15, 20, 25, 26, 31, 36, 37, 41, 42, 47, 48]);
 export const BALL_GREEN = new Set([5, 6, 11, 16, 17, 21, 22, 27, 28, 32, 33, 38, 39, 43, 44, 49]);
 
+/** Fixed prize amounts (HKD) for lower tiers. Higher tiers are pool/floating. */
+export const FIXED_PRIZE_HKD = {
+  5: 640,
+  6: 320,
+  7: 40,
+};
+
 export function normalizeBallNumber(value) {
   if (value === '' || value == null) return null;
   const num = Number(String(value).trim());
@@ -74,4 +81,45 @@ export function getPrizeTier(mainHits, specialHit) {
   if (mainHits === 3 && specialHit) return { tier: 6, labelZh: '六獎', labelEn: '6th Prize' };
   if (mainHits === 3) return { tier: 7, labelZh: '七獎', labelEn: '7th Prize' };
   return null;
+}
+
+/** Fixed HKD amount for tier 5–7; null for floating / unknown. */
+export function getFixedPrizeHkd(tier) {
+  if (tier == null) return null;
+  const amount = FIXED_PRIZE_HKD[tier];
+  return amount != null ? amount : null;
+}
+
+/**
+ * Chinese prize badge label, optionally including fixed amount.
+ * e.g. 「六獎 (固定 HK$320)」 / 「頭獎 (浮動)」 / 「未中獎 (中 2 個號碼)」
+ */
+export function formatPrizeBadge(prize, mainHits = 0, specialHit = false) {
+  if (!prize) {
+    const totalHits = (mainHits || 0) + (specialHit ? 1 : 0);
+    return `未中獎 (中 ${totalHits} 個號碼)`;
+  }
+  const fixed = getFixedPrizeHkd(prize.tier);
+  if (fixed != null) {
+    return `${prize.labelZh} (固定 HK$${fixed.toLocaleString('en-HK')})`;
+  }
+  return `${prize.labelZh} (浮動)`;
+}
+
+/** Sum known fixed-tier prize amounts from match rows; floating tiers flagged. */
+export function summarizeFixedWinnings(rows) {
+  let fixedTotal = 0;
+  let hasFloating = false;
+  let fixedCount = 0;
+  (rows || []).forEach((row) => {
+    if (!row?.prize) return;
+    const amount = getFixedPrizeHkd(row.prize.tier);
+    if (amount != null) {
+      fixedTotal += amount;
+      fixedCount += 1;
+    } else {
+      hasFloating = true;
+    }
+  });
+  return { fixedTotal, hasFloating, fixedCount };
 }
