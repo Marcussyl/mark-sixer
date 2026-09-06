@@ -488,6 +488,12 @@
     grid-template-columns: 1fr 280px;
     align-items: start;
   }
+
+  &--matches {
+    @media (min-width: 960px) {
+      grid-template-columns: 1fr minmax(300px, 340px);
+    }
+  }
 }
 
 .ms-layout__main { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
@@ -569,6 +575,22 @@
   }
 
   &__num { line-height: 1; }
+
+  &--captioned {
+    margin-bottom: 14px;
+  }
+
+  &__caption {
+    position: absolute;
+    left: 50%;
+    bottom: -14px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--ms-coral);
+  }
 }
 
 .ms-plus {
@@ -852,6 +874,25 @@
   border: 1px solid #fcd34d;
   color: var(--ms-amber-text);
 
+  &__left {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    min-width: 0;
+  }
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(120, 53, 15, 0.12);
+    color: #78350f;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
   &__status {
     font-size: 11px;
     font-weight: 700;
@@ -861,19 +902,33 @@
   }
 
   &__title {
-    margin: 4px 0 0;
+    margin: 0;
     font-size: clamp(1.1rem, 3vw, 1.5rem);
     font-weight: 800;
     color: #78350f;
   }
 
+  &__sub {
+    margin: 6px 0 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #92400e;
+    opacity: 0.9;
+    line-height: 1.4;
+  }
+
   &__stats {
     display: flex;
     gap: 1.5rem;
+    align-items: flex-start;
+    > div {
+      min-width: 7rem;
+    }
     strong {
       display: block;
       font-size: 1.25rem;
       color: #78350f;
+      font-variant-numeric: tabular-nums;
     }
   }
 }
@@ -883,17 +938,25 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   align-items: center;
+  padding: 4px;
+  background: var(--ms-surface-muted);
+  border-radius: 12px;
 }
 
 .ms-filter {
   border: none;
   background: transparent;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 500;
   color: var(--ms-muted);
   cursor: pointer;
+  transition: 0.15s ease;
+  &:hover {
+    color: var(--ms-ink);
+    background: rgba(255, 255, 255, 0.55);
+  }
   &.is-active {
     background: #fff;
     color: var(--ms-ink);
@@ -905,13 +968,28 @@
 .ms-match-card {
   background: #fff;
   border: 1px solid var(--ms-border);
-  border-top: 3px solid var(--ms-vermilion);
+  border-top: 3px solid var(--ms-border-strong);
   border-radius: 16px;
   box-shadow: var(--ms-shadow-card);
   padding: 1rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.65rem;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+
+  &.is-winner {
+    border-top-color: var(--ms-secondary-container);
+    background: linear-gradient(180deg, #fffbeb 0%, #ffffff 48px);
+  }
+
+  &.is-miss {
+    border-top-color: #cbd5e1;
+  }
+
+  &:hover {
+    box-shadow: var(--ms-shadow-hover);
+    border-color: var(--ms-border-strong);
+  }
 
   &__meta {
     display: flex;
@@ -921,6 +999,11 @@
     flex-wrap: wrap;
     font-size: 13px;
     color: var(--ms-muted);
+  }
+
+  &__label {
+    font-weight: 600;
+    color: var(--ms-ink-soft);
   }
 
   &__summary {
@@ -933,8 +1016,13 @@
   &__balls {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
+
+    &--captioned {
+      align-items: flex-start;
+      padding-bottom: 4px;
+    }
   }
 
   &__official {
@@ -948,7 +1036,8 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     font-size: 12px;
-    padding-top: 0.5rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--ms-border);
   }
 }
 
@@ -959,6 +1048,12 @@
   font-size: 12px;
   padding: 2px 10px;
   border-radius: 999px;
+
+  &--miss {
+    background: var(--ms-surface-muted);
+    color: var(--ms-muted);
+    font-weight: 600;
+  }
 }
 
 .ms-link {
@@ -993,6 +1088,13 @@
     text-align: left;
     padding: 6px 4px;
     border-bottom: 1px solid var(--ms-border);
+    vertical-align: top;
+  }
+  th {
+    color: var(--ms-muted);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.04em;
   }
   tr.is-hit {
     background: var(--ms-amber-wash);
