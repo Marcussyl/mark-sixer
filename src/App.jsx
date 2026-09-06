@@ -210,18 +210,29 @@ function App() {
  * check if there are matches between draws and releases lists
  * store the matches in results state
  */
+  /** Treat "04" and "4" as the same Mark Six number. */
+  function normalizeBallNumber(value) {
+    if (value === '' || value == null) return null;
+    const num = Number(String(value).trim());
+    return Number.isFinite(num) ? num : null;
+  }
+
   function checkHandler() {
     let newResults = []; // e.g. newResults[drawId][releaseId]
     
     for (let drawIdx = 0; drawIdx < draws.length; drawIdx++) {
       let draw = draws[drawIdx];
+      const drawNums = draw
+        .map(normalizeBallNumber)
+        .filter((n) => n !== null);
       
       for (let releaseIdx = 0; releaseIdx < releases.length; releaseIdx++) {
         let release = releases[releaseIdx].slice(1);
         let temp = [releases[releaseIdx][0]];
 
         for (let i = 0; i < 7; i++) {
-          if (release[i] !== '' && draw.includes(release[i])) {
+          const releaseNum = normalizeBallNumber(release[i]);
+          if (releaseNum !== null && drawNums.includes(releaseNum)) {
             temp.push(release[i]);
           }
         }
