@@ -156,48 +156,30 @@ function Draws() {
         <div className="ms-layout__main">
           {showOcr && (
             <section className="ms-card ms-ocr">
-              <div className="ms-ocr__grid">
-                <div className="ms-ocr__drop">
-                  <div className="ms-ocr__drop-head">
-                    <ScanOutlined />
-                    <span>彩票光學掃描</span>
-                    <span className="ms-chip ms-chip--amber">檔案上傳</span>
-                  </div>
-                  <div className="ms-ocr__viewfinder ms-soon" aria-disabled title="相機取景即將推出 — 請先使用檔案上傳">
-                    <span className="material-symbols-outlined">photo_camera</span>
-                    <span>相機取景（即將推出）</span>
-                    <span className="ms-soon-badge">即將推出</span>
-                  </div>
-                  <Dragger {...props} className="ms-ocr__dragger">
-                    <p className="ant-upload-drag-icon">
-                      <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">點擊或拖放彩票圖片上傳</p>
-                    <p className="ant-upload-hint">點擊或拖放彩票圖片以上傳辨識</p>
-                  </Dragger>
-                  {(ocrBusy || progress > 0) && (
-                    <Progress
-                      percent={Math.min(100, Math.round(progress * 100))}
-                      showInfo
-                      strokeColor="#dc2626"
-                      size="small"
-                      style={{ marginTop: 8 }}
-                    />
-                  )}
-                </div>
-                <div className="ms-ocr__hint">
-                  <p className="ms-label-caps">智能辨識</p>
-                  <h2>辨識結果校對及確認</h2>
-                  <p className="ms-muted">
-                    上傳後會彈出校對視窗。號碼須為 1–49 且不重複。
-                  </p>
-                  <ul className="ms-rules">
-                    <li>6 個主號 · 範圍 1–49</li>
-                    <li>不可重複</li>
-                    <li>支援單式自選／機票格式辨識</li>
-                  </ul>
-                </div>
+              <div className="ms-ocr__drop-head">
+                <ScanOutlined />
+                <span>彩票光學掃描</span>
+                <span className="ms-chip ms-chip--amber">檔案上傳</span>
+                <span className="ms-soon-badge" title="相機取景即將推出">相機取景（即將推出）</span>
               </div>
+              <Dragger {...props} className="ms-ocr__dragger">
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">點擊或拖放彩票圖片上傳</p>
+                <p className="ant-upload-hint">
+                  上傳後會彈出校對視窗。號碼須為 1–49 且不重複；支援單式自選／機票格式。
+                </p>
+              </Dragger>
+              {(ocrBusy || progress > 0) && (
+                <Progress
+                  percent={Math.min(100, Math.round(progress * 100))}
+                  showInfo
+                  strokeColor="#dc2626"
+                  size="small"
+                  style={{ marginTop: 8 }}
+                />
+              )}
             </section>
           )}
 
