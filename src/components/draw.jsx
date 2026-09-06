@@ -1,94 +1,69 @@
-import PropTypes from 'prop-types'
-import { useContext } from 'react'
-import { DrawContext } from '../App'
-import { DeleteOutlined } from "@ant-design/icons";
+import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import { DrawContext } from '../App';
+import { DeleteOutlined, CopyOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
+import Ball from './Ball';
+import { normalizeBallNumber } from '../utils/balls';
 
-function Draw (props) {
-    const {id} = props
-    const {draws, deleteDraw, updateDraw, drawInputRef} = useContext(DrawContext)
-    const draw = draws[id]
+function Draw({ id }) {
+  const { draws, deleteDraw, updateDraw, drawInputRef } = useContext(DrawContext);
+  const draw = draws[id];
+  const filled = draw.every((v) => normalizeBallNumber(v) !== null);
 
-    return (
-      <div className="draw">
-        <label htmlFor="draw" className="caveat-400">
-          {id + 1}&nbsp;&nbsp;
-        </label>
-        <div className="input-container">
-          <input
-            type="tel"
-            id="drawNum1"
-            name="drawNum1"
-            value={draw[0]}
-            ref={(el) => {
-              drawInputRef.current[id][0] = el;
-            }}
-            onChange={(event) => updateDraw(id, 0, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="drawNum2"
-            name="drawNum2"
-            value={draw[1]}
-            ref={(el) => {
-              drawInputRef.current[id][1] = el;
-            }}
-            onChange={(event) => updateDraw(id, 1, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="drawNum3"
-            name="drawNum3"
-            value={draw[2]}
-            ref={(el) => {
-              drawInputRef.current[id][2] = el;
-            }}
-            onChange={(event) => updateDraw(id, 2, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="drawNum4"
-            name="drawNum4"
-            value={draw[3]}
-            ref={(el) => {
-              drawInputRef.current[id][3] = el;
-            }}
-            onChange={(event) => updateDraw(id, 3, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="drawNum5"
-            name="drawNum5"
-            value={draw[4]}
-            ref={(el) => {
-              drawInputRef.current[id][4] = el;
-            }}
-            onChange={(event) => updateDraw(id, 4, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="drawNum6"
-            name="drawNum6"
-            value={draw[5]}
-            ref={(el) => {
-              drawInputRef.current[id][5] = el;
-            }}
-            onChange={(event) => updateDraw(id, 5, event.target.value)}
-          />
-        </div>
-        &nbsp;&nbsp;
-        <DeleteOutlined onClick={() => deleteDraw(id)} className="delete-btn" />
+  function copyLine() {
+    const text = draw.map((v) => String(v).padStart(2, '0')).join('+');
+    navigator.clipboard?.writeText(text);
+  }
+
+  return (
+    <div className={`ms-row ms-row--draw${filled ? ' is-filled' : ''}`}>
+      <span className="ms-row__idx">{String(id + 1).padStart(2, '0')}</span>
+      <div className="ms-row__balls">
+        {draw.map((val, fieldIdx) => (
+          <div key={fieldIdx} className="ms-cell">
+            {normalizeBallNumber(val) !== null ? (
+              <Ball value={val} size="md" />
+            ) : null}
+            <input
+              type="tel"
+              inputMode="numeric"
+              maxLength={2}
+              className={`ms-cell__input${normalizeBallNumber(val) !== null ? ' is-overlaid' : ''}`}
+              value={val}
+              ref={(el) => {
+                if (!drawInputRef.current[id]) drawInputRef.current[id] = [];
+                drawInputRef.current[id][fieldIdx] = el;
+              }}
+              onChange={(event) => updateDraw(id, fieldIdx, event.target.value)}
+              aria-label={`注項 ${id + 1} 號碼 ${fieldIdx + 1}`}
+            />
+          </div>
+        ))}
       </div>
-    );
-    
+      <div className="ms-row__actions">
+        <Tooltip title="複製">
+          <button type="button" className="ms-icon-btn ms-icon-btn--sm" onClick={copyLine} aria-label="複製">
+            <CopyOutlined />
+          </button>
+        </Tooltip>
+        <Tooltip title="刪除">
+          <button
+            type="button"
+            className="ms-icon-btn ms-icon-btn--sm ms-icon-btn--danger"
+            onClick={() => deleteDraw(id)}
+            aria-label="刪除"
+          >
+            <DeleteOutlined />
+          </button>
+        </Tooltip>
+      </div>
+    </div>
+  );
 }
 
 Draw.propTypes = {
-    id: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
-export default Draw
+export default Draw;

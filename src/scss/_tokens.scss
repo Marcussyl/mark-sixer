@@ -1,0 +1,68 @@
+/* Precision Mark Six / Stitch design tokens */
+:root {
+  /* Surfaces */
+  --ms-bg: #f8fafc;
+  --ms-surface: #ffffff;
+  --ms-surface-muted: #f1f5f9;
+  --ms-surface-low: #f2f3ff;
+  --ms-surface-high: #e2e7ff;
+  --ms-porcelain: #faf8ff;
+
+  /* Text */
+  --ms-ink: #0f172a;
+  --ms-ink-soft: #334155;
+  --ms-muted: #64748b;
+  --ms-on-surface: #131b2e;
+  --ms-on-surface-variant: #5c403c;
+
+  /* Accents */
+  --ms-vermilion: #dc2626;
+  --ms-vermilion-hover: #b91c1c;
+  --ms-vermilion-active: #991b1b;
+  --ms-primary: #b70011;
+  --ms-amber: #d97706;
+  --ms-amber-wash: #fef3c7;
+  --ms-amber-text: #92400e;
+  --ms-coral: #e11d48;
+  --ms-secondary: #904d00;
+  --ms-secondary-container: #fe932c;
+
+  /* Borders */
+  --ms-border: #e2e8f0;
+  --ms-border-strong: #cbd5e1;
+  --ms-outline: #916f6b;
+
+  /* Balls */
+  --ms-ball-red: #dc2626;
+  --ms-ball-blue: #2563eb;
+  --ms-ball-green: #16a34a;
+
+  /* Elevation */
+  --ms-shadow-card: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --ms-shadow-hover: 0 4px 12px rgba(15, 23, 42, 0.07), 0 2px 4px rgba(15, 23, 42, 0.03);
+  --ms-shadow-btn: 0 2px 8px rgba(220, 38, 38, 0.22);
+  --ms-shadow-tab: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  /* Radius */
+  --ms-radius-sm: 0.25rem;
+  --ms-radius: 0.5rem;
+  --ms-radius-md: 0.625rem;
+  --ms-radius-lg: 1rem;
+  --ms-radius-xl: 1.5rem;
+  --ms-radius-full: 9999px;
+
+  /* Layout */
+  --ms-container: 72rem;
+  --ms-gutter: 1rem;
+  --ms-header-h: 4rem;
+
+  /* Type */
+  --ms-font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "PingFang HK", "Microsoft JhengHei", sans-serif;
+  --ms-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --ms-gutter: 1.5rem;
+  }
+}

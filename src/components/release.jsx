@@ -1,118 +1,131 @@
 import PropTypes from 'prop-types';
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, CopyOutlined } from '@ant-design/icons';
 import { ReleaseContext } from '../App';
 import { useContext } from 'react';
+import { Tooltip } from 'antd';
+import Ball from './Ball';
+import { normalizeBallNumber } from '../utils/balls';
 
-function Release (props) {
-    const { id } = props
-    const { releases, updateRelease, deleteRelease, releaseInputRef } = useContext(ReleaseContext)
-    const release = releases[id];
+function Release({ id }) {
+  const { releases, updateRelease, deleteRelease, releaseInputRef } =
+    useContext(ReleaseContext);
+  const release = releases[id];
+  // Ensure 8 slots (id + 6 mains + special) for older 7-slot data
+  const row = [...release];
+  while (row.length < 8) row.push('');
 
-    return (
-      <div className="release">
-        <label htmlFor="draw" className="caveat-400">
-          {id + 1}&nbsp;&nbsp;
-        </label>
-        <div className="input-container">
+  function copyLine() {
+    const text = row.join(' ');
+    navigator.clipboard?.writeText(text);
+  }
+
+  return (
+    <article className="ms-release-card">
+      <div className="ms-release-card__top">
+        <div className="ms-release-card__id">
+          <span className="ms-badge-id">
+            <input
+              type="tel"
+              inputMode="numeric"
+              maxLength={3}
+              className="ms-id-input"
+              value={row[0]}
+              placeholder="期"
+              ref={(el) => {
+                if (!releaseInputRef.current[id]) releaseInputRef.current[id] = [];
+                releaseInputRef.current[id][0] = el;
+              }}
+              onChange={(event) => updateRelease(id, 0, event.target.value)}
+              aria-label={`開獎 ${id + 1} 期數`}
+            />
+          </span>
+          <span className="ms-muted">開獎期數 #{id + 1}</span>
+        </div>
+        <div className="ms-row__actions">
+          <Tooltip title="複製">
+            <button type="button" className="ms-icon-btn ms-icon-btn--sm" onClick={copyLine}>
+              <CopyOutlined />
+            </button>
+          </Tooltip>
+          <Tooltip title="刪除">
+            <button
+              type="button"
+              className="ms-icon-btn ms-icon-btn--sm ms-icon-btn--danger"
+              onClick={() => deleteRelease(id)}
+            >
+              <DeleteOutlined />
+            </button>
+          </Tooltip>
+          <span className="ms-icon-btn ms-icon-btn--sm ms-soon" aria-disabled title="分享（即將推出）">
+            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>share</span>
+          </span>
+        </div>
+      </div>
+
+      <div className="ms-release-card__balls">
+        {row.slice(1, 7).map((val, i) => {
+          const fieldIdx = i + 1;
+          return (
+            <div key={fieldIdx} className="ms-cell">
+              {normalizeBallNumber(val) !== null ? <Ball value={val} size="md" /> : null}
+              <input
+                type="tel"
+                inputMode="numeric"
+                maxLength={2}
+                className={`ms-cell__input${normalizeBallNumber(val) !== null ? ' is-overlaid' : ''}`}
+                value={val}
+                ref={(el) => {
+                  if (!releaseInputRef.current[id]) releaseInputRef.current[id] = [];
+                  releaseInputRef.current[id][fieldIdx] = el;
+                }}
+                onChange={(event) => updateRelease(id, fieldIdx, event.target.value)}
+                aria-label={`開獎 ${id + 1} 主號 ${i + 1}`}
+              />
+            </div>
+          );
+        })}
+        <span className="ms-plus" aria-hidden>+</span>
+        <div className="ms-cell ms-cell--special">
+          {normalizeBallNumber(row[7]) !== null ? (
+            <Ball value={row[7]} special size="md" />
+          ) : null}
           <input
             type="tel"
-            id="termNum"
-            name="termNum"
-            value={release[0]}
+            inputMode="numeric"
+            maxLength={2}
+            className={`ms-cell__input ms-cell__input--special${normalizeBallNumber(row[7]) !== null ? ' is-overlaid' : ''}`}
+            value={row[7]}
             ref={(el) => {
-              releaseInputRef.current[id][0] = el;
-            }}
-            onChange={(event) => updateRelease(id, 0, event.target.value)}
-          />
-          &nbsp;
-          <input
-            type="tel"
-            id="releaseNum1"
-            name="releaseNum1"
-            value={release[1]}
-            ref={(el) => {
-              releaseInputRef.current[id][1] = el;
-            }}
-            onChange={(event) => updateRelease(id, 1, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="releaseNum2"
-            name="releaseNum2"
-            value={release[2]}
-            ref={(el) => {
-              releaseInputRef.current[id][2] = el;
-            }}
-            onChange={(event) => updateRelease(id, 2, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="releaseNum3"
-            name="releaseNum3"
-            value={release[3]}
-            ref={(el) => {
-              releaseInputRef.current[id][3] = el;
-            }}
-            onChange={(event) => updateRelease(id, 3, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="releaseNum4"
-            name="releaseNum4"
-            value={release[4]}
-            ref={(el) => {
-              releaseInputRef.current[id][4] = el;
-            }}
-            onChange={(event) => updateRelease(id, 4, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="releaseNum5"
-            name="releaseNum5"
-            value={release[5]}
-            ref={(el) => {
-              releaseInputRef.current[id][5] = el;
-            }}
-            onChange={(event) => updateRelease(id, 5, event.target.value)}
-          />
-          -
-          <input
-            type="tel"
-            id="releaseNum6"
-            name="releaseNum6"
-            value={release[6]}
-            ref={(el) => {
-              releaseInputRef.current[id][6] = el;
-            }}
-            onChange={(event) => updateRelease(id, 6, event.target.value)}
-          />
-          &nbsp;
-          <input
-            type="tel"
-            id="releaseNum7"
-            name="releaseNum7"
-            value={release[7]}
-            ref={(el) => {
+              if (!releaseInputRef.current[id]) releaseInputRef.current[id] = [];
               releaseInputRef.current[id][7] = el;
             }}
             onChange={(event) => updateRelease(id, 7, event.target.value)}
+            aria-label={`開獎 ${id + 1} 特別號碼`}
           />
+          <span className="ms-special-label">特別號碼</span>
         </div>
-        &nbsp;&nbsp;
-        <DeleteOutlined
-          onClick={() => deleteRelease(id)}
-          className="delete-btn"
-        />
       </div>
-    );
+
+      <div className="ms-release-card__ledger ms-soon-panel">
+        <div>
+          <span className="ms-label-caps">頭獎派彩</span>
+          <span className="ms-soon-badge">即將推出</span>
+        </div>
+        <div>
+          <span className="ms-label-caps">二獎 / 三獎</span>
+          <span className="ms-muted">—</span>
+        </div>
+        <div>
+          <span className="ms-label-caps">投注額</span>
+          <span className="ms-muted">—</span>
+        </div>
+      </div>
+    </article>
+  );
 }
 
 Release.propTypes = {
-    id: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
-export default Release
+export default Release;
