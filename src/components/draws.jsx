@@ -1,4 +1,4 @@
-import { Modal, Tooltip, Button, Upload, Progress, Flex } from 'antd';
+import { Modal, Tooltip, Upload, Progress, Flex } from 'antd';
 import { useState, useContext } from 'react';
 import Tesseract from 'tesseract.js';
 import Draw from './draw.jsx';
@@ -11,7 +11,7 @@ import {
   ScanOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons';
-import { padBall, validateDrawLine } from '../utils/balls';
+import { validateDrawLine } from '../utils/balls';
 
 function Draws() {
   const [progress, setProgress] = useState(0);
