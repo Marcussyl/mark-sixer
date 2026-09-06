@@ -271,19 +271,22 @@ function App() {
     }
 
     const num = Number(cleaned);
-    const isComplete = cleaned.length === 2 || (cleaned.length === 1 && num >= 1 && num <= 9);
 
-    if (isComplete && (num < 1 || num > 49)) {
+    // Only fully validate when 2 digits are in (matches auto-advance UX).
+    // A single digit is treated as still typing (e.g. "1" → "15").
+    if (cleaned.length < 2) {
+      return { ok: true, value: cleaned };
+    }
+
+    if (num < 1 || num > 49) {
       return { ok: false, reason: "Number must be between 1 and 49" };
     }
 
-    if (isComplete) {
-      const taken = siblingValues
-        .map(normalizeBallNumber)
-        .filter((n) => n !== null);
-      if (taken.includes(num)) {
-        return { ok: false, reason: "Number already used in this row" };
-      }
+    const taken = siblingValues
+      .map(normalizeBallNumber)
+      .filter((n) => n !== null);
+    if (taken.includes(num)) {
+      return { ok: false, reason: "Number already used in this row" };
     }
 
     return { ok: true, value: cleaned };
